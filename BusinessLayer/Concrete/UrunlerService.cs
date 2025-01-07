@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Abstract;
+﻿using BusinessLayer.Abstract;
+using DataAccessLayer.Abstract;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete
 {
-    public class UrunlerService
+    public class UrunlerService:IUrunlerService
     {
         private readonly IUrunlerRepository urunlerRepository;
 
@@ -17,9 +18,29 @@ namespace BusinessLayer.Concrete
             this.urunlerRepository = urunlerRepository;
         }
 
-        public List<Urunler> Listele()
+        public void Add(Urunler urun)
         {
-            return urunlerRepository.Listele();
+            urunlerRepository.Add(urun);
+        }
+
+        public void Delete(int id)
+        {
+            urunlerRepository.Delete(id);
+        }
+
+        public List<Urunler> GetAll()
+        {
+            return urunlerRepository.GetAll();
+        }
+
+        public Urunler GetById(int id)
+        {
+            return urunlerRepository.GetById(id);
+        }
+
+        public void Update(int id)
+        {
+            urunlerRepository.Update(id);
         }
     }
 }

@@ -11,37 +11,47 @@ namespace DataAccessLayer.Concrete
 {
     public class IslemlerRepository : IIslemlerRepository
     {
-        private readonly Context _context;
+        private readonly Context context;
 
         public IslemlerRepository(Context context)
         {
-            _context = context;
-        }
-        void IIslemlerRepository.Ekle(Islemler islem)
-        {
-            _context.Islemler.Add(islem);
-            _context.Islemler.Add(islem);
-            _context.SaveChanges();
+            context = context;
         }
 
-        void IIslemlerRepository.Guncelle(Islemler islem)
+        public void Add(Islemler islem)
         {
-            throw new NotImplementedException();
+            context.Islemler.Add(islem);
+            context.SaveChanges();
         }
 
-        Islemler IIslemlerRepository.IDileGetir(int id)
+        public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var islem = GetById(id);
+            if (islem != null)
+            {
+                context.Islemler.Remove(islem);
+                context.SaveChanges();
+            }
         }
 
-        List<Islemler> IIslemlerRepository.Listele()
+        public List<Islemler> GetAll()
         {
-            throw new NotImplementedException();
+            return context.Islemler.ToList();
         }
 
-        void IIslemlerRepository.Sil(Islemler islem)
+        public Islemler GetById(int id)
         {
-            throw new NotImplementedException();
+            return context.Islemler.FirstOrDefault(x => x.IslemlerID == id);
+        }
+
+        public void Update(int id)
+        {
+            var islem = GetById(id);
+            if (islem != null)
+            {
+                context.Islemler.Update(islem);
+                context.SaveChanges();
+            }
         }
     }
 }

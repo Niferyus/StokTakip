@@ -9,10 +9,10 @@ namespace BusinessLayer.Abstract
 {
     public interface IMusterilerService
     {
-        List<Musteriler> Listele();
-        void Ekle(Musteriler musteri);
-        void Guncelle(Musteriler musteri);
-        void Sil(Musteriler musteri);
-        Musteriler IDileGetir(int id);
+        List<Musteriler> GetAll();
+        void Add(Musteriler musteri);
+        void Update(int id);
+        void Delete(int id);
+        Musteriler GetById(int id);
     }
 }

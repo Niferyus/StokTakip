@@ -17,29 +17,40 @@ namespace DataAccessLayer.Concrete
             this.context = context;
         }
 
-        public void Ekle(Musteriler m)
+        public void Add(Musteriler m)
         {
-            throw new NotImplementedException();
+            context.Musteriler.Add(m);
+            context.SaveChanges();
         }
 
-        public void Guncelle(Musteriler m)
+        public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var musteri = GetById(id);
+            if (musteri != null)
+            {
+                context.Musteriler.Remove(musteri);
+                context.SaveChanges();
+            }
         }
 
-        public Musteriler IDileGetir(int id)
+        public List<Musteriler> GetAll()
         {
-            throw new NotImplementedException();
+            return context.Musteriler.ToList();
         }
 
-        public List<Musteriler> Listele()
+        public Musteriler GetById(int id)
         {
-            throw new NotImplementedException();
+            return context.Musteriler.FirstOrDefault(x => x.MusteriID == id);
         }
 
-        public void Sil(Musteriler m)
+        public void Update(int id)
         {
-            throw new NotImplementedException();
+            var musteri = GetById(id);
+            if (musteri != null)
+            {
+                context.Musteriler.Update(musteri);
+                context.SaveChanges();
+            }
         }
     }
 }

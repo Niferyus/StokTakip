@@ -9,10 +9,10 @@ namespace DataAccessLayer.Abstract
 {
     public interface IIslemlerRepository
     {
-        public List<Islemler> Listele();
-        public void Ekle(Islemler islem);
-        public void Guncelle(Islemler islem);
-        public void Sil(Islemler islem);
-        public Islemler IDileGetir(int id);
+        public List<Islemler> GetAll();
+        public void Add(Islemler islem);
+        public void Update(int id);
+        public void Delete(int id);
+        public Islemler GetById(int id);
     }
 }

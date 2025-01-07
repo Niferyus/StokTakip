@@ -9,10 +9,10 @@ namespace BusinessLayer.Abstract
 {
     public interface IToptancilarService
     {
-        List<Toptancilar> Listele();
-        void Ekle(Toptancilar toptanci);
-        void Guncelle(Toptancilar toptanci);
-        void Sil(Toptancilar toptanci);
-        Toptancilar IDileGetir(int id);
+        List<Toptancilar> GetAll();
+        void Add(Toptancilar toptanci);
+        void Update(int id);
+        void Delete(int id);
+        Toptancilar GetById(int id);
     }
 }

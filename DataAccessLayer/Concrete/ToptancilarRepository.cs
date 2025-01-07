@@ -10,29 +10,46 @@ namespace DataAccessLayer.Concrete
 {
     public class ToptancilarRepository : IToptancilarRepository
     {
-        void IToptancilarRepository.Ekle(Toptancilar toptanci)
+        private readonly Context context;
+
+        public ToptancilarRepository(Context context)
         {
-            throw new NotImplementedException();
+            this.context = context;
+        }
+        public void Add(Toptancilar toptanci)
+        {
+            context.Toptancilar.Add(toptanci);
+            context.SaveChanges();
         }
 
-        void IToptancilarRepository.Guncelle(Toptancilar toptanci)
+        public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var toptanci = GetById(id);
+            if (toptanci != null)
+            {
+                context.Toptancilar.Remove(toptanci);
+                context.SaveChanges();
+            }
         }
 
-        Toptancilar IToptancilarRepository.IDileGetir(int id)
+        public List<Toptancilar> GetAll()
         {
-            throw new NotImplementedException();
+            return context.Toptancilar.ToList();
         }
 
-        List<Toptancilar> IToptancilarRepository.Listele()
+        public Toptancilar GetById(int id)
         {
-            throw new NotImplementedException();
+            return context.Toptancilar.FirstOrDefault(x => x.ToptanciID == id);
         }
 
-        void IToptancilarRepository.Sil(Toptancilar toptanci)
+        public void Update(int id)
         {
-            throw new NotImplementedException();
+            var toptanci = GetById(id);
+            if (toptanci != null)
+            {
+                context.Toptancilar.Update(toptanci);
+                context.SaveChanges();
+            }
         }
     }
 }

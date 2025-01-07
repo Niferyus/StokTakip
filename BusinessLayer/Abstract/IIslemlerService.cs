@@ -9,10 +9,10 @@ namespace BusinessLayer.Abstract
 {
     public interface IIslemlerService
     {
-        List<Islemler> Listele();
-        void Ekle(Islemler islem);
-        void Guncelle(Islemler islem);
-        void Sil(Islemler islem);
-        Islemler IDileGetir(int id);
+        List<Islemler> GetAll();
+        void Add(Islemler islem);
+        void Update(int id);
+        void Delete(int id);
+        Islemler GetById(int id);
     }
 }

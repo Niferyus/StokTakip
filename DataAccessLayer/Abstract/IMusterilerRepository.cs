@@ -9,10 +9,10 @@ namespace DataAccessLayer.Abstract
 {
     public interface IMusterilerRepository
     {
-        List<Musteriler> Listele();
-        void Ekle(Musteriler m);
-        void Guncelle(Musteriler m);
-        void Sil(Musteriler m);
-        Musteriler IDileGetir(int id);
+        List<Musteriler> GetAll();
+        void Add(Musteriler m);
+        void Update(int id);
+        void Delete(int id);
+        Musteriler GetById(int id);
     }
 }

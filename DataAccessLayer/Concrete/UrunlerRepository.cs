@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Abstract;
 using EntityLayer.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +11,44 @@ namespace DataAccessLayer.Concrete
 {
     public class UrunlerRepository : IUrunlerRepository
     {
-        void IUrunlerRepository.Ekle(Urunler urun)
+        private readonly Context context;
+
+        public UrunlerRepository(Context context)
         {
-            throw new NotImplementedException();
+            this.context = context;
         }
 
-        void IUrunlerRepository.Guncelle(Urunler urun)
+        public void Add(Urunler urun)
         {
-            throw new NotImplementedException();
+            context.Urunler.Add(urun);
+            context.SaveChanges();
         }
 
-        Urunler IUrunlerRepository.IDileGetir(int id)
+        public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var urun = GetById(id);
+            if (urun != null )
+            {
+                context.Urunler.Remove(urun);
+                context.SaveChanges();
+            }
         }
 
-        List<Urunler> IUrunlerRepository.Listele()
+        public List<Urunler> GetAll()
         {
-            throw new NotImplementedException();
+            return context.Urunler.ToList();
         }
 
-        void IUrunlerRepository.Sil(Urunler urun)
+        public Urunler GetById(int id)
         {
-            throw new NotImplementedException();
+            return context.Urunler.FirstOrDefault(x => x.UrunID == id);
+        }
+
+        public void Update(int id)
+        {
+            var urun = GetById(id);
+            context.Urunler.Update(urun);
+            context.SaveChanges();
         }
     }
 }

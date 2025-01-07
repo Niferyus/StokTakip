@@ -9,10 +9,10 @@ namespace BusinessLayer.Abstract
 {
     public interface IUrunlerService
     {
-        List<Urunler> Listele();
-        void Ekle(Urunler urun);
-        void Guncelle(Urunler urun);
-        void Sil(Urunler urun);
-        Urunler IDileGetir(int id);
+        List<Urunler> GetAll();
+        void Add(Urunler urun);
+        void Update(int id);
+        void Delete(int id);
+        Urunler GetById(int id);
     }
 }
