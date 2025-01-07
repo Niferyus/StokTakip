@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 namespace DataAccessLayer.Concrete
 {
     public class Context:DbContext
-    {   
-        DbSet<Islemler> Islemler { get; set; }
-        DbSet<Musteriler> Musteriler { get; set; }
-        DbSet<Toptancilar> Toptancilar { get; set; }
-        DbSet<Urunler> Urunler { get; set; }
-        public Context(DbContextOptions<Context> options)
-        : base(options) { }
+    {
+        public DbSet<Islemler> Islemler { get; set; }
+        public DbSet<Musteriler> Musteriler { get; set; }
+        public DbSet<Toptancilar> Toptancilar { get; set; }
+        public DbSet<Urunler> Urunler { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("server=Furkan;initial catalog=StokTakipDB;integrated security=true;TrustServerCertificate=true");
+        }
     }
 }

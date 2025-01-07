@@ -8,36 +8,29 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Concrete
 {
-    public class MusterilerRepository : IMusterilerRepository
+    public class ToptancilarRepository : IToptancilarRepository
     {
-        private readonly Context context;
-
-        public MusterilerRepository(Context context)
-        {
-            this.context = context;
-        }
-
-        public void Ekle(Musteriler m)
+        void IToptancilarRepository.Ekle(Toptancilar toptanci)
         {
             throw new NotImplementedException();
         }
 
-        public void Guncelle(Musteriler m)
+        void IToptancilarRepository.Guncelle(Toptancilar toptanci)
         {
             throw new NotImplementedException();
         }
 
-        public Musteriler IDileGetir(int id)
+        Toptancilar IToptancilarRepository.IDileGetir(int id)
         {
             throw new NotImplementedException();
         }
 
-        public List<Musteriler> Listele()
+        List<Toptancilar> IToptancilarRepository.Listele()
         {
             throw new NotImplementedException();
         }
 
-        public void Sil(Musteriler m)
+        void IToptancilarRepository.Sil(Toptancilar toptanci)
         {
             throw new NotImplementedException();
         }

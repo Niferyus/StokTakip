@@ -19,7 +19,10 @@ namespace EntityLayer.Concrete
         public int ToplamFiyat { get; set; }
         public DateOnly Tarih { get; set; }
         public bool Satis { get; set; }
+        [ForeignKey("UrunID")]
         public Urunler Urun { get; set; }
+
+        [ForeignKey("MusteriID")]
         public Musteriler Musteri { get; set; }
     }
 }
