@@ -16,7 +16,8 @@ namespace PresentationLayer.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var toptancilar = toptancilarService.GetAll();
+            return View(toptancilar);
         }
 
         public IActionResult Delete(int id)

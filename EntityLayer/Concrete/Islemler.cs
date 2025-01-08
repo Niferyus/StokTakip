@@ -13,7 +13,9 @@ namespace EntityLayer.Concrete
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IslemlerID { get; set; }
-        public int MusteriID { get; set; }
+        public int? MusteriID { get; set; }
+
+        public int? ToptanciID { get; set; }
         public int UrunID { get; set; }
         public int Adet { get; set; }
         public int ToplamFiyat { get; set; }
@@ -24,5 +26,8 @@ namespace EntityLayer.Concrete
 
         [ForeignKey("MusteriID")]
         public Musteriler Musteri { get; set; }
+
+        [ForeignKey("ToptanciID")]
+        public Toptancilar Toptanci { get; set; }
     }
 }

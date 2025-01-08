@@ -38,9 +38,9 @@ namespace BusinessLayer.Concrete
             return islemlerRepository.GetById(id);
         }
 
-        public void Update(Toptancilar toptanci)
+        public void Update(Islemler islem)
         {
-            islemlerRepository.Update(toptanci);
+            islemlerRepository.Update(islem);
         }
     }
 }

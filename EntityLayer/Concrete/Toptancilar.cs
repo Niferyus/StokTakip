@@ -19,5 +19,7 @@ namespace EntityLayer.Concrete
         public int SatisFiyati { get; set; }
         [ForeignKey("UrunID")]
         public Urunler Urun { get; set; }
+
+        
     }
 }

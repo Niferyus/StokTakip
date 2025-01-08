@@ -9,11 +9,11 @@
 <form method="post">
     @if (Model.ToptanciID != 0)
     {
-        <input type="hidden" asp-for="UrunID" class="form-control" value="@Model.UrunID" />
+        <input type="hidden" asp-for="ToptanciID" class="form-control" value="@Model.ToptanciID" />
     }
-    <label>Ürün Adı</label>
+    <label>Toptancı Adı</label>
     <input type="text" asp-for="ToptanciAdi" class="form-control" value="@(Model.ToptanciAdi)" />
-    <label>Ürün Fiyatı</label>
+    <label>Ürün ID</label>
     <input type="text" asp-for="UrunID" class="form-control" value="@(Model.UrunID)" />
     <label>Ürün Stoğu</label>
     <input type="text" asp-for="Adet" class="form-control" value="@(Model.Adet)" />

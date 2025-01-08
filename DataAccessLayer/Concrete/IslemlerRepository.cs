@@ -15,7 +15,7 @@ namespace DataAccessLayer.Concrete
 
         public IslemlerRepository(Context context)
         {
-            context = context;
+            this.context = context;
         }
 
         public void Add(Islemler islem)
