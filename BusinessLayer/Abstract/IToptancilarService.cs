@@ -11,7 +11,7 @@ namespace BusinessLayer.Abstract
     {
         List<Toptancilar> GetAll();
         void Add(Toptancilar toptanci);
-        void Update(int id);
+        void Update(Toptancilar toptanci);
         void Delete(int id);
         Toptancilar GetById(int id);
     }

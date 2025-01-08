@@ -42,14 +42,10 @@ namespace DataAccessLayer.Concrete
             return context.Toptancilar.FirstOrDefault(x => x.ToptanciID == id);
         }
 
-        public void Update(int id)
+        public void Update(Toptancilar toptanci)
         {
-            var toptanci = GetById(id);
-            if (toptanci != null)
-            {
-                context.Toptancilar.Update(toptanci);
-                context.SaveChanges();
-            }
+            context.Toptancilar.Update(toptanci);
+            context.SaveChanges();
         }
     }
 }

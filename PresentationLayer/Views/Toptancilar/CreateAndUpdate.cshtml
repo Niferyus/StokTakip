@@ -1,0 +1,24 @@
+﻿@model EntityLayer.Concrete.Toptancilar
+@{
+    ViewData["Title"] = "CreateandUpdate";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<h1>@(Model.ToptanciID == 0 ? "Yeni Toptanci Ekle" : "Toptancıyı Güncelle")</h1>
+
+<form method="post">
+    @if (Model.ToptanciID != 0)
+    {
+        <input type="hidden" asp-for="UrunID" class="form-control" value="@Model.UrunID" />
+    }
+    <label>Ürün Adı</label>
+    <input type="text" asp-for="ToptanciAdi" class="form-control" value="@(Model.ToptanciAdi)" />
+    <label>Ürün Fiyatı</label>
+    <input type="text" asp-for="UrunID" class="form-control" value="@(Model.UrunID)" />
+    <label>Ürün Stoğu</label>
+    <input type="text" asp-for="Adet" class="form-control" value="@(Model.Adet)" />
+    <label>Satış Fiyatı</label>
+    <input type="text" asp-for="SatisFiyati" class="form-control" value="@(Model.SatisFiyati)" />
+    <button class="btn btn-primary">Kaydet</button>
+</form>
+

@@ -38,9 +38,9 @@ namespace BusinessLayer.Concrete
             return urunlerRepository.GetById(id);
         }
 
-        public void Update(int id)
+        public void Update(Urunler urun)
         {
-            urunlerRepository.Update(id);
+            urunlerRepository.Update(urun);
         }
     }
 }

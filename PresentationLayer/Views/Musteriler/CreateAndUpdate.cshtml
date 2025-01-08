@@ -1,0 +1,20 @@
+﻿@model EntityLayer.Concrete.Musteriler
+@{
+    ViewData["Title"] = "CreateAndUpdate";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<h1>@(Model.MusteriID == 0 ? "Yeni Müşteri Ekle" : "Müşteriyi Güncelle")</h1>
+
+<form method="post">
+    @if (Model.MusteriID != 0)
+    {
+        <input type="hidden" asp-for="MusteriID" class="form-control" value="@Model.MusteriID" />
+    }
+    <label>Ürün Fiyatı</label>
+    <input type="text" asp-for="MusteriAdi" class="form-control" value="@(Model.MusteriAdi)" />
+    <label>Ürün Stoğu</label>
+    <input type="text" asp-for="MusteriSoyadi" class="form-control" value="@(Model.MusteriSoyadi)" />
+    <button class="btn btn-primary">Kaydet</button>
+</form>
+

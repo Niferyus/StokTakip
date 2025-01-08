@@ -11,7 +11,7 @@ namespace BusinessLayer.Abstract
     {
         List<Islemler> GetAll();
         void Add(Islemler islem);
-        void Update(int id);
+        void Update(Islemler islem);
         void Delete(int id);
         Islemler GetById(int id);
     }

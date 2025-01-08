@@ -44,14 +44,11 @@ namespace DataAccessLayer.Concrete
             return context.Islemler.FirstOrDefault(x => x.IslemlerID == id);
         }
 
-        public void Update(int id)
+        public void Update(Islemler islem)
         {
-            var islem = GetById(id);
-            if (islem != null)
-            {
-                context.Islemler.Update(islem);
-                context.SaveChanges();
-            }
+            context.Islemler.Update(islem);
+            context.SaveChanges();
+            
         }
     }
 }

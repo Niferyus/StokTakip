@@ -1,0 +1,22 @@
+﻿@model EntityLayer.Concrete.Urunler
+@{
+    ViewData["Title"] = "CreateandUpdate";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<h1>@(Model.UrunID == 0 ? "Yeni Ürün Ekle" : "Ürünü Güncelle")</h1>
+
+<form method="post">
+    @if (Model.UrunID != 0)
+    {
+    <input type="hidden" asp-for="UrunID" class="form-control" value="@Model.UrunID" />
+    }
+    <label>Ürün Adı</label>
+    <input type="text" asp-for="UrunAdi" class="form-control" value="@(Model.UrunAdi)" />
+    <label>Ürün Fiyatı</label>
+    <input type="text" asp-for="UrunFiyat" class="form-control" value="@(Model.UrunFiyat)" />
+    <label>Ürün Stoğu</label>
+    <input type="text" asp-for="UrunStok" class="form-control" value="@(Model.UrunStok)" />
+    <button class="btn btn-primary">Kaydet</button>
+</form>
+

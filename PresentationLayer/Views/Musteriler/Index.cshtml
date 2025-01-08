@@ -1,0 +1,29 @@
+﻿@model List<EntityLayer.Concrete.Musteriler>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<table class="table table-bordered">
+    <tr>
+        <th>#</th>
+        <th>Ürün Adı</th>
+        <th>Fiyat</th>
+        <th>Stok Miktarı</th>
+        <th>Güncelle</th>
+        <th>Detaylar</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th>@item.MusteriID</th>
+            <td>@item.MusteriAdi</td>
+            <td>@item.MusteriSoyadi</td>
+            <td><a href="/Islemler/CreateAndUpdate/@item.MusteriID" class="btn btn-primary">Satış Yap</a></td>
+            <td><a href="/Musteriler/CreateandUpdate/@item.MusteriID" class="btn btn-primary">Güncelle</a></td>
+            <td><a href="/Musteriler/Delete/@item.MusteriID" class="btn btn-danger">Sil</a></td>
+        </tr>
+    }
+</table>
+<a href="/Musteriler/CreateandUpdate/" class="btn btn-info">Ekle</a>
+

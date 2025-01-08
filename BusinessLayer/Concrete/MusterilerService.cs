@@ -37,9 +37,9 @@ namespace BusinessLayer.Concrete
             return musterilerRepository.GetById(id);
         }
 
-        public void Update(int id)
+        public void Update(Musteriler musteri)
         {
-            musterilerRepository.Update(id); 
+            musterilerRepository.Update(musteri); 
         }
     }
 }

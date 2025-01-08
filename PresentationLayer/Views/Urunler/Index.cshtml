@@ -1,0 +1,29 @@
+﻿@model List<EntityLayer.Concrete.Urunler>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<table class="table table-bordered">
+    <tr>
+        <th>#</th>
+        <th>Ürün Adı</th>
+        <th>Fiyat</th>
+        <th>Stok Miktarı</th>
+        <th>Güncelle</th>
+        <th>Detaylar</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th>@item.UrunID</th>
+            <td>@item.UrunAdi</td>
+            <td>@item.UrunFiyat</td>
+            <td>@item.UrunStok</td>
+            <td><a href="/Urunler/Delete/@item.UrunID" class="btn btn-danger">Sil</a></td>
+            <td><a href="/Urunler/CreateandUpdate/@item.UrunID" class="btn btn-primary">Güncelle</a></td>
+        </tr>
+    }
+</table>
+<a href="/Urunler/CreateandUpdate/" class="btn btn-info">Ekle</a>
+

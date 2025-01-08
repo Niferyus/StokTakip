@@ -38,9 +38,9 @@ namespace BusinessLayer.Concrete
             return toptancilarRepository.GetById(id);
         }
 
-        public void Update(int id)
+        public void Update(Toptancilar toptanci)
         {
-            toptancilarRepository.Update(id);
+            toptancilarRepository.Update(toptanci);
         }
     }
 }

@@ -44,9 +44,8 @@ namespace DataAccessLayer.Concrete
             return context.Urunler.FirstOrDefault(x => x.UrunID == id);
         }
 
-        public void Update(int id)
+        public void Update(Urunler urun)
         {
-            var urun = GetById(id);
             context.Urunler.Update(urun);
             context.SaveChanges();
         }

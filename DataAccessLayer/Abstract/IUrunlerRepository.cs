@@ -11,7 +11,7 @@ namespace DataAccessLayer.Abstract
     {
         List<Urunler> GetAll();
         void Add(Urunler urun);
-        void Update(int id);
+        void Update(Urunler urun);
         void Delete(int id);
         Urunler GetById(int id);
     }

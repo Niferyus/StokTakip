@@ -11,7 +11,7 @@ namespace DataAccessLayer.Abstract
     {
         public List<Islemler> GetAll();
         public void Add(Islemler islem);
-        public void Update(int id);
+        public void Update(Islemler islem);
         public void Delete(int id);
         public Islemler GetById(int id);
     }

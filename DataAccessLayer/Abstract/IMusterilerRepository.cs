@@ -11,7 +11,7 @@ namespace DataAccessLayer.Abstract
     {
         List<Musteriler> GetAll();
         void Add(Musteriler m);
-        void Update(int id);
+        void Update(Musteriler m);
         void Delete(int id);
         Musteriler GetById(int id);
     }

@@ -1,0 +1,30 @@
+﻿@model List<EntityLayer.Concrete.Toptancilar>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<table class="table table-bordered">
+    <tr>
+        <th>#</th>
+        <th>Toptancı Adı</th>
+        <th>Urun ID</th>
+        <th>Adet</th>
+        <th>SatisFiyati</th>
+        <th>Detaylar</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th>@item.ToptanciID</th>
+            <td>@item.ToptanciAdi</td>
+            <td>@item.UrunID</td>
+            <td>@item.Adet</td>
+            <td>@item.SatisFiyati</td>
+            <td><a href="/Toptancilar/Delete/@item.ToptanciID" class="btn btn-danger">Sil</a></td>
+            <td><a href="/Toptancilar/CreateandUpdate/@item.ToptanciID" class="btn btn-primary">Güncelle</a></td>
+        </tr>
+    }
+</table>
+<a href="/Toptancilar/CreateandUpdate/" class="btn btn-info">Ekle</a>
+

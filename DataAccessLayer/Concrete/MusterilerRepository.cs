@@ -43,14 +43,11 @@ namespace DataAccessLayer.Concrete
             return context.Musteriler.FirstOrDefault(x => x.MusteriID == id);
         }
 
-        public void Update(int id)
+        public void Update(Musteriler musteri)
         {
-            var musteri = GetById(id);
-            if (musteri != null)
-            {
-                context.Musteriler.Update(musteri);
-                context.SaveChanges();
-            }
+             context.Musteriler.Update(musteri);
+             context.SaveChanges();
+           
         }
     }
 }
