@@ -27,6 +27,13 @@ namespace DataAccessLayer.Concrete
             var toptanci = GetById(id);
             if (toptanci != null)
             {
+                var islemler = context.Islemler.Where(i => i.ToptanciID == id).ToList();
+                foreach (var islem in islemler)
+                {
+                    islem.ToptanciID = null;
+                    context.Islemler.Update(islem);
+                }
+                context.SaveChanges();
                 context.Toptancilar.Remove(toptanci);
                 context.SaveChanges();
             }
@@ -37,7 +44,7 @@ namespace DataAccessLayer.Concrete
             return context.Toptancilar.ToList();
         }
 
-        public Toptancilar GetById(int id)
+        public Toptancilar GetById(int? id)
         {
             return context.Toptancilar.FirstOrDefault(x => x.ToptanciID == id);
         }

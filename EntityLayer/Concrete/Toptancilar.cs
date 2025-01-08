@@ -20,6 +20,6 @@ namespace EntityLayer.Concrete
         [ForeignKey("UrunID")]
         public Urunler Urun { get; set; }
 
-        
+        public ICollection<Islemler> Islemler { get; set; }
     }
 }

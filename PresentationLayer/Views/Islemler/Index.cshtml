@@ -9,11 +9,11 @@
         <th>#</th>
         <th>Ürün ID</th>
         <th>Müşteri ID</th>
+        <th>Toptanci ID</th>
         <th>Adet</th>
         <th>Toplam Fiyat</th>
+        <th>Tarih</th>
         <th>Satis</th>
-        <th>#</th>
-        <th>#</th>
     </tr>
     @foreach (var item in Model)
     {
@@ -21,12 +21,11 @@
             <th>@item.IslemlerID</th>
             <th>@item.UrunID</th>
             <td>@item.MusteriID</td>
+            <td>@item.ToptanciID</td>
             <td>@item.Adet</td>
             <td>@item.ToplamFiyat</td>
             <td>@item.Tarih</td>
             <td>@item.Satis</td>
-            <td><a href="/Urunler/Delete/@item.IslemlerID" class="btn btn-danger">Sil</a></td>
-            <td><a href="/Urunler/CreateandUpdate/@item.IslemlerID" class="btn btn-primary">Güncelle</a></td>
         </tr>
     }
 </table>

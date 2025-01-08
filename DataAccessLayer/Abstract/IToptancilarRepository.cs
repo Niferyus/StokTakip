@@ -13,6 +13,6 @@ namespace DataAccessLayer.Abstract
         void Add(Toptancilar toptanci);
         void Update(Toptancilar toptanci);
         void Delete(int id);
-        Toptancilar GetById(int id);
+        Toptancilar GetById(int? id);
     }
 }

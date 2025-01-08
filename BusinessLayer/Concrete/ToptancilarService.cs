@@ -33,9 +33,18 @@ namespace BusinessLayer.Concrete
             return toptancilarRepository.GetAll();
         }
 
-        public Toptancilar GetById(int id)
+        public Toptancilar GetById(int? id)
         {
-            return toptancilarRepository.GetById(id);
+            if(id == null)
+            {
+                return null;
+            }
+            else
+            {
+                return toptancilarRepository.GetById(id);
+            }
+
+            
         }
 
         public void Update(Toptancilar toptanci)

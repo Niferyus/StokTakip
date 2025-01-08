@@ -9,11 +9,13 @@ namespace PresentationLayer.Controllers
     {
         private readonly IIslemlerService islemlerService;
         private readonly IUrunlerService urunlerService;
+        private readonly IToptancilarService toptancilarService;
 
-        public IslemlerController(IIslemlerService islemlerService, IUrunlerService urunlerService)
+        public IslemlerController(IIslemlerService islemlerService, IUrunlerService urunlerService, IToptancilarService toptancilarService)
         {
             this.islemlerService = islemlerService;
             this.urunlerService = urunlerService;
+            this.toptancilarService = toptancilarService;
         }
 
         public IActionResult Index()
@@ -22,22 +24,39 @@ namespace PresentationLayer.Controllers
             return View(islemler);
         }
 
-        public IActionResult CreateAndUpdate(int id)
+        public IActionResult Create(int id,bool satismi)
         {
-            var newIslem = new Islemler
+            var newIslem = new Islemler();
+            if (satismi)
             {
-                MusteriID = id,
-                Tarih = DateOnly.FromDateTime(DateTime.Now),
-                Satis = true,
-                UrunID = 0,
-                Adet = 1,   
-                ToplamFiyat = 0, 
-            };
+                newIslem = new Islemler
+                {
+                    MusteriID = id,
+                    Tarih = DateOnly.FromDateTime(DateTime.Now),
+                    Satis = satismi,
+                    UrunID = 0,
+                    Adet = 1,
+                    ToplamFiyat = 0,
+                };
+            }
+            else
+            {
+                newIslem = new Islemler
+                {
+                    ToptanciID = id,
+                    Tarih = DateOnly.FromDateTime(DateTime.Now),
+                    Satis = satismi,
+                    UrunID = toptancilarService.GetById(id).UrunID,
+                    Adet = 1,
+                    ToplamFiyat = 0,
+                };
+            }
+            
             return View(newIslem);
         }
 
         [HttpPost]
-        public IActionResult CreateAndUpdate(Islemler islem)
+        public IActionResult Create(Islemler islem)
         {
             var urun = urunlerService.GetById(islem.UrunID);
             if (urun == null)
@@ -45,36 +64,34 @@ namespace PresentationLayer.Controllers
                 return NotFound();
             }
 
-            islem.ToplamFiyat = urun.UrunFiyat * islem.Adet;
-
-            
-            if (urun.UrunStok < islem.Adet)
-            {
-               ModelState.AddModelError("Adet", "Stok yetersiz");
-               return View(islem);
-            }
-            
-            islemlerService.Add(islem);
-            
             if (islem.Satis)
             {
+                islem.ToplamFiyat = urun.UrunFiyat * islem.Adet;
+                if (urun.UrunStok < islem.Adet)
+                {
+                    ModelState.AddModelError("Adet", "Stok yetersiz");
+                    return View(islem);
+                }
                 urun.UrunStok -= islem.Adet;
             }
             else
             {
+                var toptanci = toptancilarService.GetById(islem.ToptanciID!);
+                islem.ToplamFiyat = toptanci.SatisFiyati! * islem.Adet; 
+                if (toptanci.Adet < islem.Adet)
+                {
+                    ModelState.AddModelError("Adet", "Stok yetersiz");
+                    return View(islem);
+                }
+                toptanci.Adet -= islem.Adet;
                 urun.UrunStok += islem.Adet;
             }
 
+            islemlerService.Add(islem);
             urunlerService.Update(urun);
 
             return RedirectToAction("Index");
 
-        }
-
-        public IActionResult Delete(int id)
-        {
-            islemlerService.Delete(id);
-            return RedirectToAction("Index");
         }
     }
 }

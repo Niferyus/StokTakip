@@ -10,17 +10,17 @@
     @if (Model.Satis == true)
     {
         <input type="hidden" asp-for="MusteriID" />
+        <label>Ürün ID</label>
+        <input type="text" asp-for="UrunID" class="form-control" />
     }
     @if (Model.Satis == false)
     {
         <input type="hidden" asp-for="ToptanciID" />
+        <input type="hidden" asp-for="UrunID" />
     }
     <input type="hidden" asp-for="Tarih" />
     <input type="hidden" asp-for="Satis" />
     <input type="hidden" asp-for="ToplamFiyat" />
-    <label>Ürün ID</label>
-    <input type="text" asp-for="UrunID" class="form-control" />
-
     <label>Ürün Adeti</label>
     <input type="text" asp-for="Adet" class="form-control" />
     <span asp-validation-for="Adet" class="text-danger"></span>
