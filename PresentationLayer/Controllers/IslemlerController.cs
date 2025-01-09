@@ -20,8 +20,8 @@ namespace PresentationLayer.Controllers
 
         public IActionResult Index()
         {
-            var islemler = islemlerService.GetAll();
-            return View(islemler);
+            var islemlerDtos = islemlerService.GetAllDto();
+            return View(islemlerDtos);
         }
 
         public IActionResult Create(int id,bool satismi)
@@ -32,7 +32,7 @@ namespace PresentationLayer.Controllers
                 newIslem = new Islemler
                 {
                     MusteriID = id,
-                    Tarih = DateOnly.FromDateTime(DateTime.Now),
+                    Tarih = DateTime.Now,
                     Satis = satismi,
                     UrunID = 0,
                     Adet = 1,
@@ -44,7 +44,7 @@ namespace PresentationLayer.Controllers
                 newIslem = new Islemler
                 {
                     ToptanciID = id,
-                    Tarih = DateOnly.FromDateTime(DateTime.Now),
+                    Tarih = DateTime.Now,
                     Satis = satismi,
                     UrunID = toptancilarService.GetById(id).UrunID,
                     Adet = 1,

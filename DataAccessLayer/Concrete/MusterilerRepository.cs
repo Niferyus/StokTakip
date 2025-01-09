@@ -38,7 +38,7 @@ namespace DataAccessLayer.Concrete
             return context.Musteriler.ToList();
         }
 
-        public Musteriler GetById(int id)
+        public Musteriler GetById(int? id)
         {
             return context.Musteriler.FirstOrDefault(x => x.MusteriID == id);
         }

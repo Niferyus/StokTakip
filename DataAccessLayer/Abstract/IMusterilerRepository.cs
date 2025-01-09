@@ -13,6 +13,6 @@ namespace DataAccessLayer.Abstract
         void Add(Musteriler m);
         void Update(Musteriler m);
         void Delete(int id);
-        Musteriler GetById(int id);
+        Musteriler GetById(int? id);
     }
 }

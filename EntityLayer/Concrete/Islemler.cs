@@ -18,8 +18,8 @@ namespace EntityLayer.Concrete
         public int? ToptanciID { get; set; }
         public int UrunID { get; set; }
         public int Adet { get; set; }
-        public int ToplamFiyat { get; set; }
-        public DateOnly Tarih { get; set; }
+        public decimal ToplamFiyat { get; set; }
+        public DateTime Tarih { get; set; }
         public bool Satis { get; set; }
         [ForeignKey("UrunID")]
         public Urunler Urun { get; set; }

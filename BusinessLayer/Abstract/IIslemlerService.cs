@@ -10,6 +10,7 @@ namespace BusinessLayer.Abstract
     public interface IIslemlerService
     {
         List<Islemler> GetAll();
+        List<IslemlerDto> GetAllDto();
         void Add(Islemler islem);
         void Update(Islemler islem);
         void Delete(int id);

@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
+using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
@@ -32,9 +33,17 @@ namespace BusinessLayer.Concrete
             return musterilerRepository.GetAll();
         }
 
-        public Musteriler GetById(int id)
+        public Musteriler GetById(int? id)
         {
-            return musterilerRepository.GetById(id);
+            if (id == null)
+            {
+                return null;
+            }
+            else
+            {
+                return musterilerRepository.GetById(id);
+            }
+
         }
 
         public void Update(Musteriler musteri)

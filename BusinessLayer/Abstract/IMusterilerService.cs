@@ -13,6 +13,6 @@ namespace BusinessLayer.Abstract
         void Add(Musteriler musteri);
         void Update(Musteriler musteri);
         void Delete(int id);
-        Musteriler GetById(int id);
+        Musteriler GetById(int? id);
     }
 }

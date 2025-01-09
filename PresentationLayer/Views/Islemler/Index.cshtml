@@ -1,4 +1,4 @@
-﻿@model List<EntityLayer.Concrete.Islemler>
+﻿@model List<EntityLayer.Concrete.IslemlerDto>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Layout/AdminLayout.cshtml";
@@ -7,9 +7,9 @@
 <table class="table table-bordered">
     <tr>
         <th>#</th>
-        <th>Ürün ID</th>
-        <th>Müşteri ID</th>
-        <th>Toptanci ID</th>
+        <th>Ürün Adı</th>
+        <th>Müşteri Adı</th>
+        <th>Toptanci Adı</th>
         <th>Adet</th>
         <th>Toplam Fiyat</th>
         <th>Tarih</th>
@@ -18,14 +18,23 @@
     @foreach (var item in Model)
     {
         <tr>
-            <th>@item.IslemlerID</th>
-            <th>@item.UrunID</th>
-            <td>@item.MusteriID</td>
-            <td>@item.ToptanciID</td>
+            <th>@item.IslemlerId</th>
+            <th>@item.UrunAdi</th>
+            <td>@item.MusteriAdi</td>
+            <td>@item.ToptanciAdi</td>
             <td>@item.Adet</td>
-            <td>@item.ToplamFiyat</td>
+            <td>@string.Format("{0:C2}", item.ToplamFiyat)</td>
             <td>@item.Tarih</td>
-            <td>@item.Satis</td>
+
+            @if (item.SatisTipi == true)
+            {
+                <td>Satış</td>
+            }
+            @if (item.SatisTipi == false)
+            {
+                <td>Alış</td>
+            }
+
         </tr>
     }
 </table>

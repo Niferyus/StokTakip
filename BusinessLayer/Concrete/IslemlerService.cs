@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
+using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,16 @@ namespace BusinessLayer.Concrete
     public class IslemlerService : IIslemlerService
     {
         private readonly IIslemlerRepository islemlerRepository;
+        private readonly IUrunlerService urunlerService;
+        private readonly IToptancilarService toptancilarService;
+        private readonly IMusterilerService musterilerService;
 
-        public IslemlerService(IIslemlerRepository islemlerRepository)
+        public IslemlerService(IIslemlerRepository islemlerRepository, IToptancilarService isoptancilarService, IMusterilerService musterilerService, IUrunlerService urunlerService)
         {
             this.islemlerRepository = islemlerRepository;
+            this.toptancilarService = isoptancilarService;
+            this.musterilerService = musterilerService;
+            this.urunlerService = urunlerService;
         }
 
         public void Add(Islemler islem)
@@ -31,6 +38,11 @@ namespace BusinessLayer.Concrete
         public List<Islemler> GetAll()
         {
             return islemlerRepository.GetAll();
+        }
+
+        public List<IslemlerDto> GetAllDto()
+        {
+            return islemlerRepository.GetAllDtos();
         }
 
         public Islemler GetById(int id)
