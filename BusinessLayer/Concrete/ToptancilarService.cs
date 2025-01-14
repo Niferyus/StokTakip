@@ -33,6 +33,11 @@ namespace BusinessLayer.Concrete
             return toptancilarRepository.GetAll();
         }
 
+        public List<ToptancilarDto> GetAllDto()
+        {
+            return toptancilarRepository.GetAllDto();
+        }
+
         public Toptancilar GetById(int? id)
         {
             if(id == null)

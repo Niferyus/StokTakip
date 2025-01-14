@@ -3,11 +3,13 @@ using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
+using EntityLayer.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<Context>();
+builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Context>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IUrunlerRepository, UrunlerRepository>();
@@ -41,6 +43,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Urunler}/{action=Index}/{id?}");
+    pattern: "{controller=Register}/{action=Index}/{id?}");
 
 app.Run();

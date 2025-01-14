@@ -10,6 +10,8 @@ namespace BusinessLayer.Abstract
     public interface IToptancilarService
     {
         List<Toptancilar> GetAll();
+
+        List<ToptancilarDto> GetAllDto();
         void Add(Toptancilar toptanci);
         void Update(Toptancilar toptanci);
         void Delete(int id);

@@ -1,4 +1,4 @@
-﻿@model List<EntityLayer.Concrete.Toptancilar>
+﻿@model List<EntityLayer.Concrete.ToptancilarDto>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Layout/AdminLayout.cshtml";
@@ -8,7 +8,7 @@
     <tr>
         <th>#</th>
         <th>Toptancı Adı</th>
-        <th>Urun ID</th>
+        <th>Urun Adı</th>
         <th>Adet</th>
         <th>SatisFiyati</th>
         <th>#</th>
@@ -19,9 +19,9 @@
         <tr>
             <th>@item.ToptanciID</th>
             <td>@item.ToptanciAdi</td>
-            <td>@item.UrunID</td>
+            <td>@item.UrunAdi</td>
             <td>@item.Adet</td>
-            <td>@item.SatisFiyati</td>
+            <td>@string.Format("{0:C2}", item.SatisFiyati)</td>
             <td><a href="/Islemler/Create/@item.ToptanciID?satismi=false" class="btn btn-primary">Alım Yap</a></td>
             <td><a href="/Toptancilar/Delete/@item.ToptanciID" class="btn btn-danger">Sil</a></td>
             <td><a href="/Toptancilar/CreateandUpdate/@item.ToptanciID" class="btn btn-primary">Güncelle</a></td>

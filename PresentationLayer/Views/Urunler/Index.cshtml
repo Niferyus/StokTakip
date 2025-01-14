@@ -18,7 +18,7 @@
         <tr>
             <th>@item.UrunID</th>
             <td>@item.UrunAdi</td>
-            <td>@item.UrunFiyat</td>
+            <td>@string.Format("{0:C2}", item.UrunFiyat)</td>
             <td>@item.UrunStok</td>
             <td><a href="/Urunler/Delete/@item.UrunID" class="btn btn-danger">Sil</a></td>
             <td><a href="/Urunler/CreateandUpdate/@item.UrunID" class="btn btn-primary">Güncelle</a></td>

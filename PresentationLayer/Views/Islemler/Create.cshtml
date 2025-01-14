@@ -13,7 +13,7 @@
         <label>Ürün ID</label>
         <input type="text" asp-for="UrunID" class="form-control" />
     }
-    @if (Model.Satis == false)
+    else
     {
         <input type="hidden" asp-for="ToptanciID" />
         <input type="hidden" asp-for="UrunID" />

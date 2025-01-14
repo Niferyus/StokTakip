@@ -44,6 +44,22 @@ namespace DataAccessLayer.Concrete
             return context.Toptancilar.ToList();
         }
 
+        public List<ToptancilarDto> GetAllDto()
+        {
+            var query = from toptanci in context.Toptancilar
+                        join urun in context.Urunler on toptanci.UrunID equals urun.UrunID into urunGroup
+                        from urun in urunGroup.DefaultIfEmpty()
+                        select new ToptancilarDto
+                        {
+                            ToptanciID = toptanci.ToptanciID,
+                            ToptanciAdi = toptanci != null ? toptanci.ToptanciAdi : null,
+                            UrunAdi = urun != null ? urun.UrunAdi : null,
+                            Adet = toptanci.Adet,
+                            SatisFiyati = toptanci.SatisFiyati
+                        };
+            return query.ToList();
+        }
+
         public Toptancilar GetById(int? id)
         {
             return context.Toptancilar.FirstOrDefault(x => x.ToptanciID == id);
