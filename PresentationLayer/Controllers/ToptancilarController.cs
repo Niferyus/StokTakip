@@ -1,10 +1,13 @@
 ﻿using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
 {
+    [Authorize(Roles = "Satıcı")]
     public class ToptancilarController : Controller
     {
         private readonly IToptancilarService toptancilarService;
