@@ -8,21 +8,13 @@ using System.Threading.Tasks;
 
 namespace EntityLayer.Concrete
 {
-    public class Urunler
+    public class Cart
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UrunID { get; set; }
-
-        public string UrunAdi { get; set; }
-
-        public int UrunFiyat { get; set; }
-
-        public int UrunStok { get; set; }
-
-        public ICollection<Islemler> Islemler { get; set; }
-
-        public ICollection<Toptancilar> Toptancilar { get; set; }
+        public int CartId { get; set; }
+        
+        public int UserId { get; set; }
 
         public ICollection<CartItem> cartitem { get; set; }
     }

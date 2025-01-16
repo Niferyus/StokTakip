@@ -30,7 +30,14 @@ namespace PresentationLayer.Controllers
 
             if(result.Succeeded)
             {
-                return RedirectToAction("Index", "Urunler");
+                if(User.IsInRole("Satıcı"))
+                {
+                    return RedirectToAction("Index", "Urun");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "MusteriUrun");
+                }
             }
             else
             {

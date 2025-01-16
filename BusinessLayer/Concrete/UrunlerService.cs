@@ -33,6 +33,11 @@ namespace BusinessLayer.Concrete
             return urunlerRepository.GetAll();
         }
 
+        public List<MusteriUrunDto> GetAllDto()
+        {
+            return urunlerRepository.GetAllDto();
+        }
+
         public Urunler GetById(int id)
         {
             return urunlerRepository.GetById(id);

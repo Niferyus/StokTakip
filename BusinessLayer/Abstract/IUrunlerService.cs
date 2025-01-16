@@ -10,6 +10,8 @@ namespace BusinessLayer.Abstract
     public interface IUrunlerService
     {
         List<Urunler> GetAll();
+
+        List<MusteriUrunDto> GetAllDto();
         void Add(Urunler urun);
         void Update(Urunler urun);
         void Delete(int id);

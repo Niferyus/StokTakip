@@ -10,6 +10,8 @@ namespace DataAccessLayer.Abstract
     public interface IUrunlerRepository
     {
         List<Urunler> GetAll();
+
+        List<MusteriUrunDto> GetAllDto();
         void Add(Urunler urun);
         void Update(Urunler urun);
         void Delete(int id);

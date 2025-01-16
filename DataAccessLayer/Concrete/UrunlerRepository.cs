@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,6 +38,19 @@ namespace DataAccessLayer.Concrete
         public List<Urunler> GetAll()
         {
             return context.Urunler.ToList();
+        }
+
+        public List<MusteriUrunDto> GetAllDto()
+        {
+            var query = from urun in context.Urunler
+                        select new MusteriUrunDto
+                        {
+                            UrunId = urun.UrunID,
+                            UrunAdi = urun.UrunAdi,
+                            UrunFiyati = urun.UrunFiyat,
+                            UrunStok = urun.UrunStok
+                        };
+            return query.ToList();
         }
 
         public Urunler GetById(int id)

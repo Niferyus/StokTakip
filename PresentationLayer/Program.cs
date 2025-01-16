@@ -24,6 +24,9 @@ builder.Services.AddScoped<IToptancilarService, ToptancilarService>();
 builder.Services.AddScoped<IIslemlerRepository, IslemlerRepository>();
 builder.Services.AddScoped<IIslemlerService, IslemlerService>();
 
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartService, CartService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

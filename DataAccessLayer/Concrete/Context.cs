@@ -15,6 +15,8 @@ namespace DataAccessLayer.Concrete
         public DbSet<Musteriler> Musteriler { get; set; }
         public DbSet<Toptancilar> Toptancilar { get; set; }
         public DbSet<Urunler> Urunler { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

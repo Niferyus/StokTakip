@@ -1,0 +1,59 @@
+﻿@model List<EntityLayer.Concrete.MusteriUrunDto>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<p>@ViewBag.Message</p>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Ürün Adı</th>
+        <th>Fiyat</th>
+        <th>Stok Miktarı</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.UrunAdi</td>
+            <td>@string.Format("{0:C2}", item.UrunFiyati)</td>
+            <td>@item.UrunStok</td>
+            <td>
+                <button class="btn btn-primary"
+                        onclick="addToCart(@User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value, @item.UrunId, @item.UrunFiyati)">
+                    Satın Al
+                </button>
+            </td>
+
+        </tr>
+    }
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    function addToCart(userid, productid, fiyat) {
+        $.ajax({
+            url: '/Cart/AddToCart',
+            type: 'POST',
+            data: {
+                userid: userid,
+                productid: productid,
+                fiyat: fiyat
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                } else {
+                    alert("Ürün sepete eklenirken bir hata oluştu.");
+                }
+            },
+            error: function () {
+                alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+            }
+        });
+    }
+</script>
+
