@@ -40,6 +40,11 @@ namespace PresentationLayer.Controllers
         [HttpPost]
         public IActionResult CreateAndUpdate(Musteriler musteri)
         {
+            if(!ModelState.IsValid)
+            {
+                return View(musteri);
+            }
+
             if (musteri.MusteriID == 0)
             {
                 musteriService.Add(musteri);

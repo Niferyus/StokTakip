@@ -13,7 +13,10 @@ namespace EntityLayer.Concrete
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MusteriID { get; set; }
+        [Required(ErrorMessage = "Müşteri adı zorunludur.")]
         public string MusteriAdi { get; set; }
+
+        [Required(ErrorMessage = "Müşteri soyadı zorunludur.")]
         public string MusteriSoyadi { get; set; }
 
         public ICollection<Islemler> Islemler { get; set; }

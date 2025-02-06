@@ -1,8 +1,36 @@
-﻿
+﻿@model List<EntityLayer.Concrete.CartItemDto>
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Layout/AdminLayout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Sepet</h1>
 
+<table class="table table-bordered">
+    <tr>
+        <th>Ürün Adı</th>
+        <th>Fiyat</th>
+        <th>Adet</th>
+        <th>#</th>
+    </tr>
+    @{
+        decimal total = 0;
+    }
+    
+    
+    @foreach (var item in Model)
+    {
+        total += item.Price * item.Quantity;
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@string.Format("{0:C2}", item.Price)</td>
+            <td>@item.Quantity</td>
+            <td><a href="/Cart/RemoveFromCart/@item.CartId?param2=@item.ProductId" class="btn btn-danger">Sepeti Temizle</a></td>
+        </tr>
+    }
+</table>
+
+<h3>Toplam: @string.Format("{0:C2}", total)</h3>
+
+@*<a href="/Cart/ClearCart/@Model.CartID" class="btn btn-danger">Sepeti Temizle</a>*@

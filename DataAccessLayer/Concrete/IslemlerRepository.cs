@@ -48,7 +48,7 @@ namespace DataAccessLayer.Concrete
         public List<IslemlerDto> GetAllDtos()
         {
             var query = from islem in context.Islemler
-                        join urun in context.Urunler on islem.UrunID equals urun.UrunID into urunGroup
+                        join urun in context.Urunler on islem.UrunId equals urun.Id into urunGroup
                         from urun in urunGroup.DefaultIfEmpty()
                         join musteri in context.Musteriler on islem.MusteriID equals musteri.MusteriID into musteriGroup
                         from musteri in musteriGroup.DefaultIfEmpty()
@@ -57,7 +57,7 @@ namespace DataAccessLayer.Concrete
                         select new IslemlerDto
                         {
                             IslemlerId = islem.IslemlerID,
-                            UrunAdi = urun != null ? urun.UrunAdi : null,
+                            UrunAdi = urun != null ? urun.Adi : null,
                             MusteriAdi = musteri != null ? musteri.MusteriAdi : null,
                             ToptanciAdi = toptanci != null ? toptanci.ToptanciAdi : null,
                             Adet = islem.Adet,

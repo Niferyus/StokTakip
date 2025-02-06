@@ -5,7 +5,13 @@
     Layout = "~/Views/Layout/AdminLayout.cshtml";
 }
 
-<p>@ViewBag.Message</p>
+<div>
+    <p>@ViewBag.VisitorCount</p>
+    <p>@ViewBag.Message</p>
+    <p>@ViewData["userid"]</p>
+    <a href="Cart/Index/?userid=@ViewBag.UserId"><i class="mdi mdi-cart-outline"></i></a>
+</div>
+
 
 <table class="table table-bordered">
     <tr>
@@ -22,7 +28,7 @@
             <td>@item.UrunStok</td>
             <td>
                 <button class="btn btn-primary"
-                        onclick="addToCart(@User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value, @item.UrunId, @item.UrunFiyati)">
+                        onclick="addToCart(@ViewBag.UserId, @item.UrunId, @item.UrunFiyati)">
                     Satın Al
                 </button>
             </td>

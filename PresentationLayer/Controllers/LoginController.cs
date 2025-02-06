@@ -9,6 +9,7 @@ namespace PresentationLayer.Controllers
     {
         private readonly SignInManager<AppUser> _signInManager;
 
+        public int OnlineUserId { get; set; }
         public LoginController(SignInManager<AppUser> signInManager)
         {
             _signInManager = signInManager;
@@ -28,11 +29,14 @@ namespace PresentationLayer.Controllers
             }
             var result = await _signInManager.PasswordSignInAsync(user.Username, user.Password, false, false);
 
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
-                if(User.IsInRole("Satıcı"))
+                OnlineUserId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+                HttpContext.Session.SetInt32("OnlineUserId", OnlineUserId);
+
+                if (User.IsInRole("Satıcı"))
                 {
-                    return RedirectToAction("Index", "Urun");
+                    return RedirectToAction("Index", "Urunler");
                 }
                 else
                 {

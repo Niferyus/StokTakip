@@ -16,7 +16,7 @@ namespace EntityLayer.Concrete
 
         public int CartID { get; set; }
 
-        public int UrunID { get; set; }
+        public int UrunId { get; set; }
 
         public int Adet { get; set; }
 
@@ -25,7 +25,7 @@ namespace EntityLayer.Concrete
         [ForeignKey("CartID")]
         public Cart cart { get; set; }
 
-        [ForeignKey("UrunID")]
+        [ForeignKey("UrunId")]
         public Urunler Urun { get; set; }
     }
 }

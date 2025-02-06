@@ -161,14 +161,14 @@ namespace DataAccessLayer.Migrations
                     b.Property<decimal>("Fiyat")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("UrunID")
+                    b.Property<int>("UrunId")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
                     b.HasIndex("CartID");
 
-                    b.HasIndex("UrunID");
+                    b.HasIndex("UrunId");
 
                     b.ToTable("CartItems");
                 });
@@ -199,7 +199,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<int?>("ToptanciID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UrunID")
+                    b.Property<int>("UrunId")
                         .HasColumnType("int");
 
                     b.HasKey("IslemlerID");
@@ -208,7 +208,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("ToptanciID");
 
-                    b.HasIndex("UrunID");
+                    b.HasIndex("UrunId");
 
                     b.ToTable("Islemler");
                 });
@@ -252,35 +252,65 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UrunID")
+                    b.Property<int>("UrunId")
                         .HasColumnType("int");
 
                     b.HasKey("ToptanciID");
 
-                    b.HasIndex("UrunID");
+                    b.HasIndex("UrunId");
 
                     b.ToTable("Toptancilar");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Urunler", b =>
                 {
-                    b.Property<int>("UrunID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UrunID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("UrunAdi")
+                    b.Property<string>("Aciklama")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UrunFiyat")
+                    b.Property<bool?>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Adi")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("AlisFiyat")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool?>("Approved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("BarkodNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Birim")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("InsUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UrunStok")
+                    b.Property<string>("Marka")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("SatisFiyat")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Stok")
                         .HasColumnType("int");
 
-                    b.HasKey("UrunID");
+                    b.HasKey("Id");
 
                     b.ToTable("Urunler");
                 });
@@ -398,7 +428,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
                         .WithMany("cartitem")
-                        .HasForeignKey("UrunID")
+                        .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -419,7 +449,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
                         .WithMany("Islemler")
-                        .HasForeignKey("UrunID")
+                        .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -434,7 +464,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
                         .WithMany("Toptancilar")
-                        .HasForeignKey("UrunID")
+                        .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

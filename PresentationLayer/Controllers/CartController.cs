@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Abstract;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace PresentationLayer.Controllers
 {
@@ -14,6 +15,7 @@ namespace PresentationLayer.Controllers
 
         public IActionResult Index(int userid)
         {
+            ViewBag.UserId = userid;
             var items = cartService.GetCartItems(userid);
             return View(items);
         }
@@ -30,6 +32,18 @@ namespace PresentationLayer.Controllers
             {
                 return Json(new { success = false, message = "Hata: " + ex.Message });
             }
+        }
+
+        public IActionResult ClearCart(int cartid)
+        {
+            cartService.ClearCart(cartid);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult RemoveFromCart(int cartid, int productid)
+        {
+            cartService.RemoveFromCart(cartid, productid);
+            return RedirectToAction("Index");
         }
     }
 }

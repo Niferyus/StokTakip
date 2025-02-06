@@ -36,7 +36,7 @@ namespace PresentationLayer.Controllers
                     MusteriID = id,
                     Tarih = DateTime.Now,
                     Satis = satismi,
-                    UrunID = 0,
+                    UrunId = 0,
                     Adet = 1,
                     ToplamFiyat = 0,
                 };
@@ -48,7 +48,7 @@ namespace PresentationLayer.Controllers
                     ToptanciID = id,
                     Tarih = DateTime.Now,
                     Satis = satismi,
-                    UrunID = toptancilarService.GetById(id).UrunID,
+                    UrunId = toptancilarService.GetById(id).UrunId,
                     Adet = 1,
                     ToplamFiyat = 0,
                 };
@@ -60,7 +60,7 @@ namespace PresentationLayer.Controllers
         [HttpPost]
         public IActionResult Create(Islemler islem)
         {
-            var urun = urunlerService.GetById(islem.UrunID);
+            var urun = urunlerService.GetById(islem.UrunId);
             if (urun == null)
             {
                 return NotFound();
@@ -68,13 +68,13 @@ namespace PresentationLayer.Controllers
 
             if (islem.Satis)
             {
-                islem.ToplamFiyat = urun.UrunFiyat * islem.Adet;
-                if (urun.UrunStok < islem.Adet)
+                islem.ToplamFiyat = urun.SatisFiyat * islem.Adet;
+                if (urun.Stok < islem.Adet)
                 {
                     ModelState.AddModelError("Adet", "Stok yetersiz");
                     return View(islem);
                 }
-                urun.UrunStok -= islem.Adet;
+                urun.Stok -= islem.Adet;
             }
             else
             {
@@ -86,11 +86,11 @@ namespace PresentationLayer.Controllers
                     return View(islem);
                 }
                 toptanci.Adet -= islem.Adet;
-                urun.UrunStok += islem.Adet;
+                urun.Stok += islem.Adet;
             }
 
             islemlerService.Add(islem);
-            urunlerService.Update(urun);
+            urunlerService.Edit(urun);
 
             return RedirectToAction("Index");
 

@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "ExcelView";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<h2>Excel İşlemleri</h2>
+
+<!-- Excel Yükleme (Import) -->
+<form asp-action="ImportExcel" asp-controller="Urunler" method="post" enctype="multipart/form-data">
+    <label>Excel Dosyası Yükle:</label>
+    <input type="file" name="file" />
+    <button type="submit">Yükle</button>
+</form>
+
+<!-- Excel İndirme (Export) -->
+<form asp-action="ExportExcel" asp-controller="Urunler" method="get">
+    <button type="submit">Excel İndir</button>
+</form>

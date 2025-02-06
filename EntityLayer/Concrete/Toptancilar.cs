@@ -14,10 +14,10 @@ namespace EntityLayer.Concrete
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ToptanciID { get; set; }
         public string ToptanciAdi { get; set; }
-        public int UrunID { get; set; }
+        public int UrunId { get; set; }
         public int Adet { get; set; }
         public int SatisFiyati { get; set; }
-        [ForeignKey("UrunID")]
+        [ForeignKey("UrunId")]
         public Urunler Urun { get; set; }
 
         public ICollection<Islemler> Islemler { get; set; }

@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "ExcelUpload";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<h2>Excel Dosyası Yükle</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">@ViewBag.Message</div>
+}
+
+<form asp-action="Upload" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="file">Excel Dosyası Seçin:</label>
+        <input type="file" name="file" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Yükle ve İndir</button>
+</form>
+

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PresentationLayer.Models;
+using System.Security.Claims;
 
 namespace PresentationLayer.Controllers
 {

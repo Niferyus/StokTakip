@@ -38,7 +38,7 @@ namespace DataAccessLayer.Concrete
             context.CartItems.Add(new EntityLayer.Concrete.CartItem
             {
                 CartID = cart.CartId,
-                UrunID = productId,
+                UrunId = productId,
                 Adet = 1,
                 Fiyat = fiyat
             });
@@ -52,15 +52,25 @@ namespace DataAccessLayer.Concrete
 
         public void RemoveFromCart(int cartid,int productId)
         {
-            context.CartItems.RemoveRange(context.CartItems.Where(p => p.CartID == cartid && p.UrunID == productId));
+            context.CartItems.RemoveRange(context.CartItems.Where(p => p.CartID == cartid && p.UrunId == productId));
             context.SaveChanges();
         }
 
-        public List<CartItem> GetCartItems(int userid)
+        public List<CartItemDto> GetCartItems(int userid)
         {
             var cart = ControlCart(userid);
             var cartitems = context.CartItems.Where(p => p.CartID == cart.CartId).ToList();
-            return cartitems;
+            var query = from item in cartitems
+                        join urun in context.Urunler on item.UrunId equals urun.Id
+                        select new CartItemDto
+                        {
+                            ProductId = item.UrunId,
+                            CartId = item.CartID,
+                            ProductName = urun.Adi,
+                            Price = item.Fiyat,
+                            Quantity = item.Adet
+                        };
+            return query.ToList();
         }
     }
 }

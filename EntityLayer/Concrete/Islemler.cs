@@ -16,12 +16,12 @@ namespace EntityLayer.Concrete
         public int? MusteriID { get; set; }
 
         public int? ToptanciID { get; set; }
-        public int UrunID { get; set; }
+        public int UrunId { get; set; }
         public int Adet { get; set; }
         public decimal ToplamFiyat { get; set; }
         public DateTime Tarih { get; set; }
         public bool Satis { get; set; }
-        [ForeignKey("UrunID")]
+        [ForeignKey("UrunId")]
         public Urunler Urun { get; set; }
 
         [ForeignKey("MusteriID")]

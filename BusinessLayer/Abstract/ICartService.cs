@@ -15,6 +15,6 @@ namespace BusinessLayer.Abstract
 
         public void ClearCart(int cartid);
 
-        public List<CartItem> GetCartItems(int userid);
+        public List<CartItemDto> GetCartItems(int userid);
     }
 }

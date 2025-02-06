@@ -1,22 +1,54 @@
 ﻿@model EntityLayer.Concrete.Urunler
 @{
     ViewData["Title"] = "CreateandUpdate";
-    Layout = "~/Views/Layout/AdminLayout.cshtml";
+    Layout = null;
 }
 
-<h1>@(Model.UrunID == 0 ? "Yeni Ürün Ekle" : "Ürünü Güncelle")</h1>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">-->
+<!-- JS Kütüphaneleri -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-<form method="post">
-    @if (Model.UrunID != 0)
+<h1>@(Model.Id == 0 ? "Yeni Ürün Ekle" : "Ürünü Güncelle")</h1>
+
+<form id="urunForm">
+    @if (Model.Id != 0)
     {
-    <input type="hidden" asp-for="UrunID" class="form-control" value="@Model.UrunID" />
+        <input type="hidden" asp-for="Id" class="form-control" value="@Model.Id" />
     }
     <label>Ürün Adı</label>
-    <input type="text" asp-for="UrunAdi" class="form-control" value="@(Model.UrunAdi)" />
+    <input type="text" asp-for="Adi" class="form-control" value="@(Model.Adi)" />
     <label>Ürün Fiyatı</label>
-    <input type="text" asp-for="UrunFiyat" class="form-control" value="@(Model.UrunFiyat)" />
+    <input type="text" asp-for="SatisFiyat" class="form-control" value="@(Model.SatisFiyat)" />
     <label>Ürün Stoğu</label>
-    <input type="text" asp-for="UrunStok" class="form-control" value="@(Model.UrunStok)" />
-    <button class="btn btn-primary">Kaydet</button>
+    <input type="text" asp-for="Stok" class="form-control" value="@(Model.Stok)" />
+    <button type="submit" class="btn btn-primary">Kaydet</button>
 </form>
 
+<script>
+$(document).ready(function () {
+    $("#urunForm").submit(function (event) {
+        event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+
+        var formData = $(this).serialize(); // Form verilerini al
+
+        $.ajax({
+            url: '@Url.Action("CreateAndUpdate", "Urunler")',
+            type: "POST",
+            data: formData,
+            success: function (response) {
+            if (response.success) {
+            $("#grid").trigger("reloadGrid"); // ✅ Grid’i yenile
+            alert("İşlem başarılı!");
+            } else {
+            alert("Hata oluştu!");
+            }
+            },
+            error: function (xhr) {
+            alert("Sunucu hatası: " + xhr.responseText);
+            }
+            });
+            });
+});
+</script>

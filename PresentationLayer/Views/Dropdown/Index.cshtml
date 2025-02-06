@@ -1,0 +1,48 @@
+﻿@model List<PresentationLayer.Models.City>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<div>
+    <label for="ilDropdown">İl:</label>
+    <select id="ilDropdown" class="form-control">
+        <option value="">İl seçin</option>
+        @foreach (var il in Model)
+        {
+            <option value="@il.Id">@il.Name</option>
+        }
+    </select>
+</div>
+
+<div>
+    <label for="ilceDropdown">İlçe:</label>
+    <select id="ilceDropdown" class="form-control">
+        <option value="">Önce bir il seçin</option>
+    </select>
+</div>
+
+<script src="~/jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#ilDropdown').on('change', function () {
+            let ilId = $(this).val();
+            let ilceDropdown = $('#ilceDropdown');
+            ilceDropdown.empty();
+            ilceDropdown.append('<option value="">İlçe seçin</option>');
+
+            if (ilId) {
+                $.ajax({
+                    url: '/Dropdown/GetIlceler',
+                    type: 'POST',
+                    data: { ilId: ilId },
+                    success: function (ilceler) {
+                        ilceler.forEach(function (ilce) {
+                            ilceDropdown.append(`<option value="${ilce.id}">${ilce.name}</option>`);
+                        });
+                    }
+                });
+            }
+        });
+    });</script>
+

@@ -9,7 +9,7 @@ namespace DataAccessLayer.Abstract
 {
     public interface ICartRepository
     {
-        public List<CartItem> GetCartItems(int userid);
+        public List<CartItemDto> GetCartItems(int userid);
         public void AddToCart(int userid,int productId,decimal fiyat);
 
         public void RemoveFromCart(int cartid,int productId);

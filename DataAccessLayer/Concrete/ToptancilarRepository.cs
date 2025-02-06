@@ -47,13 +47,13 @@ namespace DataAccessLayer.Concrete
         public List<ToptancilarDto> GetAllDto()
         {
             var query = from toptanci in context.Toptancilar
-                        join urun in context.Urunler on toptanci.UrunID equals urun.UrunID into urunGroup
+                        join urun in context.Urunler on toptanci.UrunId equals urun.Id into urunGroup
                         from urun in urunGroup.DefaultIfEmpty()
                         select new ToptancilarDto
                         {
                             ToptanciID = toptanci.ToptanciID,
                             ToptanciAdi = toptanci != null ? toptanci.ToptanciAdi : null,
-                            UrunAdi = urun != null ? urun.UrunAdi : null,
+                            UrunAdi = urun != null ? urun.Adi : null,
                             Adet = toptanci.Adet,
                             SatisFiyati = toptanci.SatisFiyati
                         };

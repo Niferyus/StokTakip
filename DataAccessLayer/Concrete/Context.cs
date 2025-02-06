@@ -1,15 +1,10 @@
 ﻿using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Concrete
 {
-    public class Context:IdentityDbContext<AppUser, AppRole, int>
+    public class Context : IdentityDbContext<AppUser, AppRole, int>
     {
         public DbSet<Islemler> Islemler { get; set; }
         public DbSet<Musteriler> Musteriler { get; set; }
@@ -20,7 +15,7 @@ namespace DataAccessLayer.Concrete
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=Furkan;initial catalog=StokTakipDB;integrated security=true;TrustServerCertificate=true");
+            optionsBuilder.UseSqlServer("server=Furkan;initial catalog=DBStokTakip;integrated security=true;TrustServerCertificate=true");
         }
     }
 }

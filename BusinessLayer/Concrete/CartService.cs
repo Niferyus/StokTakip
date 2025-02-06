@@ -28,7 +28,7 @@ namespace BusinessLayer.Concrete
             cartRepository.ClearCart(cartid);
         }
 
-        public List<CartItem> GetCartItems(int userid)
+        public List<CartItemDto> GetCartItems(int userid)
         {
             return cartRepository.GetCartItems(userid);
         }

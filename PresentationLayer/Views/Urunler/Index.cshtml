@@ -1,29 +1,421 @@
-﻿@model List<EntityLayer.Concrete.Urunler>
+﻿@model EntityLayer.Concrete.Urunler
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Layout/AdminLayout.cshtml";
+    ViewData["Title"] = "Ürün Listesi";
+    Layout = null;
 }
 
-<table class="table table-bordered">
-    <tr>
-        <th>#</th>
-        <th>Ürün Adı</th>
-        <th>Fiyat</th>
-        <th>Stok Miktarı</th>
-        <th>Güncelle</th>
-        <th>Detaylar</th>
-    </tr>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <th>@item.UrunID</th>
-            <td>@item.UrunAdi</td>
-            <td>@string.Format("{0:C2}", item.UrunFiyat)</td>
-            <td>@item.UrunStok</td>
-            <td><a href="/Urunler/Delete/@item.UrunID" class="btn btn-danger">Sil</a></td>
-            <td><a href="/Urunler/CreateandUpdate/@item.UrunID" class="btn btn-primary">Güncelle</a></td>
-        </tr>
-    }
-</table>
-<a href="/Urunler/CreateandUpdate/" class="btn btn-info">Ekle</a>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS Kütüphaneleri -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
+    <link href="~/css/urunlerindex.css" rel="stylesheet" />
+</head>
 
+<body>
+    <div class="main-container">
+        <div class="page-header">
+            <h2 class="page-title">Ürün Listesi</h2>
+            <button id="addnewitem" class="btn-add" onclick="openform()">
+                <i class="fas fa-plus"></i>
+                Yeni Ürün Ekle
+            </button>
+        </div>
+
+        <form id="filterform" class="card p-3 mb-4">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-filter"></i> Ürün Filtreleme
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Marka</label>
+                        <input type="text" id="markainput" name="marka" class="form-control" />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Ad</label>
+                        <input type="text" id="adiinput" name="adi" class="form-control" />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Barkod No</label>
+                        <input type="text" id="barkodinput" name="barkod" class="form-control" />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Stok Durumu</label>
+                        <select id="stokdrop" name="stok" class="form-select">
+                            <option value="">Tümü</option>
+                            <option value="StokVar">Stok Var</option>
+                            <option value="StokYok">Stok Yok</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <button type="button" id="filterbutton" class="btn btn-outline-success">
+                        <i class="fas fa-search"></i> Filtrele
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="grid-container">
+            <table id="grid"></table>
+            <div id="pager"></div>
+        </div>
+    </div>
+
+    <div class="newitemform" id="newitemform">
+        <button id="closeformbtn" onclick="closeform()">
+            <i class="fas fa-times"></i>
+        </button>
+        <h4 class="mb-4">Yeni Ürün Ekle</h4>
+        <form id="addnewitem" action="/Urunler/AddUrun" method="post">
+            <div class="form-group">
+                <label class="form-label">Marka</label>
+                <span asp-validation-for="Marka" class="text-danger"></span>
+                <input type="text" asp-for="Marka" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Ad</label>
+                <span asp-validation-for="Adi" class="text-danger"></span>
+                <input type="text" asp-for="Adi" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Barkod No</label>
+                <span asp-validation-for="BarkodNo" class="text-danger"></span>
+                <input type="text" asp-for="BarkodNo" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Açıklama</label>
+                <span asp-validation-for="Aciklama" class="text-danger"></span>
+                <input type="text" asp-for="Aciklama" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Birim</label>
+                <span asp-validation-for="Birim" class="text-danger"></span>
+                <input type="text" asp-for="Birim" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Alış Fiyatı</label>
+                <span asp-validation-for="AlisFiyat" class="text-danger"></span>
+                <input type="text" asp-for="AlisFiyat" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Satış Fiyatı</label>
+                <span asp-validation-for="SatisFiyat" class="text-danger"></span>
+                <input type="text" asp-for="SatisFiyat" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Stok</label>
+                <span asp-validation-for="Stok" class="text-danger"></span>
+                <input type="text" asp-for="Stok" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+        </form>
+    </div>
+
+    <div class="updateitemform" id="updateitemform">
+        <button id="closeUpdateFormBtn" onclick="closeUpdateForm()">
+            <i class="fas fa-times"></i>
+        </button>
+        <h4 class="mb-4">Ürün Düzenle</h4>
+        <form id="updateItemForm" action="/Urunler/EditUrun">
+            <input type="hidden" id="updateId" name="Id" />
+
+            <div class="form-group mb-3">
+                <label class="form-label">Marka</label>
+                <input asp-for="Marka" type="text" id="updateMarka" name="Marka" class="form-control" required />
+                <span asp-validation-for="Marka" class="text-danger field-validation-valid"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Ad</label>
+                <input asp-for="Adi" type="text" id="updateAdi" name="Adi" class="form-control" required />
+                <span asp-validation-for="Adi" class="text-danger field-validation-valid"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Barkod No</label>
+                <input asp-for="BarkodNo" type="text" id="updateBarkodNo" name="BarkodNo" class="form-control" required />
+                <span asp-validation-for="BarkodNo" class="text-danger field-validation-valid"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Açıklama</label>
+                <input asp-for="Aciklama" type="text" id="updateAciklama" name="Aciklama" class="form-control" required />
+                <span asp-validation-for="Aciklama" class="text-danger field-validation-valid"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Birim</label>
+                <input asp-for="Birim" type="text" id="updateBirim" name="Birim" class="form-control"/>
+                <span asp-validation-for="Birim" class="text-danger field-validation-valid"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Alış Fiyatı</label>
+                <input asp-for="AlisFiyat" type="number" step="0.01" id="updateAlisFiyat" name="AlisFiyat" class="form-control" required />
+                <span asp-validation-for="AlisFiyat" class="text-danger field-validation-valid"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Satış Fiyatı</label>
+                <input asp-for="SatisFiyat" type="number" step="0.01" id="updateSatisFiyat" name="SatisFiyat" class="form-control"
+                       required />
+                <span asp-validation-for="SatisFiyat" class="text-danger field-validation-valid"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Stok</label>
+                <input asp-for="Stok" type="number" id="updateStok" name="Stok" class="form-control" required />
+                <span asp-validation-for="Stok" class="text-danger field-validation-valid"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Güncelle</button>
+        </form>
+    </div>
+
+    <!-- JS Kütüphaneleri -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+    <script src="~/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+
+    <script>
+        jQuery("#grid").jqGrid({
+            url: '@Url.Action("GetUrunler", "Urunler")',
+            datatype: "json",
+            colNames: ['id', 'Marka', 'Adı', 'BarkodNo', 'Açıklama', 'Birim', 'AlışFiyatı', 'SatışFiyatı', 'Stok', 'Tarih', 'İşlemler'],
+            colModel: [
+                { name: 'id', index: 'id', width: 55, editable: false },
+                { name: 'marka', index: 'marka', width: 100, editable: true },
+                { name: 'adi', index: 'adi', width: 80, editable: true },
+                { name: 'barkodNo', index: 'barkodNo', width: 90, editable: true },
+                { name: 'aciklama', index: 'aciklama', width: 120, editable: true },
+                { name: 'birim', index: 'birim', width: 80, sortable: false, editable: true },
+                {
+                    name: 'alisFiyat', index: 'alisFiyat', width: 80, editable: true,
+                    editrules: { number: true }, formatter: 'number',
+                    formatoptions: { decimalPlaces: 2 }
+                },
+                {
+                    name: 'satisFiyat', index: 'satisFiyat', width: 80, editable: true,
+                    editrules: { number: true }, formatter: 'number',
+                    formatoptions: { decimalPlaces: 2 }
+                },
+                {
+                    name: 'stok', index: 'stok', width: 80, editable: true,
+                    editrules: { integer: true }
+                },
+                { name: 'createDate', index: 'createDate', width: 80, editable: false },
+                { name: 'islemler', width: 120, formatter: ButtonFormatter, sortable: false, editable: false }
+            ],
+            rowNum: 10,
+            rowList: [5, 10, 20, 50],
+            pager: '#pager',
+            sortname: 'id',
+            viewrecords: true,
+            sortorder: "desc",
+            caption: "Ürünler",
+            gridComplete: function () {
+                $(".deletebutton").click(function () {
+                    var id = $(this).data("id");
+                    deleteitem(id);
+                })
+                $(".updatebutton").click(function () {
+                    var id = $(this).data("id");
+                    edititem(id);
+                })
+            },
+            loadError: function (xhr, status, error) {
+                alert("Veri yüklenirken hata oluştu: " + error);
+            },
+            height: "auto",
+            autowidth: true,
+            shrinkToFit: true,
+            rownumbers: true,
+            pagerpos: "center",
+            loadonce: false,
+            pgbuttons: true,
+            pginput: true,
+            recordpos: "left",
+            pgtext: "Sayfa {0} / {1}",
+            emptyrecords: "Kayıt bulunamadı",
+            loadtext: "Yükleniyor..."
+        });
+        jQuery("#grid").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false });
+
+        function ButtonFormatter(cellvalue, options, rowObject) {
+            return `<div style="display: flex; gap: 5px;">
+            <button class="deletebutton btn btn-danger" data-id="${rowObject.id}">Sil</button>
+            <button class="updatebutton btn btn-primary" data-id="${rowObject.id}">Düzenle</button>
+            </div>`;
+        }
+
+
+        $(document).ready(function () {
+            $("#addnewitem").submit(function (event) {
+                event.preventDefault();
+                var formdata = $("form").serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "/Urunler/AddUrun",
+                    data: formdata,
+                    success: function (response) {
+                        if (response.success) {
+                            $.gritter.add({
+                                title: "Başarılı",
+                                text: "Ürün başarıyla eklendi.",
+                                class_name: "gritter-success"
+                            });
+                            closeform();
+                            $("#grid").trigger("reloadGrid");
+                        } else {
+                            alert("Ürün eklenirken bir hata oluştu.");
+                        }
+                    },
+                    error: function () {
+                        alert("Sunucu hatası oluştu");
+                    }
+                })
+            })
+        })
+
+        function openform() {
+            $("#newitemform").css("display", "block");
+        }
+
+        function closeform() {
+            $("#newitemform").css("display", "none");
+        }
+
+        function deleteitem(id) {
+            if (confirm("Bu ürünü silmek istediğinize emin misiniz?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Urunler/DeleteItem",
+                    data: { id: id },
+                    success: function (response) {
+                        if (response.success) {
+                            $.gritter.add({
+                                title: "Başarılı",
+                                text: "Ürün başarıyla silindi.",
+                                class_name: "gritter-success"
+                            });
+                            $("#grid").trigger("reloadGrid");
+                        }
+                    },
+                    error: function () {
+                        alert("Ürün silinirken bir hata oluştu.");
+                    }
+                })
+            }
+        }
+
+        $("#filterbutton").click(function (e) {
+            e.preventDefault();
+            var marka = $("#markainput").val();
+            var adi = $("#adiinput").val();
+            var barkod = $("#barkodinput").val();
+            var stok = $("#stokdrop").val();
+
+            $("#grid").jqGrid('setGridParam', {
+                url: '@Url.Action("GetFilterItem", "Urunler")',
+                postData: {
+                    marka: marka,
+                    adi: adi,
+                    barkod: barkod,
+                    stok: stok,
+                    rows: $("#grid").getGridParam("rowNum"),
+                    page: 1
+                },
+                page: 1
+            }).trigger("reloadGrid");
+        })
+
+        function edititem(id) {
+            $.ajax({
+                type: "GET",
+                url: '/Urunler/GetById',
+                data: { id: id },
+                success: function (data) {
+                    if (data) {
+                        // Form alanlarını dolduruyoruz
+                        $("#updateId").val(data.id);
+                        $("#updateMarka").val(data.marka);
+                        $("#updateAdi").val(data.adi);
+                        $("#updateBarkodNo").val(data.barkodNo);
+                        $("#updateAciklama").val(data.aciklama);
+                        $("#updateBirim").val(data.birim);
+                        $("#updateAlisFiyat").val(data.alisFiyat);
+                        $("#updateSatisFiyat").val(data.satisFiyat);
+                        $("#updateStok").val(data.stok);
+
+                        // Güncelleme formunu gösteriyoruz (modal açılıyor)
+                        openUpdateForm();
+                    } else {
+                        $.gritter.add({
+                            title: "Hata",
+                            text: "Ürün bilgisi bulunamadı.",
+                            class_name: "gritter-error"
+                        });
+                    }
+                },
+                error: function () {
+                    alert("Ürün bilgileri getirilirken hata oluştu.");
+                }
+            });
+        }
+
+        function openUpdateForm() {
+            $("#updateitemform").css("display", "block");
+        }
+
+        function closeUpdateForm() {
+            $("#updateitemform").css("display", "none");
+        }
+
+        $("#updateItemForm").submit(function (event) {
+            event.preventDefault();
+            var formdata = $("#updateItemForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Urunler/EditUrun",
+                data: formdata,
+                success: function (response) {
+                    if (response.success) {
+                        $.gritter.add({
+                            title: "Başarılı",
+                            text: "Ürün başarıyla güncellendi.",
+                            class_name: "gritter-success"
+                        });
+                        closeUpdateForm();
+                        $("#grid").trigger("reloadGrid");
+                    } else {
+                        $.gritter.add({
+                            title: "Hata",
+                            text: response.message || "Ürün güncellenirken bir hata oluştu.",
+                            class_name: "gritter-error"
+                        });
+                    }
+                },
+                error: function () {
+                    alert("Sunucu hatası oluştu.");
+                }
+            });
+        });
+    </script>
+</body>
