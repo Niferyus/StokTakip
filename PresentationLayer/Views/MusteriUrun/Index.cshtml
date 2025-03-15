@@ -23,12 +23,12 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.UrunAdi</td>
-            <td>@string.Format("{0:C2}", item.UrunFiyati)</td>
-            <td>@item.UrunStok</td>
+            <td>@item.Adi</td>
+            <td>@string.Format("{0:C2}", item.Fiyat)</td>
+            <td>@item.Stok</td>
             <td>
                 <button class="btn btn-primary"
-                        onclick="addToCart(@ViewBag.UserId, @item.UrunId, @item.UrunFiyati)">
+                        onclick="addToCart(@ViewBag.UserId, @item.Id, @item.Fiyat)">
                     Satın Al
                 </button>
             </td>

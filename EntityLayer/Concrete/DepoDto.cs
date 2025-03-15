@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EntityLayer.Concrete
+{
+    public class DepoDto
+    {
+        public int Id { get; set; }
+        [StringLength(50, ErrorMessage = "İsim en fazla 50 karakter olabilir")]
+        public string Ad { get; set; }
+        [Required(ErrorMessage ="Şehir ismi girmeniz gerekmektedir")]
+        public string Sehir { get; set; }
+        [Required(ErrorMessage = "İlçe ismi girmeniz gerekmektedir")]
+        public string Ilce { get; set; }
+        [StringLength(50, ErrorMessage = "Adres en fazla 50 karakter olabilir")]
+        [Required(ErrorMessage = "Adres bilgisi girmeniz gerekmektedir")]
+        public string Adres { get; set; }
+        [EmailAddress(ErrorMessage = "Geçerli bir mail adresi giriniz")]
+        [Required]
+        [MinLength(5, ErrorMessage = "E-posta en az 5 karakter olmalıdır.")]
+        [MaxLength(255, ErrorMessage = "E-posta en fazla 255 karakter olabilir.")]
+        public string Mail { get; set; }
+        [StringLength(20, ErrorMessage = "Adres en fazla 20 karakter olabilir")]
+        [Required]
+        public string Yetkili { get; set; }
+        [StringLength(255, ErrorMessage = "Açıklama en fazla 255 karakter olabilir")]
+        public string Aciklama { get; set; }
+    }
+}

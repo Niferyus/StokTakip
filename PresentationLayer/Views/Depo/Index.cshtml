@@ -1,0 +1,223 @@
+﻿@model EntityLayer.Concrete.DepoDto
+@{
+    Layout = "~/Views/Layoutt/Index.cshtml";
+}
+
+@section Styles{
+    <style>
+        #modalContent {
+            max-height: 70vh; /* Modal yüksekliğini aşmasın */
+            overflow-x: auto; /* Dikey kaydırma çubuğu */
+        }
+    </style>
+}
+<div>
+    <button class="btn btn-success" onclick="loadModal(0)">Depo Ekle</button>
+</div>
+<div class="grid-container card shadow-sm p-3 mb-4 bg-white rounded">
+    <table id="grid" class="table table-striped"></table>
+    <div id="pager"></div>
+</div>
+@Html.Partial("DynamicModal")
+
+
+
+@section Scripts{
+    <script>
+        jQuery('#grid').jqGrid({
+            url: '/Depo/GetDepos',
+            datatype: 'json',
+            mtype: 'GET',
+            colNames: ['Ad', 'Sehir', 'Ilce', 'Adres', 'Mail', 'Yetkili', 'Aciklama', '#', 'İşlemler'],
+            colModel: [
+                { name: 'ad', index: 'ad', editable: true },
+                { name: 'sehir', index: 'sehir', editable: true },
+                { name: 'ilce', index: 'ilce', editable: true },
+                { name: 'adres', index: 'adres', editable: true },
+                { name: 'mail', index: 'mail', editable: true },
+                { name: 'yetkili', index: 'yetkili', editable: true },
+                { name: 'aciklama', index: 'aciklama', editable: true },
+                { name: '#', formatter: UrunlerButtonFormatter, editable: false },
+                { name: 'islemler', formatter: ButtonFormatter, editable: true },
+            ],
+            pager: jQuery('#pager'),
+            rowNum: 10,
+            rowList: [10, 20, 30, 40],
+            height: '100%',
+            viewrecords: true,
+            caption: 'Depo List',
+            emptyrecords: 'No records to display',
+            jsonReader: {
+                root: "rows",
+                page: "page",
+                total: "total",
+                records: "records",
+                repeatitems: false,
+                id: "id"
+            },
+            autowidth: true,
+            multiselect: false,
+            gridComplete: function () {
+                $(".deletebutton").on("click", function () {
+                    var id = $(this).data("id");
+                    deleteitem(id);
+                });
+                $(".updatebutton").on("click", function () {
+                    var id = $(this).data("id");
+                    loadModal(id);
+                })
+                $(".urunbutton").on("click", function () {
+                    var id = $(this).data("id");
+                    getDepoUrun(id);
+                })
+            }
+        });
+
+        function loadModal(id) {
+            $.ajax({
+                url: '/Depo/GetPopUpContent',
+                type: 'GET',
+                data: { id: id },
+                success: function (response) {
+                    $("#modalContent").html(response);
+
+                    $("#dynamicModal").modal("show");
+                },
+                error: function () {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                        class_name: 'gritter-error'
+                    });
+                }
+            });
+        }
+
+        function getDepoUrun(id) {
+            $.ajax({
+                url: '/Depo/UrunPartial',
+                type: 'GET',
+                data: { id: id },
+                success: function (response) {
+                    $("#modalContent").html(response);
+                    $("#dynamicModal").addClass("modal-lg");
+                    $(".modalContent").addClass("modal-lg")
+                    $("#dynamicModal").modal("show");
+                },
+                error: function () {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                        class_name: 'gritter-error'
+                    });
+                }
+            });
+        }
+
+        function UrunlerButtonFormatter(cellvalue, options, rowObject) {
+            return `<div style="display: flex; gap: 5px;">
+                    <button class="urunbutton btn btn-success" data-id="${rowObject.id}">Ürünler</button>
+                    </div>`;
+
+        }
+
+        function ButtonFormatter(cellvalue, options, rowObject) {
+            return `<div style="display: flex; gap: 5px;">
+                    <button id="deletebutton" class="deletebutton btn btn-danger" data-id="${rowObject.id}">Sil</button>
+                    <button class="updatebutton btn btn-primary" data-id="${rowObject.id}">Düzenle</button>
+                    </div>`;
+        }
+
+        function deleteitem(id) {
+            bootbox.confirm({
+                message: "Bu depoyu silmek istediğinize emin misiniz?",
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Hayır',
+                        result: false
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Evet',
+                        result: true
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/Depo/DeleteItem',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (response) {
+                                if (response.success) {
+                                    $.gritter.add({
+                                        title: 'Başarılı',
+                                        text: 'Depo başarıyla silindi',
+                                        class_name: 'gritter-success'
+                                    });
+                                    jQuery('#grid').trigger('reloadGrid');
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Hata',
+                                        text: response.message || 'Depo silinirken bir hata oluştu',
+                                        class_name: 'gritter-error'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                $.gritter.add({
+                                    title: 'Hata',
+                                    text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                                    class_name: 'gritter-error'
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+
+
+
+        $(document).ready(function () {
+            $("#addnewitemfrom").submit(function (event) {
+                event.preventDefault();
+                var formdata = $("#addnewitemfrom").serialize();
+                if ($("#addnewitemfrom").valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Depo/Save",
+                        data: formdata,
+                        success: function (response) {
+                            if (response.success) {
+                                if (response.create) {
+                                    $.gritter.add({
+                                        title: "Başarılı",
+                                        text: "Depo başarıyla eklendi.",
+                                        class_name: "gritter-success"
+                                    });
+                                }
+                                else {
+                                    $.gritter.add({
+                                        title: "Başarılı",
+                                        text: "Depo başarıyla güncellendi.",
+                                        class_name: "gritter-success"
+                                    });
+                                }
+                                closeform();
+                                $("#grid").trigger("reloadGrid");
+                            } else {
+                                alert(response.errors.join("\n"));
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Hata Detayı:", xhr.responseText);
+                            alert("Sunucu hatası oluştu");
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+    </script>
+}

@@ -1,19 +1,36 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "ExcelView";
     Layout = "~/Views/Layout/AdminLayout.cshtml";
 }
 
-<h2>Excel İşlemleri</h2>
+<h2 class="text-center my-4">Excel İşlemleri</h2>
 
-<!-- Excel Yükleme (Import) -->
-<form asp-action="ImportExcel" asp-controller="Urunler" method="post" enctype="multipart/form-data">
-    <label>Excel Dosyası Yükle:</label>
-    <input type="file" name="file" />
-    <button type="submit">Yükle</button>
-</form>
+<div class="container">
+    <!-- Excel Yükleme (Import) -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-upload"></i> Excel Dosyası Yükle
+        </div>
+        <div class="card-body">
+            <form asp-action="ImportExcel" asp-controller="Urunler" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Excel Dosyası Yükle:</label>
+                    <input type="file" name="file" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-success w-100">Yükle</button>
+            </form>
+        </div>
+    </div>
 
-<!-- Excel İndirme (Export) -->
-<form asp-action="ExportExcel" asp-controller="Urunler" method="get">
-    <button type="submit">Excel İndir</button>
-</form>
+    <!-- Excel İndirme (Export) -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-download"></i> Excel İndir
+        </div>
+        <div class="card-body">
+            <form asp-action="ExportExcel" asp-controller="Urunler" method="get">
+                <button type="submit" class="btn btn-primary w-100">Excel İndir</button>
+            </form>
+        </div>
+    </div>
+</div>

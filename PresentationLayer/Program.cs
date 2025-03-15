@@ -1,18 +1,48 @@
 
 using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
+using BusinessLayer.Mapping;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using EntityLayer.Concrete;
+using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
 // Add services to the container.
-builder.Services.AddDbContext<Context>();
-builder.Services.AddSingleton<VisitorCounterService>();
-builder.Services.AddSession();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<Context>(options =>
+options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
+
+builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
 builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Context>();
+
+builder.Services.AddSingleton<VisitorCounterService>();
+
+builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IMarkaDal, MarkaDal>();
+builder.Services.AddScoped<IMarkaService, MarkaService>();
+
+builder.Services.AddScoped<IBirimDal, BirimDal>();
+builder.Services.AddScoped<IBirimService, BirimService>();
+
+builder.Services.AddScoped<IUrunlerDal, UrunlerDal>();
+builder.Services.AddScoped<IUrunService, UrunService>();
+
+builder.Services.AddScoped<IDepoDal, DepoDal>();
+builder.Services.AddScoped<IDepoService, DepoService>();
 
 builder.Services.AddScoped<IUrunlerRepository, UrunlerRepository>();
 builder.Services.AddScoped<IUrunlerService, UrunlerService>();

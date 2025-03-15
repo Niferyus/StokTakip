@@ -1,21 +1,25 @@
-﻿using BusinessLayer.Abstract;
+﻿using AutoMapper;
+using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Vml.Office;
 using EntityLayer.Concrete;
-using ExcelDataReader;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
+using System.Globalization;
 
 namespace PresentationLayer.Controllers
 {
     [Authorize(Roles = "Satıcı")]
     public class UrunlerController : Controller
     {
-        private readonly IUrunlerService urunlerService;
-
-        public UrunlerController(IUrunlerService urunlerService)
+        private readonly IUrunService urunService;
+        private readonly IMapper _mapper;
+        public UrunlerController(IUrunService urunlerService, IMapper _mapper)
         {
-            this.urunlerService = urunlerService;
+            this._mapper = _mapper;
+            this.urunService = urunlerService;
         }
 
         public IActionResult Index()
@@ -30,191 +34,153 @@ namespace PresentationLayer.Controllers
             }   
         }
 
-        public JsonResult GetUrunler(int page, int rows)
+        public async Task<JsonResult> GetUrunler(int page = 1)
         {
-            var totalRecords = urunlerService.GetAll().Count();
-            var totalPages = (int)Math.Ceiling((double)totalRecords / rows);
-
-            var urunler = urunlerService.GetAll()
-                .Skip((page - 1) * rows)
-                .Take(rows)
-                .ToList();
-
+            int pageSize = 5;
+            var items = await urunService.GetAllUrunlerDto(page,pageSize);
             var jsonData = new
             {
-                total = totalPages,
-                page,
-                records = totalRecords,
-                rows = urunler
+                total = items.TotalPages,
+                page = page,
+                rows = items
             };
-
             return Json(jsonData);
-        }
-
-        [HttpPost]
-        public IActionResult AddUrun(Urunler item)
-        {   
-            item.Approved = true;
-            item.Active = true;
-            item.InsUserId = HttpContext.Session.GetInt32("OnlineUserId");
-            item.CreateDate = DateTime.Now;
-            urunlerService.Add(item);
-            return Json(new { success = true, message="Ürün başarıyla eklendi" });
         }
 
         [HttpPost]
         public JsonResult DeleteItem(int id)
         {
-            urunlerService.Delete(id);
+            urunService.Delete(id);
             return Json(new { success = true });
         }
 
-        public JsonResult GetFilterItem(string marka,string adi,string barkod,string stok,int page = 1, int rows=10)
+        public async Task<JsonResult> GetFilterItem(string marka,string adi,string barkod,string stok,string baslangicTarihi,string bitisTarihi,int page = 1)
         {
-            var query = urunlerService.GetByFilter(marka, adi, barkod, stok);
+            int pagesize = 5;
 
-            var totalRecords = query.Count();
-            var totalPages = (int)Math.Ceiling((double)totalRecords / rows);
-
-            var urunler = query.Skip((page - 1) * rows)
-                               .Take(rows)
-                               .ToList();
-
+            var items = await urunService.GetByFilter(marka, adi, barkod, stok,baslangicTarihi,bitisTarihi ,page, pagesize);
+            
             var response = new
             {
-                rows = urunler,
+                rows = items,
                 page = page,
-                total = totalPages,
-                records = totalRecords
+                total = items.TotalPages,
             };
             return Json(response);
         }
 
         public JsonResult GetById(int id)
         {
-            var urun = urunlerService.GetById(id);
-            return Json(urun);
+            var urun = urunService.GetById(id);
+            return Json(urun.Result);
+        }
+
+        public JsonResult Save(UrunlerDto entity)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                   .SelectMany(v => v.Errors)
+                   .Select(e => e.ErrorMessage)
+                   .ToList();
+
+                return Json(new { success = false, errors });
+            }
+            var item = _mapper.Map<UrunlerDto, Urunler>(entity);
+            var create = false;
+            if (item.Id == 0)
+            {
+                item.InsUserId = (int)HttpContext.Session.GetInt32("OnlineUserId");
+                item.CreateDate = DateTime.Now;
+                item.Approved = true;
+                item.Active = true;
+                create = true;
+            }
+            urunService.Save(item);
+            return Json(new { success = true, create = create });
+        }
+
+        public IActionResult DownloadTemplate()
+        {
+            var fileBytes = urunService.GenerateTemplate();
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Urunler_Template.xlsx");
         }
 
         [HttpPost]
-        public JsonResult EditUrun(Urunler item)
-        {
-            //if (!ModelState.IsValid)
-            //{
-            //    return Json(new { success = false, message = "Doğrulama hatası" });
-            //}
+        public async Task<IActionResult> UploadExcel(IFormFile file)
+        {   
+            int userid = (int)HttpContext.Session.GetInt32("OnlineUserId");
+            using var stream = new MemoryStream();
+            await file.CopyToAsync(stream);
+            await urunService.ImportFromExcelAsync(stream.ToArray(),userid);
 
-            var existingUrun = urunlerService.GetById(item.Id);
-            if (existingUrun == null)
-            {
-                return Json(new { success = false, message = "Ürün bulunamadı" });
-            }
-
-            // Gerekli alanları güncelliyoruz.
-            existingUrun.Marka = item.Marka;
-            existingUrun.Adi = item.Adi;
-            existingUrun.BarkodNo = item.BarkodNo;
-            existingUrun.Aciklama = item.Aciklama;
-            existingUrun.Birim = item.Birim;
-            existingUrun.AlisFiyat = item.AlisFiyat;
-            existingUrun.SatisFiyat = item.SatisFiyat;
-            existingUrun.Stok = item.Stok;
-
-            urunlerService.Edit(existingUrun);
-            return Json(new { success = true });
+            return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult GetPopUpContent(int id)
+        {
+            return FormPartial(id);
+        }
 
+        public PartialViewResult FormPartial(int id)
+        {
+            ViewBag.Id = id;
+            return PartialView("~/Views/Urunler/FormPartial.cshtml");
+        }
 
+        public PartialViewResult ExcelPartial()
+        {
+            return PartialView("~/Views/Urunler/ExcelPartial.cshtml");
+        }
 
-
-        //[HttpPost]
-        //public IActionResult ExcelYukle(IFormFile file)
+        //public async Task<IActionResult> ExportToExcel()
         //{
-        //    if (file == null || file.Length == 0)
-        //    {
-        //        return BadRequest("Lütfen bir Excel dosyası seçin.");
-        //    }
-
-        //    using (var stream = new MemoryStream())
-        //    {
-        //        file.CopyTo(stream);
-        //        stream.Position = 0;
-
-        //        using (var reader = ExcelReaderFactory.CreateReader(stream))
-        //        {
-        //            var result = reader.AsDataSet();
-        //            var table = result.Tables[0]; // İlk sayfa
-
-        //            List<Urunler> urunListesi = new List<Urunler>();
-
-        //            for (int i = 1; i < table.Rows.Count; i++) // İlk satır başlık olduğu için 1'den başlıyoruz
-        //            {
-        //                var urun = new Urunler
-        //                {
-        //                    UrunAdi = table.Rows[i][0].ToString(), // 1. sütun Ürün Adı
-        //                    UrunFiyat = Convert.ToDecimal(table.Rows[i][1]), // 2. sütun Fiyat
-        //                    UrunStok = Convert.ToInt32(table.Rows[i][2]) // 3. sütun Stok
-        //                };
-
-        //                urunListesi.Add(urun);
-        //            }
-        //            urunlerService.AddList(urunListesi);
-        //        }
-        //    }
-
-        //    return RedirectToAction("Index"); // Ürün listesine geri dön
-        //}
-
-        //public IActionResult CreateAndUpdate(int? id)
-        //{
-        //    var entity = (id == null) ? new Urunler() : urunlerService.GetById(id.Value);
-
-        //    if (id != null && id > 0 && entity.UrunID == 0)
-        //    {
-        //        return NotFound(); //Id dolu geldiği halde kayıt databasede bulunamadı.
-        //    }
-
-        //    if (entity.UrunID == 0)//Yeni Kayıt Eklenecek Demek
-        //    {
-        //        entity.UrunAdi = "Yeni Ürün Adı";
-        //    }
-
-        //    return View(entity); //
+        //    var products = await urunService.GetAll();
+        //    var fileBytes = urunService.ExportToExcel(products);
+        //    return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Urunler.xlsx");
         //}
 
         //[HttpPost]
-        //public IActionResult CreateAndUpdate(Urunler urun) // Fonk. Adı Edit olacak.
+        //public JsonResult AddUrun(Urunler item)
         //{
-        //    if (urun.UrunID == 0)  // Yeni kayıt ekleme
+        //    //if(!ModelState.IsValid)
+        //    //{
+        //    //    return Json(new { success = false, message = "Doğrulama hatası" });
+        //    //}
+        //    item.Approved = true;
+        //    item.Active = true;
+        //    item.InsUserId = (int)HttpContext.Session.GetInt32("OnlineUserId");
+        //    item.CreateDate = DateTime.Now;
+        //    urunService.Add(item);
+        //    return Json(new {success = true});
+        //}
+
+        //[HttpPost]
+        //public JsonResult EditUrun(Urunler item)
+        //{
+        //    //if (!ModelState.IsValid)
+        //    //{
+        //    //    return Json(new { success = false, message = "Doğrulama hatası" });
+        //    //}
+
+        //    var existingUrun = urunlerService.GetById(item.Id);
+        //    if (existingUrun == null)
         //    {
-        //        urunlerService.Add(urun);
-        //    }
-        //    else  // Güncelleme işlemi
-        //    {
-        //        var existingUrun = urunlerService.GetById(urun.UrunID);
-        //        if (existingUrun == null)
-        //        {
-        //            return Json(new { success = false, message = "Ürün bulunamadı" });
-        //        }
-
-        //        existingUrun.UrunAdi = urun.UrunAdi;
-        //        existingUrun.UrunFiyat = urun.UrunFiyat;
-        //        existingUrun.UrunStok = urun.UrunStok;
-
-        //        urunlerService.Update(existingUrun);
+        //        return Json(new { success = false, message = "Ürün bulunamadı" });
         //    }
 
+        //    // Gerekli alanları güncelliyoruz.
+        //    existingUrun.Marka = item.Marka;
+        //    existingUrun.Adi = item.Adi;
+        //    existingUrun.BarkodNo = item.BarkodNo;
+        //    existingUrun.Aciklama = item.Aciklama;
+        //    existingUrun.Birim = item.Birim;
+        //    existingUrun.AlisFiyat = item.AlisFiyat;
+        //    existingUrun.SatisFiyat = item.SatisFiyat;
+        //    existingUrun.Stok = item.Stok;
+
+        //    urunService.Save(existingUrun);
         //    return Json(new { success = true });
-        //}
-
-        //public IActionResult Delete(int id)
-        //{
-        //    //İlgili kayıt databasede varmı kontrol edilir. vede işlem yapan kişinin bu kaydı işlem yetkisi varmı kontrol edilir.
-        //    //Gerçek delete yapmayız Active=false yaparız.
-        //    var urunvarmi = urunlerService.GetById(id) ?? throw new Exception("Bu ID'ye sahip ürün bulunamadı");
-        //    urunlerService.Delete(id);
-        //    return RedirectToAction("Index");
         //}
     }
 }

@@ -1,4 +1,5 @@
-﻿using EntityLayer.Concrete;
+﻿using DataAccessLayer.Concrete;
+using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,11 @@ namespace BusinessLayer.Abstract
         Urunler GetById(int id);
         void AddList(List<Urunler> itemList);
         void saveChanges();
-        List<Urunler> GetByFilter(string marka, string adi, string barkod, string stok);
+        Task<Pagination<Urunler>> GetByFilter(string marka, string adi, string barkod, string stok,int pageIndex, int pageSize);
+        Task<List<Urunler>> GetAllAsync();
+        Task ImportFromExcelAsync(byte[] fileBytes);
+        byte[] GenerateTemplate();
+        byte[] ExportToExcel(List<Urunler> items);
+        Task<Pagination<UrunlerDto>> GetAllUrunlerDto(int pageIndex, int pageSize);
     }
 }

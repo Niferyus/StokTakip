@@ -32,7 +32,7 @@ namespace DataAccessLayer.Concrete
             var item = GetById(id);
             if (item != null)
             {
-                context.Urunler.Remove(item);
+                item.Active = false;
                 stringbuild.Append(item.Adi);
                 stringbuild.Append("satıldı");
                 Console.WriteLine(stringbuild.ToString());
@@ -54,19 +54,67 @@ namespace DataAccessLayer.Concrete
             var query = from urun in context.Urunler
                         select new MusteriUrunDto
                         {
-                            UrunId = urun.Id,
-                            UrunAdi = urun.Adi,
-                            UrunFiyati = urun.SatisFiyat,
-                            UrunStok = urun.Stok
+                            Id = urun.Id,
+                            Adi = urun.Adi,
+                            Fiyat = urun.SatisFiyat,
+                            Stok = urun.Stok
                         };
             return query.ToList();
         }
 
-        public Urunler GetById(int id)
+        public async Task<Pagination<UrunlerDto>> GetAllUrunlerDto(int pageIndex, int pageSize)
+        {
+            var query = from urun in context.Urunler
+                        join user in context.Users on urun.InsUserId equals user.Id
+                        where urun.Active == true
+                        select new UrunlerDto 
+                        {
+                            Id = urun.Id,
+                            UserName = user.Name,
+                            Marka = urun.Marka,
+                            Adi = urun.Adi,
+                            BarkodNo = urun.BarkodNo,
+                            Aciklama = urun.Aciklama,
+                            Birim = urun.Birim,
+                            AlisFiyat = urun.AlisFiyat,
+                            SatisFiyat = urun.SatisFiyat,
+                            Stok = urun.Stok,
+                            Tarih = urun.CreateDate
+                        };
+            var items = await Task.Run(() => Pagination<UrunlerDto>.Create(query.AsQueryable(), pageIndex, pageSize));
+            return items;
+        }
+
+        public async Task<Pagination<Urunler>> GetByFilter(string marka, string adi, string barkod, string stok,int pageIndex, int pageSize)
+        {
+            var query = context.Urunler.AsQueryable();
+
+            if (!string.IsNullOrEmpty(marka))
+                query = query.Where(x => x.Marka.Contains(marka));
+
+            if (!string.IsNullOrEmpty(adi))
+                query = query.Where(x => x.Adi.Contains(adi));
+
+            if (!string.IsNullOrEmpty(barkod))
+                query = query.Where(x => x.BarkodNo.Contains(barkod));
+
+            if (!string.IsNullOrEmpty(stok))
+            {
+                if (stok == "StokVar")
+                    query = query.Where(x => x.Stok > 0);
+                else if (stok == "StokYok")
+                    query = query.Where(x => x.Stok <= 0);
+            }
+            query = query.Where(x => x.Active == true);
+            var items = await Task.Run(() => Pagination<Urunler>.Create(query, pageIndex, pageSize));
+            return items;
+        }
+
+        public Urunler? GetById(int id)
         {
             //var item = context.Urunler.FromSqlInterpolated($"EXEC GetById @URUNID = {id}").FirstOrDefault();
             //return item;
-            return context.Urunler.FirstOrDefault(x => x.Id == id);
+            return context.Urunler?.FirstOrDefault(x => x.Id == id);
         }
 
         public void Edit(Urunler item)
@@ -106,28 +154,15 @@ namespace DataAccessLayer.Concrete
             context.SaveChanges();
         }
 
-        public List<Urunler> GetByFilter(string marka, string adi, string barkod, string stok)
+        public async Task<List<Urunler>> GetAllAsync()
         {
-            var query = context.Urunler.AsQueryable();
+            return await context.Urunler.ToListAsync();
+        }
 
-            if (!string.IsNullOrEmpty(marka))
-                query = query.Where(x => x.Marka.Contains(marka));
-
-            if (!string.IsNullOrEmpty(adi))
-                query = query.Where(x => x.Adi.Contains(adi));
-
-            if (!string.IsNullOrEmpty(barkod))
-                query = query.Where(x => x.BarkodNo.Contains(barkod));
-
-            if (!string.IsNullOrEmpty(stok))
-            {
-                if (stok == "StokVar")
-                    query = query.Where(x => x.Stok > 0);
-                else if (stok == "StokYok")
-                    query = query.Where(x => x.Stok <= 0);
-            }
-
-            return query.ToList();
+        public async Task AddAsync(List<Urunler> items)
+        {
+            await context.Urunler.AddRangeAsync(items);
+            await context.SaveChangesAsync();
         }
     }
 }

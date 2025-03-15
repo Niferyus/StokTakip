@@ -1,0 +1,200 @@
+﻿@model EntityLayer.Concrete.DepoDto
+
+
+<form id="addnewitemfrom" method="post">
+
+    <div class="form-group">
+        <label class="form-label">Ad</label>
+        <span asp-validation-for="Ad" class="text-danger"></span>
+        <input type="text" asp-for="Ad" class="form-control" id="adi" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Şehir</label>
+        <select id="ilDropdown" class="form-control">
+            <option value="">Şehir seçin</option>
+        </select>
+        <span asp-validation-for="Sehir" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">İlçe</label>
+        <span asp-validation-for="Ilce" class="text-danger"></span>
+        <label for="ilceDropdown">İlçe:</label>
+        <select id="ilceDropdown" class="form-control">
+            <option value="">Önce bir il seçin</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Adres</label>
+        <span asp-validation-for="Adres" class="text-danger"></span>
+        <input type="text" asp-for="Adres" class="form-control" id="adres" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Mail</label>
+        <span asp-validation-for="Mail" class="text-danger"></span>
+        <input type="text" asp-for="Mail" class="form-control" id="mail" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Yetkili</label>
+        <span asp-validation-for="Yetkili" class="text-danger"></span>
+        <input type="text" asp-for="Yetkili" class="form-control" id="yetkili" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Açıklama</label>
+        <span asp-validation-for="Aciklama" class="text-danger"></span>
+        <input type="text" asp-for="Aciklama" class="form-control" id="aciklama" />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+</form>
+<script src="~/jquery-validate/jquery.validate.min.js"></script>
+<script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        var id = @Html.Raw(Json.Serialize(ViewBag.Id)); // Razor'dan JS değişkenine güvenli dönüşüm
+        if (id !== 0) {
+            edititem(id);
+        }
+    });
+
+    $(document).ready(function (id) {
+        $.ajax({
+            url: '/Depo/GetAllYerlesim',
+            type: 'GET',
+            data: { id: id },
+            success: function (response) {
+                if (response.success) {
+                    $("#ilDropdown").empty
+                    response.data.forEach(function (il) {
+                        $('#ilDropdown').append(`<option value="${il.id}">${il.ad}</option>`);
+                    });
+                } else {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: response.message || 'İller getirilirken bir hata oluştu',
+                        class_name: 'gritter-error'
+                    });
+                }
+            },
+            error: function () {
+                $.gritter.add({
+                    title: 'Hata',
+                    text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                    class_name: 'gritter-error'
+                });
+            }
+        });
+    });
+
+    $('#ilDropdown').on('change', function () {
+        ilId = $(this).val();
+        ilceDropdown = $('#ilceDropdown');
+        ilceDropdown.empty();
+        ilceDropdown.append('<option value="">İlçe seçin</option>');
+        $.ajax({
+            url: '/Depo/GetAllYerlesim',
+            type: 'GET',
+            data: { id: ilId },
+            success: function (response) {
+                if (response.success) {
+                    response.data.forEach(function (ilce) {
+                        ilceDropdown.append(`<option value="${ilce.id}">${ilce.ad}</option>`);
+                    });
+                } else {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: response.message || 'İlçeler getirilirken bir hata oluştu',
+                        class_name: 'gritter-error'
+                    });
+                }
+            },
+        })
+    });
+
+    $(document).ready(function () {
+        $("#addnewitemfrom").submit(function (event) {
+            event.preventDefault();
+            var formdata = $("#addnewitemfrom").serialize();
+            if ($("#addnewitemfrom").valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Depo/Save",
+                    data: formdata,
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.create) {
+                                $.gritter.add({
+                                    title: "Başarılı",
+                                    text: "Depo başarıyla eklendi.",
+                                    class_name: "gritter-success"
+                                });
+                            }
+                            else {
+                                $.gritter.add({
+                                    title: "Başarılı",
+                                    text: "Depo başarıyla güncellendi.",
+                                    class_name: "gritter-success"
+                                });
+                            }
+                            $("#dynamicModal").modal("hide");
+                            $("#grid").trigger("reloadGrid");
+                        } else {
+                            alert(response.errors.join("\n"));
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Hata Detayı:", xhr.responseText);
+                        alert("Sunucu hatası oluştu");
+                    }
+                });
+            }
+            return false;
+        });
+    });
+
+    function edititem(id) {
+        $.ajax({
+            url: '/Depo/GetItem',
+            type: 'GET',
+            data: { id: id },
+            success: function (response) {
+                if (response.success) {
+                    let data = response.data;
+
+                    $("#adi").val(data.ad);
+                    $("#sehir").val(data.sehir);
+                    $("#ilce").val(data.ilce);
+                    $("#adres").val(data.adres);
+                    $("#mail").val(data.mail);
+                    $("#yetkili").val(data.yetkili);
+                    $("#aciklama").val(data.aciklama);
+
+                    idinput = $("<input>", { type: "hidden", name: "Id", id: "id" });
+                    $("#addnewitemfrom").append(idinput);
+
+                    idinput.val(data.id);
+                } else {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: response.message || 'Depo bilgileri getirilirken bir hata oluştu',
+                        class_name: 'gritter-error'
+                    });
+                }
+            },
+            error: function () {
+                $.gritter.add({
+                    title: 'Hata',
+                    text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                    class_name: 'gritter-error'
+                });
+            }
+        });
+    }
+
+</script>

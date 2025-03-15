@@ -1,0 +1,50 @@
+﻿@model EntityLayer.Concrete.DepoDto
+
+
+<form id="addnewitemfrom" method="post">
+
+    <div class="form-group">
+        <label class="form-label">Ad</label>
+        <span asp-validation-for="Ad" class="text-danger"></span>
+        <input type="text" asp-for="Ad" class="form-control" id="adi" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Şehir</label>
+        <span asp-validation-for="Sehir" class="text-danger"></span>
+        <input type="text" asp-for="Sehir" class="form-control" id="sehir" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">İlçe</label>
+        <span asp-validation-for="Ilce" class="text-danger"></span>
+        <input type="text" asp-for="Ilce" class="form-control" id="ilce" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Adres</label>
+        <span asp-validation-for="Adres" class="text-danger"></span>
+        <input type="text" asp-for="Adres" class="form-control" id="adres" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Mail</label>
+        <span asp-validation-for="Mail" class="text-danger"></span>
+        <input type="text" asp-for="Mail" class="form-control" id="mail" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Yetkili</label>
+        <span asp-validation-for="Yetkili" class="text-danger"></span>
+        <input type="text" asp-for="Yetkili" class="form-control" id="yetkili" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Açıklama</label>
+        <span asp-validation-for="Aciklama" class="text-danger"></span>
+        <input type="text" asp-for="Aciklama" class="form-control" id="aciklama" />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+</form>
+

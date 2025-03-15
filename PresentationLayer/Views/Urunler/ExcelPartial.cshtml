@@ -1,0 +1,10 @@
+﻿<h2>Ürün Listesi</h2>
+
+<a class="btn btn-success" href="/Urunler/DownloadTemplate">Excel Şablonunu İndir</a>
+
+<form asp-action="UploadExcel" asp-controller="Urunler" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" required />
+    <button type="submit" class="btn btn-primary">Excel Yükle</button>
+</form>
+
+<a class="btn btn-info" href="/Urunler/ExportToExcel">Excel Olarak Dışa Aktar</a>

@@ -1,39 +1,52 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace EntityLayer.Concrete
 {
+    [Index(nameof(BarkodNo), IsUnique = true)]
     public class Urunler : EntityBase
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [Required(ErrorMessage ="Marka alanı boş geçilemez")]
+
+        [Column(TypeName = "varchar(50)")]
         public string Marka { get; set; }
-        [Required(ErrorMessage ="İsim alanı boş geçilemez")]
+
+        [Column(TypeName = "varchar(20)")]
         public string Adi { get; set; }
-        [StringLength(13,ErrorMessage ="Barkod 13 haneli olmalıdır")]
+        [Column(TypeName = "varchar(13)")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string BarkodNo { get; set; }
-        [StringLength(50,ErrorMessage ="En fazla 50 karakter olmalı")]
+
+        [Column(TypeName = "varchar(100)")]
         public string Aciklama { get; set; }
+        [Column(TypeName = "varchar(20)")]
         public string? Birim { get; set; }
-        //[DataType(DataType.Currency)]
-        [Required(ErrorMessage ="Alış fiyatı alanı boş geçilemez")]
+
         public decimal AlisFiyat { get; set; }
-        //[DataType(DataType.Currency)]
-        [Required(ErrorMessage ="Satış Fiyatı alanı boş geçilemez")]
+       
         public decimal SatisFiyat { get; set; }
-        [Required(ErrorMessage ="Stok miktarı alanı boş geçilemez")]
+
+        public int KritikStokMiktarı { get; set; }
+
+        public int EksikStokMiktarı { get; set; }
+
         public int Stok { get; set; }
+
+        public int? DepoId { get; set; }
+
+
+        [ForeignKey("DepoId")]
+        public Depo Depo { get; set; }
         public ICollection<Islemler> Islemler { get; set; }
-
         public ICollection<Toptancilar> Toptancilar { get; set; }
-
         public ICollection<CartItem> cartitem { get; set; }
     }
 }

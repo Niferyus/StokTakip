@@ -8,11 +8,11 @@ namespace EntityLayer.Concrete
 {
     public class MusteriUrunDto
     {
-        public int UrunId { get; set; }
-        public string UrunAdi { get; set; }
+        public int Id { get; set; }
+        public string Adi { get; set; }
 
-        public decimal UrunFiyati { get; set; }
+        public decimal Fiyat { get; set; }
 
-        public int UrunStok { get; set; }
+        public int Stok { get; set; }
     }
 }

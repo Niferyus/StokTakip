@@ -1,0 +1,208 @@
+﻿@model EntityLayer.Concrete.UrunlerDto
+
+
+<form id="addnewitemfrom" method="post">
+
+    <div class="form-group">
+        <label class="form-label">Marka</label>
+        <span asp-validation-for="Marka" class="text-danger"></span>
+        <select id="markaselect" class="form-control">
+            <option value="">Marka seçin</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Ad</label>
+        <span asp-validation-for="Adi" class="text-danger"></span>
+        <input type="text" asp-for="Adi" class="form-control" id="adi" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Barkod No</label>
+        <span asp-validation-for="BarkodNo" class="text-danger"></span>
+        <input type="text" asp-for="BarkodNo" class="form-control" id="barkod" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Açıklama</label>
+        <span asp-validation-for="Aciklama" class="text-danger"></span>
+        <input type="text" asp-for="Aciklama" class="form-control" id="aciklama" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Birim</label>
+        <span asp-validation-for="Birim" class="text-danger"></span>
+        <select id="birimselect" class="form-control">
+            <option value="">Marka seçin</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Alış Fiyatı</label>
+        <span asp-validation-for="AlisFiyat" class="text-danger"></span>
+        <input type="text" asp-for="AlisFiyat" class="form-control" id="alisfiyat" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Satış Fiyatı</label>
+        <span asp-validation-for="SatisFiyat" class="text-danger"></span>
+        <input type="text" asp-for="SatisFiyat" class="form-control" id="satisfiyat" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Stok</label>
+        <span asp-validation-for="Stok" class="text-danger"></span>
+        <input type="text" asp-for="Stok" class="form-control" id="stok" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Kritik Stok Miktarı</label>
+        <span asp-validation-for="KritikStokMiktarı" class="text-danger"></span>
+        <input type="text" asp-for="KritikStokMiktarı" class="form-control" id="kritikstokmiktari" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Eksik Stok Miktarı</label>
+        <span asp-validation-for="EksikStokMiktarı" class="text-danger"></span>
+        <input type="text" asp-for="EksikStokMiktarı" class="form-control" id="eksikstokmiktari" />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+</form>
+
+<script>
+
+    $(document).ready(function () {
+    var id = @Html.Raw(Json.Serialize(ViewBag.Id)); // Razor'dan JS değişkenine güvenli dönüşüm
+    if (id !== 0) {
+        edititem(id);
+    }
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: '/Marka/GetItems',
+            success: function (response) {
+                if (response.success) {
+                    $("#markaselect").empty();
+                    response.items.forEach(function (item) {
+                        $("#markaselect").append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                } else {
+                    $.gritter.add({
+                        title: "Hata",
+                        text: "Markalar getirilirken bir hata oluştu.",
+                        class_name: "gritter-error"
+                    });
+                }
+            },
+            error: function () {
+                alert("Markalar getirilirken hata oluştu.");
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: '/Birim/GetAllBirim',
+            success: function (response) {
+                if (response.success) {
+                    $("#birimselect").empty();
+                    response.items.forEach(function (item) {
+                        $("#birimselect").append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                } else {
+                    $.gritter.add({
+                        title: "Hata",
+                        text: "Markalar getirilirken bir hata oluştu.",
+                        class_name: "gritter-error"
+                    });
+                }
+            },
+            error: function () {
+                alert("Markalar getirilirken hata oluştu.");
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $("#addnewitemfrom").submit(function (event) {
+            event.preventDefault();
+            var formdata = $("#addnewitemfrom").serialize();
+            if ($("#addnewitemfrom").valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Urunler/Save",
+                    data: formdata,
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.create) {
+                                $.gritter.add({
+                                    title: "Başarılı",
+                                    text: "Ürün başarıyla eklendi.",
+                                    class_name: "gritter-success"
+                                });
+                            }
+                            else {
+                                $.gritter.add({
+                                    title: "Başarılı",
+                                    text: "Ürün başarıyla güncellendi.",
+                                    class_name: "gritter-success"
+                                });
+                            }
+                            closeform();
+                            $("#grid").trigger("reloadGrid");
+                        } else {
+                            alert("Ürün eklenirken bir hata oluştu.");
+                        }
+                    },
+                    error: function () {
+                        alert("Sunucu hatası oluştu");
+                    }
+                });
+            }
+            return false;
+        });
+    });
+
+    function edititem(id) {
+        $.ajax({
+            type: "GET",
+            url: '/Urunler/GetById',
+            data: { id: id },
+            success: function (data) {
+                if (data) {
+
+                    $("#marka").val(data.marka);
+                    $("#adi").val(data.adi);
+                    $("#barkod").val(data.barkodNo);
+                    $("#aciklama").val(data.aciklama);
+                    $("#birim").val(data.birim);
+                    $("#alisfiyat").val(data.alisFiyat);
+                    $("#satisfiyat").val(data.satisFiyat);
+                    $("#stok").val(data.stok);
+                    $("#kritikstokmiktari").val(data.kritikStokMiktari);
+                    $("#stok").val(data.eksikStokMiktari);
+
+                    let idinput = document.createElement("input");
+                    idinput.type = "hidden";
+                    idinput.name = "Id";
+                    idinput.id = "id"
+                    $("#addnewitemfrom").append(idinput);
+                    $("#id").val(data.id);
+                } else {
+                    $.gritter.add({
+                        title: "Hata",
+                        text: "Ürün bilgisi bulunamadı.",
+                        class_name: "gritter-error"
+                    });
+                }
+            },
+            error: function () {
+                alert("Ürün bilgileri getirilirken hata oluştu.");
+            }
+        });
+    }
+</script>

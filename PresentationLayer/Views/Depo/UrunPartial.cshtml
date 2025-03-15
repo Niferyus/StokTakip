@@ -1,0 +1,62 @@
+﻿@model int
+<div class="grid-container card shadow-sm p-3 mb-4 bg-white rounded">
+    <table id="gridurun" class="table table-striped"></table>
+    <div id="pager"></div>
+</div>
+
+<script>
+    jQuery('#gridurun').jqGrid({
+        url: '/Depo/GetDepoUrun',
+        datatype: 'json',
+        mtype: 'GET',
+        postData: { depoId: '@Model' },
+        width: $("#modalContent").width(),
+        colNames: ['Ekleyen Satıcı', 'Marka', 'Adı', 'BarkodNo', 'Açıklama', 'Birim', 'Alış Fiyatı', 'Satış Fiyatı', 'Stok', 'Tarih'],
+        colModel: [
+            { name: 'userName', index: 'userName', width: 100, editable: false },
+            { name: 'marka', index: 'marka', width: 100, editable: true },
+            { name: 'adi', index: 'adi', width: 80, editable: true },
+            { name: 'barkodNo', index: 'barkodNo', width: 90, editable: true },
+            { name: 'aciklama', index: 'aciklama', width: 120, editable: true },
+            { name: 'birim', index: 'birim', width: 80, sortable: false, editable: true },
+            {
+                name: 'alisFiyat', index: 'alisFiyat', width: 80, editable: true,
+                editrules: { number: true }, formatter: 'number',
+                formatoptions: { decimalPlaces: 2 }
+            },
+            {
+                name: 'satisFiyat', index: 'satisFiyat', width: 80, editable: true,
+                editrules: { number: true }, formatter: 'number',
+                formatoptions: { decimalPlaces: 2 }
+            },
+            {
+                name: 'stok', index: 'stok', width: 80, editable: true,
+                editrules: { integer: true }
+            },
+            {
+                name: 'tarih', index: 'tarih', width: 80, editable: false,
+                formatter: "date", formatoptions: { srcformat: "Y-m-d\\TH:i:s", newformat: "d/m/Y" }
+            },
+            //{ name: 'islemler', width: 120, formatter: ButtonFormatter, sortable: false, editable: false }
+        ],
+        pager: jQuery('#pager'),
+        rowNum: 10,
+        rowList: [10, 20, 30, 40],
+        height: '100%',
+        viewrecords: true,
+        caption: 'Depo List',
+        emptyrecords: 'Bu depoda ürün bulunmamaktadır',
+        jsonReader: {
+            root: "rows",
+            page: "page",
+            total: "total",
+            records: "records",
+            repeatitems: false,
+            id: "id"
+        },
+        autowidth: true,
+        shrinkToFit: true,
+        multiselect: false,
+        
+    });
+</script>

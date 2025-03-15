@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class newdbb : Migration
+    public partial class firstmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,19 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Birim",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Birim", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Carts",
                 columns: table => new
                 {
@@ -65,6 +78,42 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Carts", x => x.CartId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Depo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Ad = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Sehir = table.Column<string>(type: "varchar(30)", nullable: false),
+                    Ilce = table.Column<string>(type: "varchar(30)", nullable: false),
+                    Adres = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Mail = table.Column<string>(type: "nvarchar(255)", nullable: false),
+                    Yetkili = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Aciklama = table.Column<string>(type: "nvarchar(255)", nullable: false),
+                    InsUserId = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Approved = table.Column<bool>(type: "bit", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Depo", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Marka",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Marka", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,30 +128,6 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Musteriler", x => x.MusteriID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Urunler",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Marka = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UrunAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BarkodNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UrunAciklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Birim = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UrunAlisFiyat = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    UrunSatisFiyat = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    UrunStok = table.Column<int>(type: "int", nullable: false),
-                    InsUserId = table.Column<int>(type: "int", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Approved = table.Column<bool>(type: "bit", nullable: true),
-                    Active = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Urunler", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -207,6 +232,37 @@ namespace DataAccessLayer.Migrations
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Urunler",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Marka = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Adi = table.Column<string>(type: "varchar(20)", nullable: false),
+                    BarkodNo = table.Column<string>(type: "varchar(13)", nullable: false),
+                    Aciklama = table.Column<string>(type: "varchar(100)", nullable: false),
+                    Birim = table.Column<string>(type: "varchar(20)", nullable: true),
+                    AlisFiyat = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SatisFiyat = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Stok = table.Column<int>(type: "int", nullable: false),
+                    DepoId = table.Column<int>(type: "int", nullable: false),
+                    InsUserId = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Approved = table.Column<bool>(type: "bit", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Urunler", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Urunler_Depo_DepoId",
+                        column: x => x.DepoId,
+                        principalTable: "Depo",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -364,6 +420,17 @@ namespace DataAccessLayer.Migrations
                 name: "IX_Toptancilar_UrunId",
                 table: "Toptancilar",
                 column: "UrunId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Urunler_BarkodNo",
+                table: "Urunler",
+                column: "BarkodNo",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Urunler_DepoId",
+                table: "Urunler",
+                column: "DepoId");
         }
 
         /// <inheritdoc />
@@ -385,10 +452,16 @@ namespace DataAccessLayer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Birim");
+
+            migrationBuilder.DropTable(
                 name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "Islemler");
+
+            migrationBuilder.DropTable(
+                name: "Marka");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -407,6 +480,9 @@ namespace DataAccessLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Urunler");
+
+            migrationBuilder.DropTable(
+                name: "Depo");
         }
     }
 }
