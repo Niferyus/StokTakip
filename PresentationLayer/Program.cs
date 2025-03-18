@@ -29,6 +29,12 @@ builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Contex
 
 builder.Services.AddSingleton<VisitorCounterService>();
 
+builder.Services.AddScoped<SehirIdResolver>();
+builder.Services.AddScoped<IlceIdResolver>();
+
+builder.Services.AddScoped<SehirAdResolver>();
+builder.Services.AddScoped<IlceAdResolver>();
+
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 

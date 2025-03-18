@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstract;
+using BusinessLayer.Mapping;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
@@ -15,11 +16,13 @@ namespace BusinessLayer.Concrete
     {
         private readonly IDepoDal _depoDal;
         private readonly IUrunlerDal _urunlerDal;
+        private readonly IMapper _mapper;
 
-        public DepoService(IDepoDal depoDal, IUrunlerDal urunlerDal)
+        public DepoService(IDepoDal depoDal, IUrunlerDal urunlerDal, IMapper mapper)
         {
-            this._depoDal = depoDal;
-            this._urunlerDal = urunlerDal;
+            _depoDal = depoDal;
+            _urunlerDal = urunlerDal;
+            _mapper = mapper;
         }
 
         public async Task Delete(int id)
@@ -75,6 +78,11 @@ namespace BusinessLayer.Concrete
         public async Task<Pagination<DepoDto>> GetAllDepo(int pageIndex, int pageSize)
         {
             return await _depoDal.GetAllDepo(pageIndex, pageSize);
+        }
+
+        public async Task<Depo> ConvertToEntity(DepoDto item)
+        {
+            return await Task.Run(() => _mapper.Map<Depo>(item));
         }
     }
 }

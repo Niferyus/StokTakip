@@ -18,13 +18,11 @@ namespace EntityLayer.Concrete
         [Required]
         public int SehirId { get; set; }
         [ForeignKey("SehirId")]
-        public Yerlesim Sehir { get; set; }
-
+        public Yerlesim Sehirr { get; set; }
         [Required]
         public int IlceId { get; set; }
-
         [ForeignKey("IlceId")]
-        public Yerlesim Ilce { get; set; }
+        public Yerlesim Ilcee { get; set; }
         [Column(TypeName = "varchar(50)")]
         [Required]
         public string Adres { get; set; }

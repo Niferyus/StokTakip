@@ -55,5 +55,45 @@ namespace DataAccessLayer.Concrete
                             .ToListAsync();
             return items;
         }
+
+        public async Task<int> GetSehirIdByName(string sehirAdi)
+        {
+            return await _context.Yerlesim.Where(x => x.Ad == sehirAdi && x.UstYerlesimId == 0)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<int> GetIlceIdByName(string ilceAdi)
+        {
+            return await _context.Yerlesim.Where(x => x.Ad == ilceAdi && x.UstYerlesimId != 0)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<string> GetIlceNameById(int ilceId)
+        {
+            var ilceAdi = await _context.Yerlesim
+                .Where(x => x.Id == ilceId)
+                .Select(x => x.Ad)
+                .FirstOrDefaultAsync();
+
+            if (ilceAdi == null)
+                throw new InvalidOperationException($"İlçe bulunamadı. (ID: {ilceId})");
+
+            return ilceAdi;
+        }
+
+        public async Task<string> GetSehirNameById(int sehirId)
+        {
+            var sehirAdi = await _context.Yerlesim
+                .Where(x => x.Id == sehirId)
+                .Select(x => x.Ad)
+                .FirstOrDefaultAsync();
+
+            if (sehirAdi == null)
+                throw new InvalidOperationException($"İlçe bulunamadı. (ID: {sehirId})");
+
+            return sehirAdi;
+        }
     }
 }

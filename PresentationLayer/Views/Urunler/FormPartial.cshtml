@@ -12,6 +12,14 @@
     </div>
 
     <div class="form-group">
+        <label class="form-label">Depo</label>
+        @*<span asp-validation-for="Marka" class="text-danger"></span>*@
+        <select id="deposelect" class="form-control">
+            <option value="">Marka seçin</option>
+        </select>
+    </div>
+
+    <div class="form-group">
         <label class="form-label">Ad</label>
         <span asp-validation-for="Adi" class="text-danger"></span>
         <input type="text" asp-for="Adi" class="form-control" id="adi" />
@@ -88,6 +96,31 @@
                     $("#markaselect").empty();
                     response.items.forEach(function (item) {
                         $("#markaselect").append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                } else {
+                    $.gritter.add({
+                        title: "Hata",
+                        text: "Markalar getirilirken bir hata oluştu.",
+                        class_name: "gritter-error"
+                    });
+                }
+            },
+            error: function () {
+                alert("Markalar getirilirken hata oluştu.");
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: '/Depo/GetDepos',
+            success: function (response) {
+                if (response) {
+                    $("#deposelect").empty();
+                    response.rows.forEach(function (item) {
+                        console.log(item);
+                        $("#deposelect").append(`<option value="${item.id}">${item.ad}</option>`);
                     });
                 } else {
                     $.gritter.add({

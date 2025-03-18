@@ -13,9 +13,7 @@ namespace EntityLayer.Concrete
         public int Id { get; set; }
         [StringLength(50, ErrorMessage = "İsim en fazla 50 karakter olabilir")]
         public string Ad { get; set; }
-        [Required(ErrorMessage ="Şehir ismi girmeniz gerekmektedir")]
         public string Sehir { get; set; }
-        [Required(ErrorMessage = "İlçe ismi girmeniz gerekmektedir")]
         public string Ilce { get; set; }
         [StringLength(50, ErrorMessage = "Adres en fazla 50 karakter olabilir")]
         [Required(ErrorMessage = "Adres bilgisi girmeniz gerekmektedir")]

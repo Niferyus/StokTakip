@@ -11,7 +11,7 @@
 
     <div class="form-group">
         <label class="form-label">Şehir</label>
-        <select id="ilDropdown" class="form-control">
+        <select asp-for="Sehir" id="ilDropdown" class="form-control">
             <option value="">Şehir seçin</option>
         </select>
         <span asp-validation-for="Sehir" class="text-danger"></span>
@@ -21,7 +21,7 @@
         <label class="form-label">İlçe</label>
         <span asp-validation-for="Ilce" class="text-danger"></span>
         <label for="ilceDropdown">İlçe:</label>
-        <select id="ilceDropdown" class="form-control">
+        <select asp-for="Ilce" id="ilceDropdown" class="form-control">
             <option value="">Önce bir il seçin</option>
         </select>
     </div>
@@ -49,7 +49,7 @@
         <span asp-validation-for="Aciklama" class="text-danger"></span>
         <input type="text" asp-for="Aciklama" class="form-control" id="aciklama" />
     </div>
-
+    <br />
     <button type="submit" class="btn btn-primary w-100">Kaydet</button>
 </form>
 <script src="~/jquery-validate/jquery.validate.min.js"></script>
@@ -72,7 +72,7 @@
                 if (response.success) {
                     $("#ilDropdown").empty
                     response.data.forEach(function (il) {
-                        $('#ilDropdown').append(`<option value="${il.id}">${il.ad}</option>`);
+                        $('#ilDropdown').append(`<option value="${il.ad}" data-sehiradi="${il.id}">${il.ad}</option>`);
                     });
                 } else {
                     $.gritter.add({
@@ -93,7 +93,9 @@
     });
 
     $('#ilDropdown').on('change', function () {
-        ilId = $(this).val();
+        const selectedOption = this.options[this.selectedIndex];
+        const ilId = selectedOption.getAttribute("data-sehiradi");
+        console.log(ilId)
         ilceDropdown = $('#ilceDropdown');
         ilceDropdown.empty();
         ilceDropdown.append('<option value="">İlçe seçin</option>');
@@ -104,7 +106,7 @@
             success: function (response) {
                 if (response.success) {
                     response.data.forEach(function (ilce) {
-                        ilceDropdown.append(`<option value="${ilce.id}">${ilce.ad}</option>`);
+                        ilceDropdown.append(`<option value="${ilce.ad}">${ilce.ad}</option>`);
                     });
                 } else {
                     $.gritter.add({
@@ -121,6 +123,7 @@
         $("#addnewitemfrom").submit(function (event) {
             event.preventDefault();
             var formdata = $("#addnewitemfrom").serialize();
+            console.log(formdata);
             if ($("#addnewitemfrom").valid()) {
                 $.ajax({
                     type: "POST",
@@ -168,8 +171,9 @@
                     let data = response.data;
 
                     $("#adi").val(data.ad);
-                    $("#sehir").val(data.sehir);
-                    $("#ilce").val(data.ilce);
+                    $("#ilDropdown").val(data.sehir).change();
+                    $('#ilDropdown').attr("data-sehiradi", data.sehir)
+                    $("#ilceDropdown").val(data.ilce).change();
                     $("#adres").val(data.adres);
                     $("#mail").val(data.mail);
                     $("#yetkili").val(data.yetkili);
