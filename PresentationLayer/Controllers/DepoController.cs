@@ -60,15 +60,15 @@ namespace PresentationLayer.Controllers
         public async Task<JsonResult> Save(DepoDto entity)
         {
             var create = false;
-            //if (!ModelState.IsValid)
-            //{
-            //    var errors = ModelState.Values
-            //        .SelectMany(v => v.Errors)
-            //        .Select(e => e.ErrorMessage)
-            //        .ToList();
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
 
-            //    return Json(new { success = false, errors });
-            //}         
+                return Json(new { success = false, errors });
+            }         
             var depo = await _depoService.ConvertToEntity(entity);
             if (entity.Id == 0)
             {

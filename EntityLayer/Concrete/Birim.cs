@@ -15,7 +15,7 @@ namespace EntityLayer.Concrete
         public int Id { get; set; }
         [Required(ErrorMessage = "Birim adı boş bırakılamaz")]
         [StringLength(100, ErrorMessage = "Birim adı en fazla 100 karakter olabilir")]
-        public string Name { get; set; }
+        public string Ad { get; set; }
         public bool IsActive { get; set; }
     }
 }

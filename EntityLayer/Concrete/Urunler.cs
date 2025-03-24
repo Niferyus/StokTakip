@@ -15,10 +15,7 @@ namespace EntityLayer.Concrete
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        [Column(TypeName = "varchar(50)")]
-        public string Marka { get; set; }
-
+        public int MarkaId { get; set; }
         [Column(TypeName = "varchar(20)")]
         public string Adi { get; set; }
         [Column(TypeName = "varchar(13)")]
@@ -27,24 +24,20 @@ namespace EntityLayer.Concrete
 
         [Column(TypeName = "varchar(100)")]
         public string Aciklama { get; set; }
-        [Column(TypeName = "varchar(20)")]
-        public string? Birim { get; set; }
-
+        public int? BirimId { get; set; }
         public decimal AlisFiyat { get; set; }
-       
         public decimal SatisFiyat { get; set; }
-
         public int KritikStokMiktarı { get; set; }
-
         public int EksikStokMiktarı { get; set; }
-
         public int Stok { get; set; }
-
         public int? DepoId { get; set; }
-
 
         [ForeignKey("DepoId")]
         public Depo Depo { get; set; }
+        [ForeignKey("MarkaId")]
+        public Marka Marka { get; set; }
+        [ForeignKey("BirimId")]
+        public Birim Birimler { get; set; }
         public ICollection<Islemler> Islemler { get; set; }
         public ICollection<Toptancilar> Toptancilar { get; set; }
         public ICollection<CartItem> cartitem { get; set; }

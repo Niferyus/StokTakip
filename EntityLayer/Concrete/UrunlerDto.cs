@@ -13,8 +13,7 @@ namespace EntityLayer.Concrete
         public int Id { get; set; }
         public string? UserName { get; set; }
         [Required(ErrorMessage = "Marka alanı boş geçilemez")]
-        [StringLength(50, ErrorMessage = "Marka en fazla 50 karakter olabilir")]
-        public string Marka { get; set; }
+        public string MarkaAdi { get; set; }
         [Required(ErrorMessage = "İsim alanı boş geçilemez")]
         [StringLength(20, ErrorMessage = "İsim en fazla 50 karakter olabilir")]
         public string Adi { get; set; }
@@ -38,7 +37,11 @@ namespace EntityLayer.Concrete
         [Range(0, double.MaxValue, ErrorMessage = "Satış fiyatı negatif olamaz!")]
         public int Stok { get; set; }
         public DateTime Tarih { get; set; }
+        [Required(ErrorMessage = "Kritik stok miktarı alanı boş geçilemez")]
         public int KritikStokMiktarı { get; set; }
+        [Required(ErrorMessage = "Eksik stok miktarı alanı boş geçilemez")]
         public int EksikStokMiktarı { get; set; }
+        [Required(ErrorMessage = "Depo alanı boş geçilemez")]
+        public string DepoAdi { get; set; }
     }
 }

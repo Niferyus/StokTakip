@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Abstract;
+using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -26,16 +27,18 @@ namespace DataAccessLayer.Concrete
         {
             var query = from urun in _context.Urunler
                         join user in _context.Users on urun.InsUserId equals user.Id
+                        join marka in _context.Marka on urun.MarkaId equals marka.Id
+                        join birim in _context.Birim on urun.BirimId equals birim.Id
                         where urun.Active == true
                         select new UrunlerDto
                         {
                             Id = urun.Id,
                             UserName = user.Name,
-                            Marka = urun.Marka,
+                            MarkaAdi = marka.Ad,
                             Adi = urun.Adi,
                             BarkodNo = urun.BarkodNo,
                             Aciklama = urun.Aciklama,
-                            Birim = urun.Birim,
+                            Birim = birim.Ad,
                             AlisFiyat = urun.AlisFiyat,
                             SatisFiyat = urun.SatisFiyat,
                             Stok = urun.Stok,
@@ -50,24 +53,27 @@ namespace DataAccessLayer.Concrete
         {
             var query = from urun in _context.Urunler
                         join user in _context.Users on urun.InsUserId equals user.Id
+                        join markaa in _context.Marka on urun.MarkaId equals markaa.Id
+                        join birim in _context.Birim on urun.BirimId equals birim.Id
                         where urun.Active == true
                         select new UrunlerDto
                         {
                             Id = urun.Id,
                             UserName = user.Name,
-                            Marka = urun.Marka,
+                            MarkaAdi = markaa.Ad,
                             Adi = urun.Adi,
                             BarkodNo = urun.BarkodNo,
                             Aciklama = urun.Aciklama,
-                            Birim = urun.Birim,
+                            Birim = birim.Ad,
                             AlisFiyat = urun.AlisFiyat,
                             SatisFiyat = urun.SatisFiyat,
                             Stok = urun.Stok,
                             Tarih = urun.CreateDate
                         };
 
+
             if (!string.IsNullOrEmpty(marka))
-                query = query.Where(x => x.Marka.Contains(marka));
+                query = query.Where(x => x.MarkaAdi.Contains(marka));
 
             if (!string.IsNullOrEmpty(adi))
                 query = query.Where(x => x.Adi.Contains(adi));
@@ -129,6 +135,62 @@ namespace DataAccessLayer.Concrete
                         where urun.Active == true && urun.DepoId == depoId
                         select urun;
             return Task.Run(() => Pagination<Urunler>.Create(query.AsQueryable(), 1, 10));
+        }
+
+        public async Task<int> GetIdByName<TEntity>(string name) where TEntity : class
+        {
+            var entity = await _context.Set<TEntity>()
+                .Where(x => EF.Property<string>(x, "Ad") == name) // Burada EF.Property kullanıyoruz.
+                .Select(x => EF.Property<int>(x, "Id")) // Burada da EF.Property kullanıyoruz.
+                .FirstOrDefaultAsync();
+
+            if (entity == 0) // FirstOrDefaultAsync() int döndürdüğü için null yerine 0 kontrolü yapıyoruz.
+                throw new InvalidOperationException($"(ID: {entity}) BULUNAMADI");
+
+            return entity;
+        }
+
+        public async Task<string> GetNameById<TEntity>(int id) where TEntity : class
+        {
+            var name = await _context.Set<TEntity>()
+                .Where(x => EF.Property<int>(x, "Id") == id) // Burada EF.Property kullanıyoruz.
+                .Select(x => EF.Property<string>(x, "Ad")) // Burada da EF.Property kullanıyoruz.
+                .FirstOrDefaultAsync();
+
+            if (name == null)
+                throw new InvalidOperationException($"(ID: {name}) BULUNAMADI");
+
+            return (string)name;
+        }
+
+        public async Task<int> GetMarkaId(string markaAdi)
+        {
+            return await GetIdByName<Marka>(markaAdi);
+        }
+
+        public async Task<int> GetBirimId(string birimAdi)
+        {
+            return await GetIdByName<Birim>(birimAdi);
+        }
+
+        public async Task<int> GetDepoId(string depoAdi)
+        {
+            return await GetIdByName<Depo>(depoAdi);
+        }
+
+        public async Task<string> GetMarkaName(int id)
+        {
+            return await GetNameById<Marka>(id);
+        }
+
+        public async Task<string> GetBirimName(int id)
+        {
+            return await GetNameById<Birim>(id);
+        }
+
+        public async Task<string> GetDepoName(int id)
+        {
+            return await GetNameById<Depo>(id);
         }
     }
 }

@@ -10,10 +10,10 @@ namespace PresentationLayer.Controllers
     public class IslemlerController : Controller
     {
         private readonly IIslemlerService islemlerService;
-        private readonly IUrunlerService urunlerService;
+        private readonly IUrunService urunlerService;
         private readonly IToptancilarService toptancilarService;
 
-        public IslemlerController(IIslemlerService islemlerService, IUrunlerService urunlerService, IToptancilarService toptancilarService)
+        public IslemlerController(IIslemlerService islemlerService, IUrunService urunlerService, IToptancilarService toptancilarService)
         {
             this.islemlerService = islemlerService;
             this.urunlerService = urunlerService;
@@ -57,43 +57,43 @@ namespace PresentationLayer.Controllers
             return View(newIslem);
         }
 
-        [HttpPost]
-        public IActionResult Create(Islemler islem)
-        {
-            var urun = urunlerService.GetById(islem.UrunId);
-            if (urun == null)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //public IActionResult Create(Islemler islem)
+        //{
+        //    var urun = urunlerService.GetById(islem.UrunId);
+        //    if (urun == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (islem.Satis)
-            {
-                islem.ToplamFiyat = urun.SatisFiyat * islem.Adet;
-                if (urun.Stok < islem.Adet)
-                {
-                    ModelState.AddModelError("Adet", "Stok yetersiz");
-                    return View(islem);
-                }
-                urun.Stok -= islem.Adet;
-            }
-            else
-            {
-                var toptanci = toptancilarService.GetById(islem.ToptanciID!);
-                islem.ToplamFiyat = toptanci.SatisFiyati! * islem.Adet; 
-                if (toptanci.Adet < islem.Adet)
-                {
-                    ModelState.AddModelError("Adet", "Stok yetersiz");
-                    return View(islem);
-                }
-                toptanci.Adet -= islem.Adet;
-                urun.Stok += islem.Adet;
-            }
+        //    if (islem.Satis)
+        //    {
+        //        islem.ToplamFiyat = urun.SatisFiyat * islem.Adet;
+        //        if (urun.Stok < islem.Adet)
+        //        {
+        //            ModelState.AddModelError("Adet", "Stok yetersiz");
+        //            return View(islem);
+        //        }
+        //        urun.Stok -= islem.Adet;
+        //    }
+        //    else
+        //    {
+        //        var toptanci = toptancilarService.GetById(islem.ToptanciID!);
+        //        islem.ToplamFiyat = toptanci.SatisFiyati! * islem.Adet; 
+        //        if (toptanci.Adet < islem.Adet)
+        //        {
+        //            ModelState.AddModelError("Adet", "Stok yetersiz");
+        //            return View(islem);
+        //        }
+        //        toptanci.Adet -= islem.Adet;
+        //        urun.Stok += islem.Adet;
+        //    }
 
-            islemlerService.Add(islem);
-            urunlerService.Edit(urun);
+        //    islemlerService.Add(islem);
+        //    urunlerService.Edit(urun);
 
-            return RedirectToAction("Index");
+        //    return RedirectToAction("Index");
 
-        }
+        //}
     }
 }

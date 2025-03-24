@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Concrete;
+using DocumentFormat.OpenXml.Bibliography;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,11 @@ namespace DataAccessLayer.Abstract
         public Task BulkInsert(List<Urunler> items);
         public Task Edit(Urunler entity);
         public Task<Pagination<Urunler>> GetDepoUrunler(int depoId);
+        public Task<int> GetMarkaId(string markaAdi);
+        public Task<int> GetBirimId(string birimAdi);
+        public Task<int> GetDepoId(string depoAdi);
+        public Task<string> GetMarkaName(int id);
+        public Task<string> GetBirimName(int id);
+        public Task<string> GetDepoName(int id);   
     }
 }

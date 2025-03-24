@@ -5,17 +5,17 @@
 
     <div class="form-group">
         <label class="form-label">Marka</label>
-        <span asp-validation-for="Marka" class="text-danger"></span>
-        <select id="markaselect" class="form-control">
-            <option value="">Marka seçin</option>
+        <span asp-validation-for="MarkaAdi" class="text-danger"></span>
+        <select id="markaselect" asp-for="MarkaAdi" class="form-control">
+            <option value="">Marka seçiniz</option>
         </select>
     </div>
 
     <div class="form-group">
         <label class="form-label">Depo</label>
-        @*<span asp-validation-for="Marka" class="text-danger"></span>*@
-        <select id="deposelect" class="form-control">
-            <option value="">Marka seçin</option>
+        <span asp-validation-for="DepoAdi" class="text-danger"></span>
+        <select id="deposelect" asp-for="DepoAdi" class="form-control">
+            <option value="">Depo seçiniz</option>
         </select>
     </div>
 
@@ -40,21 +40,21 @@
     <div class="form-group">
         <label class="form-label">Birim</label>
         <span asp-validation-for="Birim" class="text-danger"></span>
-        <select id="birimselect" class="form-control">
-            <option value="">Marka seçin</option>
+        <select id="birimselect" asp-for="Birim" class="form-control">
+            <option value="">Birim seçiniz</option>
         </select>
     </div>
 
     <div class="form-group">
         <label class="form-label">Alış Fiyatı</label>
         <span asp-validation-for="AlisFiyat" class="text-danger"></span>
-        <input type="text" asp-for="AlisFiyat" class="form-control" id="alisfiyat" />
+        <input type="text" asp-for="AlisFiyat" class="form-control" id="alisfiyat" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" />
     </div>
 
     <div class="form-group">
         <label class="form-label">Satış Fiyatı</label>
         <span asp-validation-for="SatisFiyat" class="text-danger"></span>
-        <input type="text" asp-for="SatisFiyat" class="form-control" id="satisfiyat" />
+        <input type="text" asp-for="SatisFiyat" class="form-control" id="satisfiyat" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" />
     </div>
 
     <div class="form-group">
@@ -93,9 +93,8 @@
             url: '/Marka/GetItems',
             success: function (response) {
                 if (response.success) {
-                    $("#markaselect").empty();
                     response.items.forEach(function (item) {
-                        $("#markaselect").append(`<option value="${item.id}">${item.name}</option>`);
+                        $("#markaselect").append(`<option value="${item.ad}" >${item.ad}</option>`);
                     });
                 } else {
                     $.gritter.add({
@@ -117,10 +116,9 @@
             url: '/Depo/GetDepos',
             success: function (response) {
                 if (response) {
-                    $("#deposelect").empty();
                     response.rows.forEach(function (item) {
                         console.log(item);
-                        $("#deposelect").append(`<option value="${item.id}">${item.ad}</option>`);
+                        $("#deposelect").append(`<option value="${item.ad}">${item.ad}</option>`);
                     });
                 } else {
                     $.gritter.add({
@@ -142,9 +140,8 @@
             url: '/Birim/GetAllBirim',
             success: function (response) {
                 if (response.success) {
-                    $("#birimselect").empty();
                     response.items.forEach(function (item) {
-                        $("#birimselect").append(`<option value="${item.id}">${item.name}</option>`);
+                        $("#birimselect").append(`<option value="${item.ad}">${item.ad}</option>`);
                     });
                 } else {
                     $.gritter.add({

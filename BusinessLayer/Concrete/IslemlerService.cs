@@ -13,11 +13,11 @@ namespace BusinessLayer.Concrete
     public class IslemlerService : IIslemlerService
     {
         private readonly IIslemlerRepository islemlerRepository;
-        private readonly IUrunlerService urunlerService;
+        private readonly IUrunService urunlerService;
         private readonly IToptancilarService toptancilarService;
         private readonly IMusterilerService musterilerService;
 
-        public IslemlerService(IIslemlerRepository islemlerRepository, IToptancilarService isoptancilarService, IMusterilerService musterilerService, IUrunlerService urunlerService)
+        public IslemlerService(IIslemlerRepository islemlerRepository, IToptancilarService isoptancilarService, IMusterilerService musterilerService, IUrunService urunlerService)
         {
             this.islemlerRepository = islemlerRepository;
             this.toptancilarService = isoptancilarService;

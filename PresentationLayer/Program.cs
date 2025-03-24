@@ -50,9 +50,6 @@ builder.Services.AddScoped<IUrunService, UrunService>();
 builder.Services.AddScoped<IDepoDal, DepoDal>();
 builder.Services.AddScoped<IDepoService, DepoService>();
 
-builder.Services.AddScoped<IUrunlerRepository, UrunlerRepository>();
-builder.Services.AddScoped<IUrunlerService, UrunlerService>();
-
 builder.Services.AddScoped<IMusterilerRepository, MusterilerRepository>();
 builder.Services.AddScoped<IMusterilerService, MusterilerService>();
 

@@ -21,8 +21,6 @@ namespace BusinessLayer.Mapping
                 .ForMember(dest => dest.Tarih, opt => opt.MapFrom(src => src.CreateDate))
                 .ReverseMap();
 
-            //CreateMap<Depo, DepoDto>().ReverseMap();
-
             CreateMap<DepoDto, Depo>()
                 .ForMember(dest => dest.SehirId, opt => opt.MapFrom<SehirIdResolver>())
                 .ForMember(dest => dest.IlceId, opt => opt.MapFrom<IlceIdResolver>())
@@ -34,6 +32,17 @@ namespace BusinessLayer.Mapping
                 .ReverseMap()
                 .ForMember(dest => dest.Sehir, opt => opt.MapFrom<SehirAdResolver>())
                 .ForMember(dest => dest.Ilce, opt => opt.MapFrom<IlceAdResolver>());
+
+            CreateMap<UrunlerDto, Urunler>()
+                .ForMember(dest => dest.MarkaId, opt => opt.MapFrom<MarkaIdResolver>())
+                .ForMember(dest => dest.BirimId, opt => opt.MapFrom<BirimIdResolver>())
+                .ForMember(dest => dest.DepoId, opt => opt.MapFrom<DepoIdResolver>())
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.Tarih))
+                .ReverseMap()
+                .ForMember(dest => dest.MarkaAdi, opt => opt.MapFrom<MarkaAdResolver>())
+                .ForMember(dest => dest.Birim, opt => opt.MapFrom<BirimAdResolver>())
+                .ForMember(dest => dest.DepoAdi, opt => opt.MapFrom<DepoAdResolver>());
+
 
             CreateMap<Pagination<Depo>, Pagination<DepoDto>>()
                 .ReverseMap();

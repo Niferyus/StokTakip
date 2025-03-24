@@ -16,6 +16,7 @@ namespace BusinessLayer.Abstract
         public byte[] GenerateTemplate();
         public byte[] ExportToExcel(List<Urunler> items);
         public Task ImportFromExcelAsync(byte[] fileBytes,int userid);
+        public Task<Urunler> ConvertToEntity(UrunlerDto item);
 
         //public Task SaveUrun(UrunlerDto entity, int? insuserid);
     }

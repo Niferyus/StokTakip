@@ -48,12 +48,12 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost]
-        public JsonResult DeleteItem(int id)
+        public async Task<JsonResult> DeleteItem(int id)
         {
-            urunService.Delete(id);
+            await urunService.Delete(id);
             return Json(new { success = true });
         }
-
+        //UrunlerDtoFilter
         public async Task<JsonResult> GetFilterItem(string marka,string adi,string barkod,string stok,string baslangicTarihi,string bitisTarihi,int page = 1)
         {
             int pagesize = 5;
@@ -69,13 +69,13 @@ namespace PresentationLayer.Controllers
             return Json(response);
         }
 
-        public JsonResult GetById(int id)
+        public async Task<JsonResult> GetById(int id)
         {
-            var urun = urunService.GetById(id);
-            return Json(urun.Result);
+            var urun = await urunService.GetById(id);
+            return Json(urun);
         }
 
-        public JsonResult Save(UrunlerDto entity)
+        public async Task<JsonResult> Save(UrunlerDto entity)
         {
             if (!ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace PresentationLayer.Controllers
 
                 return Json(new { success = false, errors });
             }
-            var item = _mapper.Map<UrunlerDto, Urunler>(entity);
+            var item = await urunService.ConvertToEntity(entity);
             var create = false;
             if (item.Id == 0)
             {
@@ -96,7 +96,7 @@ namespace PresentationLayer.Controllers
                 item.Active = true;
                 create = true;
             }
-            urunService.Save(item);
+            await urunService.Save(item);
             return Json(new { success = true, create = create });
         }
 

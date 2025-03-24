@@ -18,9 +18,11 @@ namespace BusinessLayer.Concrete
     public class UrunService : IUrunService
     {
         private readonly IUrunlerDal urunlerDal;
+        private readonly IMapper _mapper;
       
         public UrunService(IUrunlerDal urunlerDal, IMapper mapper)
         {
+            _mapper = mapper;
             this.urunlerDal = urunlerDal;
         }
 
@@ -133,7 +135,7 @@ namespace BusinessLayer.Concrete
                     worksheet.Cells[row, 2].Value = item.Adi;
                     worksheet.Cells[row, 3].Value = item.BarkodNo;
                     worksheet.Cells[row, 4].Value = item.Aciklama;
-                    worksheet.Cells[row, 5].Value = item.Birim;
+                    worksheet.Cells[row, 5].Value = item.BirimId;
                     worksheet.Cells[row, 6].Value = item.AlisFiyat;
                     worksheet.Cells[row, 7].Value = item.SatisFiyat;
                     worksheet.Cells[row, 8].Value = item.Stok;
@@ -157,11 +159,11 @@ namespace BusinessLayer.Concrete
                 {
                     var item = new Urunler
                     {
-                        Marka = worksheet.Cells[row, 1].Text,
+                        //Marka = worksheet.Cells[row, 1].Text,
                         Adi = worksheet.Cells[row, 2].Text,
                         BarkodNo = worksheet.Cells[row, 3].Text,
                         Aciklama = worksheet.Cells[row, 4].Text,
-                        Birim = worksheet.Cells[row, 5].Text,
+                        //Birim = worksheet.Cells[row, 5].Text,
                         AlisFiyat = decimal.Parse(worksheet.Cells[row, 6].Text, CultureInfo.InvariantCulture),
                         SatisFiyat = decimal.Parse(worksheet.Cells[row, 7].Text, CultureInfo.InvariantCulture),
                         Stok = int.Parse(worksheet.Cells[row, 8].Text),
@@ -184,6 +186,11 @@ namespace BusinessLayer.Concrete
         public Task<Pagination<Urunler>> GetAll(int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Urunler> ConvertToEntity(UrunlerDto item)
+        {
+            return await Task.Run(() => _mapper.Map<Urunler>(item));
         }
     }
 }
