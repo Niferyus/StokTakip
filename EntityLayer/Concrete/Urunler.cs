@@ -30,10 +30,6 @@ namespace EntityLayer.Concrete
         public int KritikStokMiktarı { get; set; }
         public int EksikStokMiktarı { get; set; }
         public int Stok { get; set; }
-        public int? DepoId { get; set; }
-
-        [ForeignKey("DepoId")]
-        public Depo Depo { get; set; }
         [ForeignKey("MarkaId")]
         public Marka Marka { get; set; }
         [ForeignKey("BirimId")]
@@ -41,5 +37,6 @@ namespace EntityLayer.Concrete
         public ICollection<Islemler> Islemler { get; set; }
         public ICollection<Toptancilar> Toptancilar { get; set; }
         public ICollection<CartItem> cartitem { get; set; }
+        public ICollection<Stok> Stoklar { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Mapping
 {
-    public class DepoAdResolver : IValueResolver<Urunler, UrunlerDto, string>
+    public class DepoAdResolver  /*IValueResolver<Urunler, UrunlerDto, string>*/
     {
         private readonly IUrunlerDal _urunlerDal;
 
@@ -18,9 +18,9 @@ namespace BusinessLayer.Mapping
             _urunlerDal = urunlerDal;
         }
 
-        public string Resolve(Urunler source, UrunlerDto destination, string destMember, ResolutionContext context)
-        {
-            return _urunlerDal.GetDepoName((int)source.DepoId).Result;
-        }
+        //public string Resolve(Urunler source, UrunlerDto destination, string destMember, ResolutionContext context)
+        //{
+        //    return _urunlerDal.GetDepoName((int)source.DepoId).Result;
+        //}
     }
 }

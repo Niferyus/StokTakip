@@ -94,20 +94,20 @@ namespace PresentationLayer.Controllers
             return Json(new { success = true, data = mappedItem });
         }
 
-        public async Task<JsonResult> GetDepoUrun(int depoId)
-        {
-            var items = await _depoService.GetDepoUrunler(depoId, 1, 5);
-            var mappedItems = _mapper.Map<List<UrunlerDto>>(items.items);
-            var paginationResult = new Pagination<UrunlerDto>(mappedItems, items.items.Count, 1, 5);
-            var jsonData = new
-            {
-                total = paginationResult.TotalPages,
-                page = 1,
-                records = items.items.Count,
-                rows = paginationResult.items
-            };
-            return Json(jsonData);
-        }
+        //public async Task<JsonResult> GetDepoUrun(int depoId)
+        //{
+        //    var items = await _depoService.GetDepoUrunler(depoId, 1, 5);
+        //    var mappedItems = _mapper.Map<List<UrunlerDto>>(items.items);
+        //    var paginationResult = new Pagination<UrunlerDto>(mappedItems, items.items.Count, 1, 5);
+        //    var jsonData = new
+        //    {
+        //        total = paginationResult.TotalPages,
+        //        page = 1,
+        //        records = items.items.Count,
+        //        rows = paginationResult.items
+        //    };
+        //    return Json(jsonData);
+        //}
 
         public IActionResult GetPopUpContent(int id)
         {

@@ -129,13 +129,13 @@ namespace DataAccessLayer.Concrete
             }
         }
 
-        public Task<Pagination<Urunler>> GetDepoUrunler(int depoId)
-        {
-            var query = from urun in _context.Urunler
-                        where urun.Active == true && urun.DepoId == depoId
-                        select urun;
-            return Task.Run(() => Pagination<Urunler>.Create(query.AsQueryable(), 1, 10));
-        }
+        //public Task<Pagination<Urunler>> GetDepoUrunler(int depoId)
+        //{
+        //    var query = from urun in _context.Urunler
+        //                where urun.Active == true && urun.DepoId == depoId
+        //                select urun;
+        //    return Task.Run(() => Pagination<Urunler>.Create(query.AsQueryable(), 1, 10));
+        //}
 
         public async Task<int> GetIdByName<TEntity>(string name) where TEntity : class
         {

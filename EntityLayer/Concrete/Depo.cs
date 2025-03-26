@@ -35,6 +35,7 @@ namespace EntityLayer.Concrete
         [Column(TypeName = "nvarchar(255)")]
         public string Aciklama { get; set; }
         public ICollection<Urunler> Urunler { get; set; }
+        public ICollection<Stok> Stoklar { get; set; }
 
     }
 }

@@ -36,12 +36,12 @@ namespace BusinessLayer.Mapping
             CreateMap<UrunlerDto, Urunler>()
                 .ForMember(dest => dest.MarkaId, opt => opt.MapFrom<MarkaIdResolver>())
                 .ForMember(dest => dest.BirimId, opt => opt.MapFrom<BirimIdResolver>())
-                .ForMember(dest => dest.DepoId, opt => opt.MapFrom<DepoIdResolver>())
+                //.ForMember(dest => dest.DepoId, opt => opt.MapFrom<DepoIdResolver>())
                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.Tarih))
                 .ReverseMap()
                 .ForMember(dest => dest.MarkaAdi, opt => opt.MapFrom<MarkaAdResolver>())
-                .ForMember(dest => dest.Birim, opt => opt.MapFrom<BirimAdResolver>())
-                .ForMember(dest => dest.DepoAdi, opt => opt.MapFrom<DepoAdResolver>());
+                .ForMember(dest => dest.Birim, opt => opt.MapFrom<BirimAdResolver>());
+                //.ForMember(dest => dest.DepoAdi, opt => opt.MapFrom<DepoAdResolver>());
 
 
             CreateMap<Pagination<Depo>, Pagination<DepoDto>>()

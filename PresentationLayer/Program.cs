@@ -6,9 +6,12 @@ using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OfficeOpenXml;
 using System;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +27,32 @@ options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
 builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
+
+builder.Services.AddAuthentication(opt =>
+{
+        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(opt =>
+ {
+    opt.SaveToken = true;
+     opt.TokenValidationParameters = new TokenValidationParameters
+     {
+         ValidateIssuerSigningKey = true,
+         IssuerSigningKey = new SymmetricSecurityKey(key),
+         ValidateIssuer = true,
+         ValidateAudience = true,
+         ValidAudience = jwtSettings["ValidAudience"],
+         ValidIssuer = jwtSettings["ValidIssuer"],
+         ValidateLifetime = true,
+         ClockSkew = TimeSpan.Zero
+    };
+});
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Context>();
 

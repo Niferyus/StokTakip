@@ -64,11 +64,11 @@ namespace BusinessLayer.Concrete
             }
         }
 
-        public async Task<Pagination<Urunler>> GetDepoUrunler(int depoId, int pageIndex, int pageSize)
-        {
-            var items = await _urunlerDal.GetDepoUrunler(depoId);
-            return items;
-        }
+        //public async Task<Pagination<Urunler>> GetDepoUrunler(int depoId, int pageIndex, int pageSize)
+        //{
+        //    var items = await _urunlerDal.GetDepoUrunler(depoId);
+        //    return items;
+        //}
 
         public async Task<List<Yerlesim>> GetAllYerlesim(int id)
         {

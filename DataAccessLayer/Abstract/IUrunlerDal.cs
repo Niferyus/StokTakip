@@ -15,7 +15,7 @@ namespace DataAccessLayer.Abstract
         public Task<Pagination<UrunlerDto>> GetByFilter(string marka, string adi, string barkod, string stok, string baslangicTarihi, string bitisTarihi, int pageIndex, int pageSize);
         public Task BulkInsert(List<Urunler> items);
         public Task Edit(Urunler entity);
-        public Task<Pagination<Urunler>> GetDepoUrunler(int depoId);
+        //public Task<Pagination<Urunler>> GetDepoUrunler(int depoId);
         public Task<int> GetMarkaId(string markaAdi);
         public Task<int> GetBirimId(string birimAdi);
         public Task<int> GetDepoId(string depoAdi);
