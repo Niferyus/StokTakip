@@ -18,6 +18,8 @@ namespace DataAccessLayer.Concrete
         public DbSet<Marka> Marka { get; set; }
         public DbSet<Birim> Birim { get; set; }
         public DbSet<Yerlesim> Yerlesim { get; set; }
+        public DbSet<Stok> Stok { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

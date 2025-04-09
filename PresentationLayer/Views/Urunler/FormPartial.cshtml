@@ -11,13 +11,13 @@
         </select>
     </div>
 
-    <div class="form-group">
-        <label class="form-label">Depo</label>
-        <span asp-validation-for="DepoAdi" class="text-danger"></span>
-        <select id="deposelect" asp-for="DepoAdi" class="form-control">
-            <option value="">Depo seçiniz</option>
-        </select>
-    </div>
+    @*<div class="form-group">
+            <label class="form-label">Depo</label>
+            <span asp-validation-for="DepoAdi" class="text-danger"></span>
+            <select id="deposelect" asp-for="DepoAdi" class="form-control">
+                <option value="">Depo seçiniz</option>
+            </select>
+        </div>*@
 
     <div class="form-group">
         <label class="form-label">Ad</label>
@@ -48,20 +48,26 @@
     <div class="form-group">
         <label class="form-label">Alış Fiyatı</label>
         <span asp-validation-for="AlisFiyat" class="text-danger"></span>
-        <input type="text" asp-for="AlisFiyat" class="form-control" id="alisfiyat" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" />
+        <input type="text" asp-for="AlisFiyat" class="form-control" id="alisfiyat"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '')" />
     </div>
 
     <div class="form-group">
         <label class="form-label">Satış Fiyatı</label>
         <span asp-validation-for="SatisFiyat" class="text-danger"></span>
-        <input type="text" datatype="float" asp-for="SatisFiyat" class="form-control" id="satisfiyat" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" />
+        <input type="text" datatype="float" asp-for="SatisFiyat" class="form-control" id="satisfiyat"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '')" />
     </div>
 
-    <div class="form-group">
-        <label class="form-label">Başlangıç Stok Miktarı</label>
+    <div class="form-group" id="depostok">
+        <label class="form-label">Ana Depo Başlangıç Stok Miktarı</label>
         <span asp-validation-for="Stok" class="text-danger"></span>
         <input type="text" asp-for="Stok" class="form-control" id="stok" />
     </div>
+
+    <a class="btn btn-primary" onclick="openDepoDropdown()">Başka Depo Ekle</a>
+
+    <input type="hidden" asp-for="DepoVerileri" id="depoDatas" name="DepoVerileri" />
 
     <div class="form-group">
         <label class="form-label">Kritik Stok Miktarı</label>
@@ -80,11 +86,104 @@
 
 <script>
 
-    $(document).ready(function () {
-    var id = @Html.Raw(Json.Serialize(ViewBag.Id)); // Razor'dan JS değişkenine güvenli dönüşüm
-    if (id !== 0) {
-        edititem(id);
+    let selectedDepos = new Set();
+    let depoStokValues = [];
+
+    function openDepoDropdown() {
+        // Depo listesini getir ve kullanılabilir depo olup olmadığını kontrol et
+        getDepos(function (availableDepos) {
+            if (availableDepos.length === 0) {
+                alert("Eklenebilecek başka depo yok!");
+                return; // Eğer eklenebilecek depo kalmadıysa dropdown oluşturma
+            }
+
+            document.createElement("br");
+            document.createElement("label").innerHTML = "Depo seçiniz";
+            let depoDropdown = document.createElement("select");
+            depoDropdown.id = "deposelect";
+            depoDropdown.classList.add("form-control");
+
+            depoDropdown.innerHTML = `<option value="">Depo seçiniz</option>`;
+            document.getElementById("depostok").appendChild(depoDropdown);
+
+            // Depo listesini dropdown'a ekle
+            availableDepos.forEach(depo => {
+                console.log(depo.id);
+                $("#deposelect").append(`<option value="${depo.ad}" data-depoid="${depo.id}">${depo.ad}</option>`);
+            });
+
+            $("#deposelect").on('change', function () {
+                let selectedDepo = $("#deposelect").val();
+                let selectedDepoId = $("#deposelect option:selected").data("depoid");
+                if (selectedDepo) {
+                    console.log("Depo seçildi:", selectedDepo);
+                    createNewDepoInput(selectedDepo, selectedDepoId);
+                    selectedDepos.add(selectedDepo);
+                }
+                depoDropdown.remove();
+            });
+        });
     }
+
+    function createNewDepoInput(depoAd, depoid) {
+        document.createElement("br");
+        let depoLabel = document.createElement("label");
+        let depoInput = document.createElement("input");
+        depoLabel.innerHTML = `${depoAd} başlangıç stok miktarı`;
+        depoInput.type = "number";
+        depoInput.classList.add("form-control");
+        depoInput.setAttribute("data-depo", depoAd);
+        depoStokValues.push({ depoid: depoid, depo: depoAd, stok: 0 })
+
+        depoInput.oninput = function () {
+            updateDepoStok(depoAd, depoInput.value);// Input değiştikçe listeyi güncelle
+        };
+        document.getElementById("depostok").appendChild(depoLabel);
+        document.getElementById("depostok").appendChild(depoInput);
+
+    }
+
+    function updateDepoStok(depoAd, stokSayisi) {
+        depoStokValues = depoStokValues.map(item =>
+            item.depo === depoAd ? { ...item, stok: parseInt(stokSayisi) } : item
+        );
+        console.log(depoAd, stokSayisi);
+        depoStokValues.forEach(item => {
+            console.log(item.depo, item.stok);
+        });
+    }
+
+    function getDepos(callback) {
+        $.ajax({
+            type: "GET",
+            url: '/Depo/GetDepos',
+            success: function (response) {
+                if (response) {
+                    let availableDepos = response.rows
+                        .filter(item => !selectedDepos.has(item.ad));
+                    callback(availableDepos); // Filtrelenmiş depo listesini döndür
+                } else {
+                    $.gritter.add({
+                        title: "Hata",
+                        text: "Depolar getirilirken bir hata oluştu.",
+                        class_name: "gritter-error"
+                    });
+                    callback([]);
+                }
+            },
+            error: function () {
+                alert("Depolar getirilirken hata oluştu.");
+                callback([]);
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        var id = @Html.Raw(Json.Serialize(ViewBag.Id)); // Razor'dan JS değişkenine güvenli dönüşüm
+        if (id !== 0) {
+            edititem(id);
+        }
     });
 
     $(document).ready(function () {
@@ -95,30 +194,6 @@
                 if (response.success) {
                     response.items.forEach(function (item) {
                         $("#markaselect").append(`<option value="${item.ad}" >${item.ad}</option>`);
-                    });
-                } else {
-                    $.gritter.add({
-                        title: "Hata",
-                        text: "Markalar getirilirken bir hata oluştu.",
-                        class_name: "gritter-error"
-                    });
-                }
-            },
-            error: function () {
-                alert("Markalar getirilirken hata oluştu.");
-            }
-        });
-    });
-
-    $(document).ready(function () {
-        $.ajax({
-            type: "GET",
-            url: '/Depo/GetDepos',
-            success: function (response) {
-                if (response) {
-                    response.rows.forEach(function (item) {
-                        console.log(item);
-                        $("#deposelect").append(`<option value="${item.ad}">${item.ad}</option>`);
                     });
                 } else {
                     $.gritter.add({
@@ -160,7 +235,17 @@
     $(document).ready(function () {
         $("#addnewitemfrom").submit(function (event) {
             event.preventDefault();
+
+            // Depo verilerini JSON'a çevir ve hidden input'a ata
+            var depoDataJson = JSON.stringify(depoStokValues);
+            console.log("BURAYAAAAAAAAAAAAAAAA" + depoDataJson);
+            $("#depoDatas").val(depoDataJson);
+            console.log("Depo Verileri:", $("#depoDatas").val(depoDataJson));
+            // Değerin doğru atandığını kontrol et
+            console.log("Depo Verileri:", $("#depoDatas").val());
+
             var formdata = $("#addnewitemfrom").serialize();
+            console.log("Form Data:", formdata);
             if ($("#addnewitemfrom").valid()) {
                 $.ajax({
                     type: "POST",

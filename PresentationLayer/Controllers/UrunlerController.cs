@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using System.Globalization;
+using System.Text.Json.Nodes;
 
 namespace PresentationLayer.Controllers
 {
@@ -16,10 +17,12 @@ namespace PresentationLayer.Controllers
     {
         private readonly IUrunService urunService;
         private readonly IMapper _mapper;
-        public UrunlerController(IUrunService urunlerService, IMapper _mapper)
+        private readonly IStokService _stokService;
+        public UrunlerController(IUrunService urunlerService, IMapper _mapper, IStokService _stokService)
         {
             this._mapper = _mapper;
-            this.urunService = urunlerService;
+            urunService = urunlerService;
+            this._stokService = _stokService;
         }
 
         public IActionResult Index()
@@ -77,19 +80,40 @@ namespace PresentationLayer.Controllers
 
         public async Task<JsonResult> Save(UrunlerDto entity)
         {
-            if (!ModelState.IsValid)
+            JsonNode depoVerileriJson = null;
+            if (!string.IsNullOrEmpty(entity.DepoVerileri))
             {
-                var errors = ModelState.Values
-                   .SelectMany(v => v.Errors)
-                   .Select(e => e.ErrorMessage)
-                   .ToList();
-
-                return Json(new { success = false, errors });
+                depoVerileriJson = JsonNode.Parse(entity.DepoVerileri);
+                Console.WriteLine("consollllllllllllllll" + depoVerileriJson.ToJsonString());
             }
+            else
+            {
+                Console.WriteLine("Depo Verileri NULL geldi!");
+            }
+
+            //Stok depoid
+
+            //Console.WriteLine("Depo Verileri: " + depoVerileriJson);
+            //string hedefDepoAdi = depoVerileriJson?[0]?["depo"]?.ToString();
+            //string hedefDepoid = depoVerileriJson?[0]?["depoid"]?.ToString();
+            //string hedefDepostok = depoVerileriJson?[0]?["stok"]?.ToString();
+            //Console.WriteLine("Hedef Depo Adı: " + hedefDepoAdi + hedefDepoid + hedefDepostok);
+            //if (!ModelState.IsValid)
+            //{
+            //    var errors = ModelState.Values
+            //       .SelectMany(v => v.Errors)
+            //       .Select(e => e.ErrorMessage)
+            //       .ToList();
+
+            //    return Json(new { success = false, errors });
+            //}
             var item = await urunService.ConvertToEntity(entity);
             var create = false;
             if (item.Id == 0)
             {
+                //Stok stok = new Stok();
+                //stok.StokMiktari = Convert.ToInt32(hedefDepostok);
+                //stok.DepoId = Convert.ToInt32(hedefDepoid);                
                 item.InsUserId = (int)HttpContext.Session.GetInt32("OnlineUserId");
                 item.CreateDate = DateTime.Now;
                 item.Approved = true;
@@ -97,6 +121,36 @@ namespace PresentationLayer.Controllers
                 create = true;
             }
             await urunService.Save(item);
+            if (create)
+            {
+                List<Stok> stoks = [];
+                JsonArray? obj = depoVerileriJson as JsonArray;
+                foreach (JsonNode depo in obj)
+                {
+                    Stok stock = new Stok();
+                    stock.DepoId = depo["depoid"].GetValue<int>();
+                    stock.StokMiktari = depo["stok"].GetValue<int>();
+                    stock.UrunId = item.Id;
+                    stoks.Add(stock);
+                }
+                foreach (var itemm in stoks)
+                {
+                    Console.WriteLine("DepoId: " + itemm.DepoId);
+                    Console.WriteLine("StokMiktari: " + itemm.StokMiktari);
+                }
+
+                Stok stok = new Stok();
+                stok.UrunId = item.Id;
+                stok.StokMiktari = entity.Stok;
+                stok.DepoId = await _stokService.GetDefaultDepo();
+                stoks.Add(stok);
+                //await _stokService.Create(stok);
+
+                //stok.StokMiktari = Convert.ToInt32(hedefDepostok);
+                //stok.DepoId = Convert.ToInt32(hedefDepoid);
+                
+                await _stokService.Create(stoks);
+            }
             return Json(new { success = true, create = create });
         }
 

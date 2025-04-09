@@ -70,6 +70,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IMarkaDal, MarkaDal>();
 builder.Services.AddScoped<IMarkaService, MarkaService>();
 
+builder.Services.AddScoped<IStokDal, StokDal>();
+builder.Services.AddScoped<IStokService, StokService>();
+
 builder.Services.AddScoped<IBirimDal, BirimDal>();
 builder.Services.AddScoped<IBirimService, BirimService>();
 

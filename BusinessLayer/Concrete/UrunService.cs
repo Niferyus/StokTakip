@@ -2,6 +2,7 @@
 using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
+using DataAccessLayer.Migrations;
 using DocumentFormat.OpenXml.Drawing.ChartDrawing;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Http;
@@ -52,12 +53,21 @@ namespace BusinessLayer.Concrete
             if (entity.Id == 0)
             {
                 await urunlerDal.Add(entity);
+
             }
             else
             {
                 await urunlerDal.Edit(entity);
             }
         }
+
+        //public async Task CreateStokRow(int id)
+        //{
+        //    Stok stok = new Stok();
+        //    stok.UrunId = id;
+        //    stok.StokMiktari = stok;
+        //    stok.DepoId = depoid;
+        //}
 
         //public async Task SaveUrun(UrunlerDto entity, int? insuserid)
         //{

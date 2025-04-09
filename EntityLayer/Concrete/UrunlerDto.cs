@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace EntityLayer.Concrete
@@ -43,5 +44,6 @@ namespace EntityLayer.Concrete
         public int EksikStokMiktarı { get; set; }
         [Required(ErrorMessage = "Depo alanı boş geçilemez")]
         public string DepoAdi { get; set; }
+        public string DepoVerileri { get; set; }
     }
 }
