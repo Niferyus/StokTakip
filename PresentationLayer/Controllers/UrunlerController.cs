@@ -91,13 +91,6 @@ namespace PresentationLayer.Controllers
                 Console.WriteLine("Depo Verileri NULL geldi!");
             }
 
-            //Stok depoid
-
-            //Console.WriteLine("Depo Verileri: " + depoVerileriJson);
-            //string hedefDepoAdi = depoVerileriJson?[0]?["depo"]?.ToString();
-            //string hedefDepoid = depoVerileriJson?[0]?["depoid"]?.ToString();
-            //string hedefDepostok = depoVerileriJson?[0]?["stok"]?.ToString();
-            //Console.WriteLine("Hedef Depo Adı: " + hedefDepoAdi + hedefDepoid + hedefDepostok);
             //if (!ModelState.IsValid)
             //{
             //    var errors = ModelState.Values
@@ -107,6 +100,7 @@ namespace PresentationLayer.Controllers
 
             //    return Json(new { success = false, errors });
             //}
+
             var item = await urunService.ConvertToEntity(entity);
             var create = false;
             if (item.Id == 0)
@@ -133,21 +127,12 @@ namespace PresentationLayer.Controllers
                     stock.UrunId = item.Id;
                     stoks.Add(stock);
                 }
-                foreach (var itemm in stoks)
-                {
-                    Console.WriteLine("DepoId: " + itemm.DepoId);
-                    Console.WriteLine("StokMiktari: " + itemm.StokMiktari);
-                }
-
+                
                 Stok stok = new Stok();
                 stok.UrunId = item.Id;
                 stok.StokMiktari = entity.Stok;
                 stok.DepoId = await _stokService.GetDefaultDepo();
                 stoks.Add(stok);
-                //await _stokService.Create(stok);
-
-                //stok.StokMiktari = Convert.ToInt32(hedefDepostok);
-                //stok.DepoId = Convert.ToInt32(hedefDepoid);
                 
                 await _stokService.Create(stoks);
             }

@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Bibliography;
 using EntityLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,17 @@ namespace DataAccessLayer.Concrete
                         };
             return await Task.Run(() => Pagination<DepoDto>.Create(query, pageIndex, pageSize));
         }
+
+        //public async Task<Pagination<Urunler>> GetDepoUrunler(int depoId)
+        //{
+        //    var values = from stok in _context.Stok
+        //                 join urun in _context.Urunler on stok.UrunId equals urun.Id
+        //                 where stok.DepoId == depoId
+        //                 select new DepoUrunDto
+        //                 {
+        //                     stok.StokMiktari
+        //                 }
+        //}
 
         public async Task Edit(Depo entity)
         {

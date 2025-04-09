@@ -15,10 +15,10 @@ namespace DataAccessLayer.Concrete
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Depo> Depo { get; set; }
-        public DbSet<Marka> Marka { get; set; }
-        public DbSet<Birim> Birim { get; set; }
         public DbSet<Yerlesim> Yerlesim { get; set; }
         public DbSet<Stok> Stok { get; set; }
+        public DbSet<UrunOzellikleri> UrunOzellikleri { get; set; }
+        
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

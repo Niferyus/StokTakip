@@ -67,14 +67,14 @@ builder.Services.AddScoped<IlceAdResolver>();
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IMarkaDal, MarkaDal>();
-builder.Services.AddScoped<IMarkaService, MarkaService>();
+//builder.Services.AddScoped<IMarkaDal, MarkaDal>();
+//builder.Services.AddScoped<IMarkaService, MarkaService>();
 
 builder.Services.AddScoped<IStokDal, StokDal>();
 builder.Services.AddScoped<IStokService, StokService>();
 
-builder.Services.AddScoped<IBirimDal, BirimDal>();
-builder.Services.AddScoped<IBirimService, BirimService>();
+//builder.Services.AddScoped<IBirimDal, BirimDal>();
+//builder.Services.AddScoped<IBirimService, BirimService>();
 
 builder.Services.AddScoped<IUrunlerDal, UrunlerDal>();
 builder.Services.AddScoped<IUrunService, UrunService>();

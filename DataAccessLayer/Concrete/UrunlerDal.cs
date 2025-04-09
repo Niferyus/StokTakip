@@ -27,18 +27,18 @@ namespace DataAccessLayer.Concrete
         {
             var query = from urun in _context.Urunler
                         join user in _context.Users on urun.InsUserId equals user.Id
-                        join marka in _context.Marka on urun.MarkaId equals marka.Id
-                        join birim in _context.Birim on urun.BirimId equals birim.Id
+                        //join marka in _context.Marka on urun.MarkaId equals marka.Id
+                        //join birim in _context.Birim on urun.BirimId equals birim.Id
                         where urun.Active == true
                         select new UrunlerDto
                         {
                             Id = urun.Id,
                             UserName = user.Name,
-                            MarkaAdi = marka.Ad,
+                            //  MarkaAdi = marka.Ad,
                             Adi = urun.Adi,
                             BarkodNo = urun.BarkodNo,
                             Aciklama = urun.Aciklama,
-                            Birim = birim.Ad,
+                            //Birim = birim.Ad,
                             AlisFiyat = urun.AlisFiyat,
                             SatisFiyat = urun.SatisFiyat,
                             Stok = urun.Stok,
@@ -53,18 +53,18 @@ namespace DataAccessLayer.Concrete
         {
             var query = from urun in _context.Urunler
                         join user in _context.Users on urun.InsUserId equals user.Id
-                        join markaa in _context.Marka on urun.MarkaId equals markaa.Id
-                        join birim in _context.Birim on urun.BirimId equals birim.Id
+                        //join markaa in _context.Marka on urun.MarkaId equals markaa.Id
+                        //join birim in _context.Birim on urun.BirimId equals birim.Id
                         where urun.Active == true
                         select new UrunlerDto
                         {
                             Id = urun.Id,
                             UserName = user.Name,
-                            MarkaAdi = markaa.Ad,
+                            //  MarkaAdi = markaa.Ad,
                             Adi = urun.Adi,
                             BarkodNo = urun.BarkodNo,
                             Aciklama = urun.Aciklama,
-                            Birim = birim.Ad,
+                            //Birim = birim.Ad,
                             AlisFiyat = urun.AlisFiyat,
                             SatisFiyat = urun.SatisFiyat,
                             Stok = urun.Stok,

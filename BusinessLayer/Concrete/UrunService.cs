@@ -141,11 +141,11 @@ namespace BusinessLayer.Concrete
                 int row = 2;
                 foreach (var item in items)
                 {
-                    worksheet.Cells[row, 1].Value = item.Marka;
+                    //worksheet.Cells[row, 1].Value = item.Marka;
                     worksheet.Cells[row, 2].Value = item.Adi;
                     worksheet.Cells[row, 3].Value = item.BarkodNo;
                     worksheet.Cells[row, 4].Value = item.Aciklama;
-                    worksheet.Cells[row, 5].Value = item.BirimId;
+                    //worksheet.Cells[row, 5].Value = item.BirimId;
                     worksheet.Cells[row, 6].Value = item.AlisFiyat;
                     worksheet.Cells[row, 7].Value = item.SatisFiyat;
                     worksheet.Cells[row, 8].Value = item.Stok;

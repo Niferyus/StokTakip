@@ -96,7 +96,7 @@ namespace PresentationLayer.Controllers
 
         //public async Task<JsonResult> GetDepoUrun(int depoId)
         //{
-        //    var items = await _depoService.GetDepoUrunler(depoId, 1, 5);
+        //  var items = await _depoService.GetDepoUrunler(depoId, 1, 5);
         //    var mappedItems = _mapper.Map<List<UrunlerDto>>(items.items);
         //    var paginationResult = new Pagination<UrunlerDto>(mappedItems, items.items.Count, 1, 5);
         //    var jsonData = new

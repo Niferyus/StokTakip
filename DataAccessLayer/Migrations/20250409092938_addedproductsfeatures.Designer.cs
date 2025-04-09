@@ -4,6 +4,7 @@ using DataAccessLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250409092938_addedproductsfeatures")]
+    partial class addedproductsfeatures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,6 +129,27 @@ namespace DataAccessLayer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Birim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Ad")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Birim");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Cart", b =>
@@ -271,6 +295,26 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Islemler");
                 });
 
+            modelBuilder.Entity("EntityLayer.Concrete.Marka", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Ad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Marka");
+                });
+
             modelBuilder.Entity("EntityLayer.Concrete.Musteriler", b =>
                 {
                     b.Property<int>("MusteriID")
@@ -356,16 +400,13 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("Ad")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Ad")
-                        .IsUnique();
 
                     b.ToTable("UrunOzellikleri");
                 });
@@ -427,17 +468,16 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("Stok")
                         .HasColumnType("int");
 
-                    b.Property<int>("UrunOzellikId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BarkodNo")
                         .IsUnique();
 
+                    b.HasIndex("BirimId");
+
                     b.HasIndex("DepoId");
 
-                    b.HasIndex("UrunOzellikId");
+                    b.HasIndex("MarkaId");
 
                     b.ToTable("Urunler");
                 });
@@ -658,17 +698,23 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Concrete.Urunler", b =>
                 {
+                    b.HasOne("EntityLayer.Concrete.Birim", "Birimler")
+                        .WithMany()
+                        .HasForeignKey("BirimId");
+
                     b.HasOne("EntityLayer.Concrete.Depo", null)
                         .WithMany("Urunler")
                         .HasForeignKey("DepoId");
 
-                    b.HasOne("EntityLayer.Concrete.UrunOzellikleri", "urunOzellikleri")
+                    b.HasOne("EntityLayer.Concrete.Marka", "Marka")
                         .WithMany()
-                        .HasForeignKey("UrunOzellikId")
+                        .HasForeignKey("MarkaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("urunOzellikleri");
+                    b.Navigation("Birimler");
+
+                    b.Navigation("Marka");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
