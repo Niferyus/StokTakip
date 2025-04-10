@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Abstract;
-using EntityLayer.Concrete;
+using EntityLayer.Concrete.Class;
+using EntityLayer.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

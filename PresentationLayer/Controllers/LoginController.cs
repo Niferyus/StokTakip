@@ -1,4 +1,4 @@
-﻿using EntityLayer.Concrete;
+﻿using EntityLayer.Concrete.Class;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Dtos.LoginDto;

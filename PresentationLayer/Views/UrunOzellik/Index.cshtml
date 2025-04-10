@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Ürün Listesi";
+    Layout = null;
+}
+
+@if (@ViewBag.type == "marka")
+{
+    @await Component.InvokeAsync("Marka")
+}
+@if (ViewBag.type == "birim")
+{
+    @await Component.InvokeAsync("Birim")
+}
+

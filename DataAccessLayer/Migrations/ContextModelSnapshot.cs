@@ -22,7 +22,7 @@ namespace DataAccessLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EntityLayer.Concrete.AppRole", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.AppRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.AppUser", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.AppUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,7 +128,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Cart", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Cart", b =>
                 {
                     b.Property<int>("CartId")
                         .ValueGeneratedOnAdd()
@@ -141,10 +141,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("CartId");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.CartItem", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.CartItem", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -170,10 +170,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UrunId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Depo", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Depo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -228,10 +228,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("SehirId");
 
-                    b.ToTable("Depo");
+                    b.ToTable("Depo", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Islemler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Islemler", b =>
                 {
                     b.Property<int>("IslemlerID")
                         .ValueGeneratedOnAdd()
@@ -268,10 +268,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UrunId");
 
-                    b.ToTable("Islemler");
+                    b.ToTable("Islemler", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Musteriler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Musteriler", b =>
                 {
                     b.Property<int>("MusteriID")
                         .ValueGeneratedOnAdd()
@@ -289,10 +289,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("MusteriID");
 
-                    b.ToTable("Musteriler");
+                    b.ToTable("Musteriler", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Stok", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Stok", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -315,10 +315,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UrunId");
 
-                    b.ToTable("Stok");
+                    b.ToTable("Stok", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Toptancilar", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Toptancilar", b =>
                 {
                     b.Property<int>("ToptanciID")
                         .ValueGeneratedOnAdd()
@@ -343,10 +343,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UrunId");
 
-                    b.ToTable("Toptancilar");
+                    b.ToTable("Toptancilar", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.UrunOzellikleri", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.UrunOzellikleri", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -367,10 +367,10 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("Ad")
                         .IsUnique();
 
-                    b.ToTable("UrunOzellikleri");
+                    b.ToTable("UrunOzellikleri", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Urunler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Urunler", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -400,7 +400,7 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("varchar(13)");
 
-                    b.Property<int?>("BirimId")
+                    b.Property<int>("BirimId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
@@ -427,22 +427,21 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("Stok")
                         .HasColumnType("int");
 
-                    b.Property<int>("UrunOzellikId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BarkodNo")
                         .IsUnique();
 
+                    b.HasIndex("BirimId");
+
                     b.HasIndex("DepoId");
 
-                    b.HasIndex("UrunOzellikId");
+                    b.HasIndex("MarkaId");
 
-                    b.ToTable("Urunler");
+                    b.ToTable("Urunler", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Yerlesim", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Yerlesim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -459,7 +458,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Yerlesim");
+                    b.ToTable("Yerlesim", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -565,15 +564,15 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.CartItem", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.CartItem", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Cart", "cart")
+                    b.HasOne("EntityLayer.Concrete.Class.Cart", "cart")
                         .WithMany("cartitem")
                         .HasForeignKey("CartID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
+                    b.HasOne("EntityLayer.Concrete.Class.Urunler", "Urun")
                         .WithMany("cartitem")
                         .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -584,15 +583,15 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("cart");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Depo", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Depo", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Yerlesim", "Ilcee")
+                    b.HasOne("EntityLayer.Concrete.Class.Yerlesim", "Ilcee")
                         .WithMany()
                         .HasForeignKey("IlceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.Yerlesim", "Sehirr")
+                    b.HasOne("EntityLayer.Concrete.Class.Yerlesim", "Sehirr")
                         .WithMany()
                         .HasForeignKey("SehirId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -603,17 +602,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Sehirr");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Islemler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Islemler", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Musteriler", "Musteri")
+                    b.HasOne("EntityLayer.Concrete.Class.Musteriler", "Musteri")
                         .WithMany("Islemler")
                         .HasForeignKey("MusteriID");
 
-                    b.HasOne("EntityLayer.Concrete.Toptancilar", "Toptanci")
+                    b.HasOne("EntityLayer.Concrete.Class.Toptancilar", "Toptanci")
                         .WithMany("Islemler")
                         .HasForeignKey("ToptanciID");
 
-                    b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
+                    b.HasOne("EntityLayer.Concrete.Class.Urunler", "Urun")
                         .WithMany("Islemler")
                         .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -626,15 +625,15 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Urun");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Stok", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Stok", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Depo", "Depo")
+                    b.HasOne("EntityLayer.Concrete.Class.Depo", "Depo")
                         .WithMany("Stoklar")
                         .HasForeignKey("DepoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
+                    b.HasOne("EntityLayer.Concrete.Class.Urunler", "Urun")
                         .WithMany("Stoklar")
                         .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -645,9 +644,9 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Urun");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Toptancilar", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Toptancilar", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
+                    b.HasOne("EntityLayer.Concrete.Class.Urunler", "Urun")
                         .WithMany("Toptancilar")
                         .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -656,24 +655,32 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Urun");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Urunler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Urunler", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Depo", null)
-                        .WithMany("Urunler")
-                        .HasForeignKey("DepoId");
-
-                    b.HasOne("EntityLayer.Concrete.UrunOzellikleri", "urunOzellikleri")
+                    b.HasOne("EntityLayer.Concrete.Class.UrunOzellikleri", "Birim")
                         .WithMany()
-                        .HasForeignKey("UrunOzellikId")
+                        .HasForeignKey("BirimId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("urunOzellikleri");
+                    b.HasOne("EntityLayer.Concrete.Class.Depo", null)
+                        .WithMany("Urunler")
+                        .HasForeignKey("DepoId");
+
+                    b.HasOne("EntityLayer.Concrete.Class.UrunOzellikleri", "Marka")
+                        .WithMany()
+                        .HasForeignKey("MarkaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Birim");
+
+                    b.Navigation("Marka");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppRole", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -682,7 +689,7 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -691,7 +698,7 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -700,13 +707,13 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppRole", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -715,36 +722,36 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Cart", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Cart", b =>
                 {
                     b.Navigation("cartitem");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Depo", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Depo", b =>
                 {
                     b.Navigation("Stoklar");
 
                     b.Navigation("Urunler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Musteriler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Musteriler", b =>
                 {
                     b.Navigation("Islemler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Toptancilar", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Toptancilar", b =>
                 {
                     b.Navigation("Islemler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Urunler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Urunler", b =>
                 {
                     b.Navigation("Islemler");
 

@@ -5,7 +5,8 @@ using DataAccessLayer.Concrete;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
-using EntityLayer.Concrete;
+using EntityLayer.Concrete.Class;
+using EntityLayer.Concrete.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers

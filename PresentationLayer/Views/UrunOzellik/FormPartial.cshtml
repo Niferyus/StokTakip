@@ -1,0 +1,78 @@
+﻿@model EntityLayer.Concrete.Class.UrunOzellikleri
+
+<form id="addnewitemfrom" method="post">
+    <div class="form-group">
+        <label class="form-label">Ad</label>
+        <span asp-validation-for="Ad" class="text-danger"></span>
+        <input type="text" asp-for="Ad" class="form-control" id="adi" />
+    </div>
+
+    <input type="hidden" asp-for="type" value="@ViewBag.Type"/>
+
+    <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+</form>
+
+<script>
+
+    $(document).ready(function () {
+    var id = @Html.Raw(Json.Serialize(ViewBag.Id)); // Razor'dan JS değişkenine güvenli dönüşüm
+    if (id !== 0) {
+        edititem(id);
+    }
+    });
+
+    function edititem(id) {
+        $.ajax({
+            url: "/UrunOzellik/GetById",
+            type: "GET",
+            data: { id: id },
+            success: function (response) {
+                $("#adi").val(response.ad);
+                idinput = $("<input>", { type: "hidden", name: "Id", id: "id" });
+                $("#addnewitemfrom").append(idinput);
+                idinput.val(response.id);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#addnewitemfrom").submit(function (event) {
+            event.preventDefault();
+            var formdata = $("#addnewitemfrom").serialize();
+            if ($("#addnewitemfrom").valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: "/UrunOzellik/Save",
+                    data: formdata,
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.create) {
+                                $.gritter.add({
+                                    title: "Başarılı",
+                                    text: "Marka başarıyla eklendi.",
+                                    class_name: "gritter-success"
+                                });
+                            }
+                            else {
+                                $.gritter.add({
+                                    title: "Başarılı",
+                                    text: "Marka başarıyla güncellendi.",
+                                    class_name: "gritter-success"
+                                });
+                            }
+                            $("#dynamicModal").modal("hide");
+                            $("#grid").trigger("reloadGrid");
+                        } else {
+                            alert(response.errors.join("\n"));
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Hata Detayı:", xhr.responseText);
+                        alert("Sunucu hatası oluştu");
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>

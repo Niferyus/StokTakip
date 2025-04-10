@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Concrete;
-using EntityLayer.Concrete;
+using EntityLayer.Concrete.Class;
+using EntityLayer.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace BusinessLayer.Mapping
             CreateMap<DepoDto, Depo>()
                 .ForMember(dest => dest.SehirId, opt => opt.MapFrom<SehirIdResolver>())
                 .ForMember(dest => dest.IlceId, opt => opt.MapFrom<IlceIdResolver>())
-                .ForMember(dest => dest.Urunler, opt => opt.Ignore())
+                //.ForMember(dest => dest.Urunler, opt => opt.Ignore())
                 .ForMember(dest => dest.InsUserId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreateDate, opt => opt.Ignore())
                 .ForMember(dest => dest.Approved, opt => opt.Ignore())
@@ -36,12 +37,10 @@ namespace BusinessLayer.Mapping
             CreateMap<UrunlerDto, Urunler>()
                 .ForMember(dest => dest.MarkaId, opt => opt.MapFrom<MarkaIdResolver>())
                 .ForMember(dest => dest.BirimId, opt => opt.MapFrom<BirimIdResolver>())
-                //.ForMember(dest => dest.DepoId, opt => opt.MapFrom<DepoIdResolver>())
                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.Tarih))
                 .ReverseMap()
                 .ForMember(dest => dest.MarkaAdi, opt => opt.MapFrom<MarkaAdResolver>())
-                .ForMember(dest => dest.Birim, opt => opt.MapFrom<BirimAdResolver>());
-                //.ForMember(dest => dest.DepoAdi, opt => opt.MapFrom<DepoAdResolver>());
+                .ForMember(dest => dest.BirimAdi, opt => opt.MapFrom<BirimAdResolver>());
 
 
             CreateMap<Pagination<Depo>, Pagination<DepoDto>>()

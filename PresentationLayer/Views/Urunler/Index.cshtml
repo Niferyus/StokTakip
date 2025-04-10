@@ -1,4 +1,4 @@
-﻿@model EntityLayer.Concrete.UrunlerDto
+﻿@model EntityLayer.Concrete.Dtos.UrunlerDto
 @{
     ViewData["Title"] = "Ürün Listesi";
     Layout = "~/Views/Layoutt/Index.cshtml"; ;
@@ -195,11 +195,6 @@
             <button class="updatebutton btn btn-primary" data-id="${rowObject.id}">Düzenle</button>
             </div>`;
         }
-
-        //function openform() {
-        //    $("#modalContent").html(response);
-        //    $("#dynamicModal").modal("show");
-        //}
 
         function loadModal(id) {
             $.ajax({

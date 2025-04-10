@@ -1,4 +1,4 @@
-﻿@model EntityLayer.Concrete.UrunlerDto
+﻿@model EntityLayer.Concrete.Dtos.UrunlerDto
 
 
 <form id="addnewitemfrom" method="post">
@@ -10,14 +10,6 @@
             <option value="">Marka seçiniz</option>
         </select>
     </div>
-
-    @*<div class="form-group">
-            <label class="form-label">Depo</label>
-            <span asp-validation-for="DepoAdi" class="text-danger"></span>
-            <select id="deposelect" asp-for="DepoAdi" class="form-control">
-                <option value="">Depo seçiniz</option>
-            </select>
-        </div>*@
 
     <div class="form-group">
         <label class="form-label">Ad</label>
@@ -39,8 +31,8 @@
 
     <div class="form-group">
         <label class="form-label">Birim</label>
-        <span asp-validation-for="Birim" class="text-danger"></span>
-        <select id="birimselect" asp-for="Birim" class="form-control">
+        <span asp-validation-for="BirimAdi" class="text-danger"></span>
+        <select id="birimselect" asp-for="BirimAdi" class="form-control">
             <option value="">Birim seçiniz</option>
         </select>
     </div>
@@ -189,7 +181,8 @@
     $(document).ready(function () {
         $.ajax({
             type: "GET",
-            url: '/Marka/GetItems',
+            url: '/UrunOzellik/GetItems',
+            data: { type: 'marka'},
             success: function (response) {
                 if (response.success) {
                     response.items.forEach(function (item) {
@@ -212,7 +205,8 @@
     $(document).ready(function () {
         $.ajax({
             type: "GET",
-            url: '/Birim/GetAllBirim',
+            url: '/UrunOzellik/GetItems',
+            data: { type: 'birim' },
             success: function (response) {
                 if (response.success) {
                     response.items.forEach(function (item) {

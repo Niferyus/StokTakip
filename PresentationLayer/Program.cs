@@ -5,7 +5,7 @@ using BusinessLayer.Mapping;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using EntityLayer.Concrete;
+using EntityLayer.Concrete.Class;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -67,14 +67,11 @@ builder.Services.AddScoped<IlceAdResolver>();
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 
-//builder.Services.AddScoped<IMarkaDal, MarkaDal>();
-//builder.Services.AddScoped<IMarkaService, MarkaService>();
+builder.Services.AddScoped<IUrunOzellikDal, UrunOzellikDal>();
+builder.Services.AddScoped<IUrunOzellikService, UrunOzellikService>();
 
 builder.Services.AddScoped<IStokDal, StokDal>();
 builder.Services.AddScoped<IStokService, StokService>();
-
-//builder.Services.AddScoped<IBirimDal, BirimDal>();
-//builder.Services.AddScoped<IBirimService, BirimService>();
 
 builder.Services.AddScoped<IUrunlerDal, UrunlerDal>();
 builder.Services.AddScoped<IUrunService, UrunService>();

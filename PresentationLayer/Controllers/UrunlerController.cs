@@ -3,7 +3,8 @@ using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Vml.Office;
-using EntityLayer.Concrete;
+using EntityLayer.Concrete.Class;
+using EntityLayer.Concrete.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
@@ -104,10 +105,7 @@ namespace PresentationLayer.Controllers
             var item = await urunService.ConvertToEntity(entity);
             var create = false;
             if (item.Id == 0)
-            {
-                //Stok stok = new Stok();
-                //stok.StokMiktari = Convert.ToInt32(hedefDepostok);
-                //stok.DepoId = Convert.ToInt32(hedefDepoid);                
+            {        
                 item.InsUserId = (int)HttpContext.Session.GetInt32("OnlineUserId");
                 item.CreateDate = DateTime.Now;
                 item.Approved = true;

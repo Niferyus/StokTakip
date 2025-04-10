@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Abstract;
-using EntityLayer.Concrete;
+using EntityLayer.Concrete.Class;
+using EntityLayer.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Mapping
 {
-    public class BirimIdResolver : IValueResolver<UrunlerDto, Urunler, int?>
+    public class BirimIdResolver : IValueResolver<UrunlerDto, Urunler, int>
     {
         private readonly IUrunlerDal _urunlerDal;
 
@@ -18,9 +19,9 @@ namespace BusinessLayer.Mapping
             _urunlerDal = urunlerDal;
         }
 
-        public int? Resolve(UrunlerDto source, Urunler destination, int? destMember, ResolutionContext context)
+        public int Resolve(UrunlerDto source, Urunler destination, int destMember, ResolutionContext context)
         {
-            return _urunlerDal.GetBirimId(source.Birim).Result;
+            return _urunlerDal.GetBirimId(source.BirimAdi).Result;
         }
     }
 }

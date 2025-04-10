@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Abstract;
-using EntityLayer.Concrete;
+using EntityLayer.Concrete.Class;
+using EntityLayer.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace DataAccessLayer.Concrete
             var cart = context.Carts.FirstOrDefault(p => p.UserId == userid);
             if (cart == null)
             {
-                context.Carts.Add(new EntityLayer.Concrete.Cart
+                context.Carts.Add(new Cart
                 {
                     UserId = userid,
                 });
@@ -35,7 +36,7 @@ namespace DataAccessLayer.Concrete
         {
             
             var cart = ControlCart(userid);
-            context.CartItems.Add(new EntityLayer.Concrete.CartItem
+            context.CartItems.Add(new CartItem
             {
                 CartID = cart.CartId,
                 UrunId = productId,

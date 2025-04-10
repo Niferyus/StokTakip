@@ -5,7 +5,8 @@ using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using EFCore.BulkExtensions;
-using EntityLayer.Concrete;
+using EntityLayer.Concrete.Class;
+using EntityLayer.Concrete.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -153,8 +154,8 @@ namespace DataAccessLayer.Concrete
         public async Task<string> GetNameById<TEntity>(int id) where TEntity : class
         {
             var name = await _context.Set<TEntity>()
-                .Where(x => EF.Property<int>(x, "Id") == id) // Burada EF.Property kullanıyoruz.
-                .Select(x => EF.Property<string>(x, "Ad")) // Burada da EF.Property kullanıyoruz.
+                .Where(x => EF.Property<int>(x, "Id") == id)
+                .Select(x => EF.Property<string>(x, "Ad")) 
                 .FirstOrDefaultAsync();
 
             if (name == null)
@@ -165,12 +166,12 @@ namespace DataAccessLayer.Concrete
 
         public async Task<int> GetMarkaId(string markaAdi)
         {
-            return await GetIdByName<Marka>(markaAdi);
+            return await GetIdByName<UrunOzellikleri>(markaAdi);
         }
 
         public async Task<int> GetBirimId(string birimAdi)
         {
-            return await GetIdByName<Birim>(birimAdi);
+            return await GetIdByName<UrunOzellikleri>(birimAdi);
         }
 
         public async Task<int> GetDepoId(string depoAdi)
@@ -180,12 +181,12 @@ namespace DataAccessLayer.Concrete
 
         public async Task<string> GetMarkaName(int id)
         {
-            return await GetNameById<Marka>(id);
+            return await GetNameById<UrunOzellikleri>(id);
         }
 
         public async Task<string> GetBirimName(int id)
         {
-            return await GetNameById<Birim>(id);
+            return await GetNameById<UrunOzellikleri>(id);
         }
 
         public async Task<string> GetDepoName(int id)

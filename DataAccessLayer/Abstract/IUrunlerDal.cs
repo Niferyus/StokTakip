@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Concrete;
 using DocumentFormat.OpenXml.Bibliography;
-using EntityLayer.Concrete;
+using EntityLayer.Concrete.Class;
+using EntityLayer.Concrete.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
