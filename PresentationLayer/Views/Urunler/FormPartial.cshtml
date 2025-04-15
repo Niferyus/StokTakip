@@ -148,10 +148,10 @@
     function getDepos(callback) {
         $.ajax({
             type: "GET",
-            url: '/Depo/GetDepos',
+            url: '/Depo/GetDefaultntDepo',
             success: function (response) {
                 if (response) {
-                    let availableDepos = response.rows
+                    let availableDepos = response
                         .filter(item => !selectedDepos.has(item.ad));
                     callback(availableDepos); // Filtrelenmiş depo listesini döndür
                 } else {
@@ -226,6 +226,10 @@
         });
     });
 
+    function closeform() {
+        $("#newitemform").css("display", "none");
+    }
+
     $(document).ready(function () {
         $("#addnewitemfrom").submit(function (event) {
             event.preventDefault();
@@ -261,7 +265,7 @@
                                     class_name: "gritter-success"
                                 });
                             }
-                            closeform();
+                            $("#dynamicModal").modal("hide");
                             $("#grid").trigger("reloadGrid");
                         } else {
                             alert("Ürün eklenirken bir hata oluştu.");

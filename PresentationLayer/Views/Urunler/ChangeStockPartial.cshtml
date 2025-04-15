@@ -1,0 +1,47 @@
+﻿@model StockChange
+
+<form id="form" method="post">
+    <div class="form-group">
+        <label class="form-label" asp-for="Miktar">Miktarı</label>
+        <span asp-validation-for="Miktar" class="text-danger"></span>
+        <input type="text" asp-for="Miktar" class="form-control" id="adi" />
+    </div>
+
+    <div class="form-group">
+        <span asp-validation-for="StockId" class="text-danger"></span>
+        <input type="hidden" asp-for="StockId" value="@ViewBag.Id" />
+    </div>
+        <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+</form>
+
+<script>
+    $('#form').submit(function (event) {
+        event.preventDefault();
+        var formdata = $("#form").serialize();
+        if ($("#form").valid()) {
+            $.ajax({
+                url: '/Stok/Update',
+                type: 'GET',
+                data: formdata,
+                success: function (response) {
+                    if (response.success) {
+                        $.gritter.add({
+                            title: "Başarılı",
+                            text: "İşlem başarıyla gerçekleşti.",
+                            class_name: "gritter-success"
+                        });
+                        $("#dynamicModal").modal("hide");
+                    } else {
+                        alert("hata");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Hata Detayı:", xhr.responseText);
+                    alert("Sunucu hatası oluştu");
+                }
+            }) 
+        }
+    })
+    
+
+</script>

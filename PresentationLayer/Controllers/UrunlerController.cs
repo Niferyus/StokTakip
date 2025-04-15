@@ -2,6 +2,7 @@
 using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Vml.Office;
 using EntityLayer.Concrete.Class;
 using EntityLayer.Concrete.Dtos;
@@ -82,6 +83,7 @@ namespace PresentationLayer.Controllers
         public async Task<JsonResult> Save(UrunlerDto entity)
         {
             JsonNode depoVerileriJson = null;
+            int TotalStock = entity.Stok;
             if (!string.IsNullOrEmpty(entity.DepoVerileri))
             {
                 depoVerileriJson = JsonNode.Parse(entity.DepoVerileri);
@@ -112,11 +114,16 @@ namespace PresentationLayer.Controllers
                 item.Active = true;
                 create = true;
             }
+            JsonArray? obj = depoVerileriJson as JsonArray;
+            foreach (JsonNode depo in obj)
+            {
+                TotalStock = depo["stok"].GetValue<int>() + TotalStock;
+            }
+            item.Stok = TotalStock;
             await urunService.Save(item);
             if (create)
             {
                 List<Stok> stoks = [];
-                JsonArray? obj = depoVerileriJson as JsonArray;
                 foreach (JsonNode depo in obj)
                 {
                     Stok stock = new Stok();
@@ -163,6 +170,18 @@ namespace PresentationLayer.Controllers
         {
             ViewBag.Id = id;
             return PartialView("~/Views/Urunler/FormPartial.cshtml");
+        }
+
+        public async Task<PartialViewResult> ProductDetailPartial(int id)
+        {
+            //var items = await _stokService.GetByUrunId(id);
+            return PartialView(id);
+        }
+
+        public PartialViewResult ChangeStockPartial(int id)
+        {
+            ViewBag.Id = id;
+            return PartialView();
         }
 
         public PartialViewResult ExcelPartial()

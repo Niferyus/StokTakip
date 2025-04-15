@@ -85,5 +85,11 @@ namespace BusinessLayer.Concrete
         {
             return await Task.Run(() => _mapper.Map<Depo>(item));
         }
+
+        public async Task<List<DepoDto>> GetDefaultntDepo()
+        {
+            var items = await _depoDal.GetDefaultntDepo();
+            return _mapper.Map<List<DepoDto>>(items);
+        }
     }
 }

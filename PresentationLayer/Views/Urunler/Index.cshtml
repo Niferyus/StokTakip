@@ -86,14 +86,14 @@
             url: '@Url.Action("GetUrunler", "Urunler")',
             datatype: "json",
             mtype: "GET",
-            colNames: ['Ekleyen Satıcı', 'Marka', 'Adı', 'BarkodNo', 'Açıklama', 'Birim', 'Alış Fiyatı', 'Satış Fiyatı', 'Stok', 'Tarih', 'İşlemler', 'KritikStokMiktarı', 'EksikStokMiktarı'],
+            colNames: ['Ekleyen Satıcı', 'Marka', 'Adı', 'BarkodNo', 'Açıklama', 'Birim', 'Alış Fiyatı', 'Satış Fiyatı', 'Stok', 'Tarih', 'Detay', 'İşlemler'],
             colModel: [
                 { name: 'userName', index: 'userName', width: 100, editable: false },
-                { name: 'markaAdi', index: 'marka', width: 100, editable: true },
+                { name: 'markaAdi', index: 'markaAdi', width: 100, editable: true },
                 { name: 'adi', index: 'adi', width: 80, editable: true },
                 { name: 'barkodNo', index: 'barkodNo', width: 90, editable: true },
                 { name: 'aciklama', index: 'aciklama', width: 120, editable: true },
-                { name: 'birim', index: 'birim', width: 80, sortable: false, editable: true },
+                { name: 'birimAdi', index: 'birimAdi', width: 80, sortable: false, editable: true },
                 {
                     name: 'alisFiyat', index: 'alisFiyat', width: 80, editable: true,
                     editrules: { number: true }, formatter: 'number',
@@ -112,15 +112,8 @@
                     name: 'tarih', index: 'tarih', width: 80, editable: false,
                     formatter: "date", formatoptions: { srcformat: "Y-m-d\\TH:i:s", newformat: "d/m/Y" }
                 },
-                { name: 'islemler', width: 120, formatter: ButtonFormatter, sortable: false, editable: false },
-                {
-                    name: 'kritikStokMiktarı', index: 'stok', width: 80, editable: true,
-                    editrules: { integer: true }
-                },
-                {
-                    name: 'eksikStokMiktarı', index: 'stok', width: 80, editable: true,
-                    editrules: { integer: true }
-                },
+                { name: 'islemler', width: 120, formatter: ButtonFormatter, sortable: false, editable: false },  
+                { name: 'detay', width: 120, formatter: ButtonDetailsFormatter, sortable: false, editable: false },  
             ],
             rowNum: 10,
             rowList: [5, 10, 20, 50],
@@ -146,6 +139,10 @@
                 $(".updatebutton").click(function () {
                     var id = $(this).data("id");
                     loadModal(id);
+                });
+                $(".detailbutton").click(function () {
+                    var id = $(this).data("id");
+                    loadDetailModal(id);
                 });
                 var grid = $("#grid");
                 var ids = grid.getDataIDs();
@@ -195,6 +192,11 @@
             <button class="updatebutton btn btn-primary" data-id="${rowObject.id}">Düzenle</button>
             </div>`;
         }
+        function ButtonDetailsFormatter(cellvalue, options, rowObject) {
+            return `<div style="display: flex; gap: 5px;">
+            <button class="detailbutton btn btn-success" data-id="${rowObject.id}">Detay</button>
+            </div>`;
+        }
 
         function loadModal(id) {
             $.ajax({
@@ -215,6 +217,18 @@
             });
         }
 
+        function loadDetailModal(id) {
+            $.ajax({
+                url: '/Urunler/ProductDetailPartial',
+                type: 'GET',
+                data: {id: id},
+                success: function (response) {
+                    $("#modalContent").html(response);
+                    $("#dynamicModal").modal("show");
+                },
+            });
+        }
+
         function loadExcelModal() {
             $.ajax({
                 url: '/Urunler/ExcelPartial',
@@ -224,10 +238,6 @@
                     $("#dynamicModal").modal("show");
                 },
             });
-        }
-
-        function closeform() {
-            $("#newitemform").css("display", "none");
         }
 
         function deleteitem(id) {

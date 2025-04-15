@@ -50,6 +50,11 @@ namespace DataAccessLayer.Concrete
         //                 }
         //}
 
+        public async Task<List<Depo>> GetDefaultntDepo()
+        {
+           return await _context.Depo.Where(x => x.IsDefault == false).ToListAsync();
+        }
+
         public async Task Edit(Depo entity)
         {
             var existingEntity = await GetById(entity.Id);

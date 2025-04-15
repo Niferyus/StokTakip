@@ -25,7 +25,6 @@ namespace BusinessLayer.Mapping
             CreateMap<DepoDto, Depo>()
                 .ForMember(dest => dest.SehirId, opt => opt.MapFrom<SehirIdResolver>())
                 .ForMember(dest => dest.IlceId, opt => opt.MapFrom<IlceIdResolver>())
-                //.ForMember(dest => dest.Urunler, opt => opt.Ignore())
                 .ForMember(dest => dest.InsUserId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreateDate, opt => opt.Ignore())
                 .ForMember(dest => dest.Approved, opt => opt.Ignore())
@@ -45,6 +44,7 @@ namespace BusinessLayer.Mapping
 
             CreateMap<Pagination<Depo>, Pagination<DepoDto>>()
                 .ReverseMap();
+
         }
     }
 }

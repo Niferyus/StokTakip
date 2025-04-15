@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Abstract;
 using EntityLayer.Concrete.Class;
+using EntityLayer.Concrete.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,5 +27,24 @@ namespace DataAccessLayer.Concrete
             var item = await _context.Depo.FirstAsync(x => x.IsDefault == true);
             return item.Id;
         }
+
+        public async Task<List<StokDto>> GetByUrunId(int id)
+        {
+            var query = from stok in _context.Stok
+                        join depo in _context.Depo on stok.DepoId equals depo.Id
+                        where stok.UrunId == id
+                        select new StokDto
+                        {
+                            Id = stok.Id,
+                            DepoName = depo.Ad,
+                            StokMiktar = stok.StokMiktari,
+                        };
+           return await query.ToListAsync();
+        }
+
+        //public async Task StokGiris(int id)
+        //{
+
+        //}
     }
 }

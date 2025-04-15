@@ -28,18 +28,18 @@ namespace DataAccessLayer.Concrete
         {
             var query = from urun in _context.Urunler
                         join user in _context.Users on urun.InsUserId equals user.Id
-                        //join marka in _context.Marka on urun.MarkaId equals marka.Id
-                        //join birim in _context.Birim on urun.BirimId equals birim.Id
+                        join ozellik in _context.UrunOzellikleri on urun.MarkaId equals ozellik.Id
+                        join birimozellik in _context.UrunOzellikleri on urun.BirimId equals birimozellik.Id
                         where urun.Active == true
                         select new UrunlerDto
                         {
                             Id = urun.Id,
                             UserName = user.Name,
-                            //  MarkaAdi = marka.Ad,
+                            MarkaAdi = ozellik.Ad,
                             Adi = urun.Adi,
                             BarkodNo = urun.BarkodNo,
                             Aciklama = urun.Aciklama,
-                            //Birim = birim.Ad,
+                            BirimAdi = birimozellik.Ad,
                             AlisFiyat = urun.AlisFiyat,
                             SatisFiyat = urun.SatisFiyat,
                             Stok = urun.Stok,

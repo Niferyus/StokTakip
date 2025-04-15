@@ -179,45 +179,45 @@
 
 
 
-        $(document).ready(function () {
-            $("#addnewitemfrom").submit(function (event) {
-                event.preventDefault();
-                var formdata = $("#addnewitemfrom").serialize();
-                if ($("#addnewitemfrom").valid()) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/Depo/Save",
-                        data: formdata,
-                        success: function (response) {
-                            if (response.success) {
-                                if (response.create) {
-                                    $.gritter.add({
-                                        title: "Başarılı",
-                                        text: "Depo başarıyla eklendi.",
-                                        class_name: "gritter-success"
-                                    });
-                                }
-                                else {
-                                    $.gritter.add({
-                                        title: "Başarılı",
-                                        text: "Depo başarıyla güncellendi.",
-                                        class_name: "gritter-success"
-                                    });
-                                }
-                                closeform();
-                                $("#grid").trigger("reloadGrid");
-                            } else {
-                                alert(response.errors.join("\n"));
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("Hata Detayı:", xhr.responseText);
-                            alert("Sunucu hatası oluştu");
-                        }
-                    });
-                }
-                return false;
-            });
-        });
+        //$(document).ready(function () {
+        //    $("#addnewitemfrom").submit(function (event) {
+        //        event.preventDefault();
+        //        var formdata = $("#addnewitemfrom").serialize();
+        //        if ($("#addnewitemfrom").valid()) {
+        //            $.ajax({
+        //                type: "POST",
+        //                url: "/Depo/Save",
+        //                data: formdata,
+        //                success: function (response) {
+        //                    if (response.success) {
+        //                        if (response.create) {
+        //                            $.gritter.add({
+        //                                title: "Başarılı",
+        //                                text: "Depo başarıyla eklendi.",
+        //                                class_name: "gritter-success"
+        //                            });
+        //                        }
+        //                        else {
+        //                            $.gritter.add({
+        //                                title: "Başarılı",
+        //                                text: "Depo başarıyla güncellendi.",
+        //                                class_name: "gritter-success"
+        //                            });
+        //                        }
+        //                        closeform();
+        //                        $("#grid").trigger("reloadGrid");
+        //                    } else {
+        //                        alert(response.errors.join("\n"));
+        //                    }
+        //                },
+        //                error: function (xhr, status, error) {
+        //                    console.error("Hata Detayı:", xhr.responseText);
+        //                    alert("Sunucu hatası oluştu");
+        //                }
+        //            });
+        //        }
+        //        return false;
+        //    });
+        //});
     </script>
 }

@@ -43,6 +43,12 @@ namespace PresentationLayer.Controllers
             return Json(jsonData);
         }
 
+        public async Task<List<DepoDto>> GetDefaultntDepo()
+        {
+            var item = await _depoService.GetDefaultntDepo();
+            return item;
+        }
+
         [HttpPost]
         public async Task<JsonResult> DeleteItem(int id)
         {
