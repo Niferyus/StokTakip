@@ -321,7 +321,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Stok");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Toptancilar", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Kisiler", b =>
                 {
                     b.Property<int>("ToptanciID")
                         .ValueGeneratedOnAdd()
@@ -346,7 +346,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UrunId");
 
-                    b.ToTable("Toptancilar");
+                    b.ToTable("Kisiler");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.UrunOzellikleri", b =>
@@ -612,7 +612,7 @@ namespace DataAccessLayer.Migrations
                         .WithMany("Islemler")
                         .HasForeignKey("MusteriID");
 
-                    b.HasOne("EntityLayer.Concrete.Toptancilar", "Toptanci")
+                    b.HasOne("EntityLayer.Concrete.Kisiler", "Toptanci")
                         .WithMany("Islemler")
                         .HasForeignKey("ToptanciID");
 
@@ -648,10 +648,10 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Urun");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Toptancilar", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Kisiler", b =>
                 {
                     b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
-                        .WithMany("Toptancilar")
+                        .WithMany("Kisiler")
                         .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -742,7 +742,7 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Islemler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Toptancilar", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Kisiler", b =>
                 {
                     b.Navigation("Islemler");
                 });
@@ -753,7 +753,7 @@ namespace DataAccessLayer.Migrations
 
                     b.Navigation("Stoklar");
 
-                    b.Navigation("Toptancilar");
+                    b.Navigation("Kisiler");
 
                     b.Navigation("cartitem");
                 });

@@ -15,14 +15,12 @@ namespace BusinessLayer.Concrete
     {
         private readonly IIslemlerRepository islemlerRepository;
         private readonly IUrunService urunlerService;
-        private readonly IToptancilarService toptancilarService;
-        private readonly IMusterilerService musterilerService;
+        private readonly IKisiService toptancilarService;
 
-        public IslemlerService(IIslemlerRepository islemlerRepository, IToptancilarService isoptancilarService, IMusterilerService musterilerService, IUrunService urunlerService)
+        public IslemlerService(IIslemlerRepository islemlerRepository, IKisiService isoptancilarService, IUrunService urunlerService)
         {
             this.islemlerRepository = islemlerRepository;
             this.toptancilarService = isoptancilarService;
-            this.musterilerService = musterilerService;
             this.urunlerService = urunlerService;
         }
 

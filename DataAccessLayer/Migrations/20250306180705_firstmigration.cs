@@ -296,7 +296,7 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Toptancilar",
+                name: "Kisiler",
                 columns: table => new
                 {
                     ToptanciID = table.Column<int>(type: "int", nullable: false)
@@ -308,9 +308,9 @@ namespace DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Toptancilar", x => x.ToptanciID);
+                    table.PrimaryKey("PK_Kisiler", x => x.ToptanciID);
                     table.ForeignKey(
-                        name: "FK_Toptancilar_Urunler_UrunId",
+                        name: "FK_Kisiler_Urunler_UrunId",
                         column: x => x.UrunId,
                         principalTable: "Urunler",
                         principalColumn: "Id",
@@ -340,9 +340,9 @@ namespace DataAccessLayer.Migrations
                         principalTable: "Musteriler",
                         principalColumn: "MusteriID");
                     table.ForeignKey(
-                        name: "FK_Islemler_Toptancilar_ToptanciID",
+                        name: "FK_Islemler_Kisiler_ToptanciID",
                         column: x => x.ToptanciID,
-                        principalTable: "Toptancilar",
+                        principalTable: "Kisiler",
                         principalColumn: "ToptanciID");
                     table.ForeignKey(
                         name: "FK_Islemler_Urunler_UrunId",
@@ -417,8 +417,8 @@ namespace DataAccessLayer.Migrations
                 column: "UrunId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Toptancilar_UrunId",
-                table: "Toptancilar",
+                name: "IX_Kisiler_UrunId",
+                table: "Kisiler",
                 column: "UrunId");
 
             migrationBuilder.CreateIndex(
@@ -476,7 +476,7 @@ namespace DataAccessLayer.Migrations
                 name: "Musteriler");
 
             migrationBuilder.DropTable(
-                name: "Toptancilar");
+                name: "Kisiler");
 
             migrationBuilder.DropTable(
                 name: "Urunler");

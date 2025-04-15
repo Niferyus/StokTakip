@@ -51,16 +51,16 @@ namespace DataAccessLayer.Concrete
             var query = from islem in context.Islemler
                         join urun in context.Urunler on islem.UrunId equals urun.Id into urunGroup
                         from urun in urunGroup.DefaultIfEmpty()
-                        join musteri in context.Musteriler on islem.MusteriID equals musteri.MusteriID into musteriGroup
-                        from musteri in musteriGroup.DefaultIfEmpty()
-                        join toptanci in context.Toptancilar on islem.ToptanciID equals toptanci.ToptanciID into toptanciGroup
-                        from toptanci in toptanciGroup.DefaultIfEmpty()
+                        //join musteri in context.Musteriler on islem.MusteriID equals musteri.MusteriID into musteriGroup
+                        //from musteri in musteriGroup.DefaultIfEmpty()
+                        //join toptanci in context.Kisiler on islem.ToptanciID equals toptanci.ToptanciID into toptanciGroup
+                        //from toptanci in toptanciGroup.DefaultIfEmpty()
                         select new IslemlerDto
                         {
                             IslemlerId = islem.IslemlerID,
                             UrunAdi = urun != null ? urun.Adi : null,
-                            MusteriAdi = musteri != null ? musteri.MusteriAdi : null,
-                            ToptanciAdi = toptanci != null ? toptanci.ToptanciAdi : null,
+                            //MusteriAdi = musteri != null ? musteri.MusteriAdi : null,
+                            //ToptanciAdi = toptanci != null ? toptanci.ToptanciAdi : null,
                             Adet = islem.Adet,
                             ToplamFiyat = islem.ToplamFiyat,
                             Tarih = islem.Tarih,

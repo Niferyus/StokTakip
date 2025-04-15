@@ -8,54 +8,54 @@ using Microsoft.AspNetCore.Mvc;
 namespace PresentationLayer.Controllers
 {
     [Authorize(Roles = "Satıcı")]
-    public class ToptancilarController : Controller
+    public class KisilerController : Controller
     {
-        private readonly IToptancilarService toptancilarService;
+        private readonly IKisilerService KisilerService;
 
-        public ToptancilarController(IToptancilarService toptancilarService)
+        public KisilerController(IKisilerService KisilerService)
         {
-            this.toptancilarService = toptancilarService;
+            this.KisilerService = KisilerService;
         }
 
-        public IActionResult Index()
-        {
-            var toptancilar = toptancilarService.GetAllDto();
-            return View(toptancilar);
-        }
+        //public IActionResult Index()
+        //{
+        //    var Kisiler = KisilerService.GetAllDto();
+        //    return View(Kisiler);
+        //}
 
-        public IActionResult Delete(int id)
-        {
-            toptancilarService.Delete(id);
-            return RedirectToAction("Index");
-        }
+        //public IActionResult Delete(int id)
+        //{
+        //    KisilerService.Delete(id);
+        //    return RedirectToAction("Index");
+        //}
 
-        public IActionResult CreateAndUpdate(int? id)
-        {
-            if (id == null)
-            {
-                return View(new Toptancilar());
-            }
+        //public IActionResult CreateAndUpdate(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return View(new Kisiler());
+        //    }
 
-            var toptanci = toptancilarService.GetById(id.Value);
-            if (toptanci == null)
-            {
-                return NotFound();
-            }
-            return View(toptanci);
-        }
+        //    var toptanci = KisilerService.GetById(id.Value);
+        //    if (toptanci == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(toptanci);
+        //}
 
-        [HttpPost]
-        public IActionResult CreateAndUpdate(Toptancilar toptanci)
-        {
-            if (toptanci.ToptanciID == 0)
-            {
-                toptancilarService.Add(toptanci);
-            }
-            else
-            {
-                toptancilarService.Update(toptanci);
-            }
-            return RedirectToAction("Index");
-        }
+        //[HttpPost]
+        //public IActionResult CreateAndUpdate(Kisiler toptanci)
+        //{
+        //    if (toptanci.ToptanciID == 0)
+        //    {
+        //        KisilerService.Add(toptanci);
+        //    }
+        //    else
+        //    {
+        //        KisilerService.Update(toptanci);
+        //    }
+        //    return RedirectToAction("Index");
+        //}
     }
 }

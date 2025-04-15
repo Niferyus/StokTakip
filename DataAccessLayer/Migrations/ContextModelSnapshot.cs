@@ -141,7 +141,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("CartId");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Class.CartItem", b =>
@@ -170,7 +170,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UrunId");
 
-                    b.ToTable("CartItems", (string)null);
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Class.Depo", b =>
@@ -228,7 +228,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("SehirId");
 
-                    b.ToTable("Depo", (string)null);
+                    b.ToTable("Depo");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Class.Islemler", b =>
@@ -268,7 +268,56 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UrunId");
 
-                    b.ToTable("Islemler", (string)null);
+                    b.ToTable("Islemler");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Kisiler", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Ad")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Adres")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Eposta")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirmaAdi")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("KayitTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Soyad")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Telefon")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("Tur")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Kisiler");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Class.Musteriler", b =>
@@ -289,7 +338,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("MusteriID");
 
-                    b.ToTable("Musteriler", (string)null);
+                    b.ToTable("Musteriler");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Class.Stok", b =>
@@ -315,10 +364,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UrunId");
 
-                    b.ToTable("Stok", (string)null);
+                    b.ToTable("Stok");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Class.Toptancilar", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Kisiler", b =>
                 {
                     b.Property<int>("ToptanciID")
                         .ValueGeneratedOnAdd()
@@ -343,7 +392,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UrunId");
 
-                    b.ToTable("Toptancilar", (string)null);
+                    b.ToTable("Kisiler");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Class.UrunOzellikleri", b =>
@@ -367,7 +416,7 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("Ad")
                         .IsUnique();
 
-                    b.ToTable("UrunOzellikleri", (string)null);
+                    b.ToTable("UrunOzellikleri");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Class.Urunler", b =>
@@ -406,9 +455,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("DepoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("EksikStokMiktarı")
                         .HasColumnType("int");
 
@@ -434,11 +480,9 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("BirimId");
 
-                    b.HasIndex("DepoId");
-
                     b.HasIndex("MarkaId");
 
-                    b.ToTable("Urunler", (string)null);
+                    b.ToTable("Urunler");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Class.Yerlesim", b =>
@@ -458,7 +502,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Yerlesim", (string)null);
+                    b.ToTable("Yerlesim");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -608,7 +652,7 @@ namespace DataAccessLayer.Migrations
                         .WithMany("Islemler")
                         .HasForeignKey("MusteriID");
 
-                    b.HasOne("EntityLayer.Concrete.Class.Toptancilar", "Toptanci")
+                    b.HasOne("EntityLayer.Concrete.Class.Kisiler", "Toptanci")
                         .WithMany("Islemler")
                         .HasForeignKey("ToptanciID");
 
@@ -644,10 +688,10 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Urun");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Class.Toptancilar", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Kisiler", b =>
                 {
                     b.HasOne("EntityLayer.Concrete.Class.Urunler", "Urun")
-                        .WithMany("Toptancilar")
+                        .WithMany("Kisiler")
                         .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -662,10 +706,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("BirimId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("EntityLayer.Concrete.Class.Depo", null)
-                        .WithMany("Urunler")
-                        .HasForeignKey("DepoId");
 
                     b.HasOne("EntityLayer.Concrete.Class.UrunOzellikleri", "Marka")
                         .WithMany()
@@ -737,8 +777,6 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("EntityLayer.Concrete.Class.Depo", b =>
                 {
                     b.Navigation("Stoklar");
-
-                    b.Navigation("Urunler");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Class.Musteriler", b =>
@@ -746,7 +784,7 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Islemler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Class.Toptancilar", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Kisiler", b =>
                 {
                     b.Navigation("Islemler");
                 });
@@ -757,7 +795,7 @@ namespace DataAccessLayer.Migrations
 
                     b.Navigation("Stoklar");
 
-                    b.Navigation("Toptancilar");
+                    b.Navigation("Kisiler");
 
                     b.Navigation("cartitem");
                 });

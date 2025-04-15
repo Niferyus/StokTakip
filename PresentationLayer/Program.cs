@@ -79,11 +79,8 @@ builder.Services.AddScoped<IUrunService, UrunService>();
 builder.Services.AddScoped<IDepoDal, DepoDal>();
 builder.Services.AddScoped<IDepoService, DepoService>();
 
-builder.Services.AddScoped<IMusterilerRepository, MusterilerRepository>();
-builder.Services.AddScoped<IMusterilerService, MusterilerService>();
-
-builder.Services.AddScoped<IToptancilarRepository, ToptancilarRepository>();
-builder.Services.AddScoped<IToptancilarService, ToptancilarService>();
+builder.Services.AddScoped<IKisilerRepository, KisilerRepository>();
+builder.Services.AddScoped<IKisilerService, KisilerService>();
 
 builder.Services.AddScoped<IIslemlerRepository, IslemlerRepository>();
 builder.Services.AddScoped<IIslemlerService, IslemlerService>();

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250311193857_addprimarykeymarkabirimyerlesim")]
-    partial class addprimarykeymarkabirimyerlesim
+    [Migration("20250415114316_addedkisiler")]
+    partial class addedkisiler
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace DataAccessLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EntityLayer.Concrete.AppRole", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.AppRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.AppUser", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.AppUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -131,27 +131,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Birim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Birim");
-                });
-
-            modelBuilder.Entity("EntityLayer.Concrete.Cart", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Cart", b =>
                 {
                     b.Property<int>("CartId")
                         .ValueGeneratedOnAdd()
@@ -167,7 +147,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.CartItem", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.CartItem", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -196,7 +176,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Depo", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Depo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -225,20 +205,21 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("Ilce")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)");
+                    b.Property<int>("IlceId")
+                        .HasColumnType("int");
 
                     b.Property<int>("InsUserId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Mail")
                         .IsRequired()
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Sehir")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)");
+                    b.Property<int>("SehirId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Yetkili")
                         .IsRequired()
@@ -246,10 +227,14 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IlceId");
+
+                    b.HasIndex("SehirId");
+
                     b.ToTable("Depo");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Islemler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Islemler", b =>
                 {
                     b.Property<int>("IslemlerID")
                         .ValueGeneratedOnAdd()
@@ -289,7 +274,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Islemler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Marka", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Kisiler", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,19 +282,48 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Ad")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Adres")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Eposta")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirmaAdi")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("KayitTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Soyad")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Telefon")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("Tur")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Marka");
+                    b.ToTable("Kisiler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Musteriler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Musteriler", b =>
                 {
                     b.Property<int>("MusteriID")
                         .ValueGeneratedOnAdd()
@@ -330,7 +344,33 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Musteriler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Kisiler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Stok", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DepoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StokMiktari")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UrunId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepoId");
+
+                    b.HasIndex("UrunId");
+
+                    b.ToTable("Stok");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Kisiler", b =>
                 {
                     b.Property<int>("ToptanciID")
                         .ValueGeneratedOnAdd()
@@ -358,7 +398,31 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Kisiler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Urunler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.UrunOzellikleri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Ad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Ad")
+                        .IsUnique();
+
+                    b.ToTable("UrunOzellikleri");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Urunler", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -388,21 +452,23 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("varchar(13)");
 
-                    b.Property<string>("Birim")
-                        .HasColumnType("varchar(20)");
+                    b.Property<int>("BirimId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("DepoId")
+                    b.Property<int>("EksikStokMiktarı")
                         .HasColumnType("int");
 
                     b.Property<int>("InsUserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Marka")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                    b.Property<int>("KritikStokMiktarı")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MarkaId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("SatisFiyat")
                         .HasColumnType("decimal(18,2)");
@@ -415,12 +481,14 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("BarkodNo")
                         .IsUnique();
 
-                    b.HasIndex("DepoId");
+                    b.HasIndex("BirimId");
+
+                    b.HasIndex("MarkaId");
 
                     b.ToTable("Urunler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Yerlesim", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Yerlesim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -543,15 +611,15 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.CartItem", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.CartItem", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Cart", "cart")
+                    b.HasOne("EntityLayer.Concrete.Class.Cart", "cart")
                         .WithMany("cartitem")
                         .HasForeignKey("CartID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
+                    b.HasOne("EntityLayer.Concrete.Class.Urunler", "Urun")
                         .WithMany("cartitem")
                         .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -562,17 +630,36 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("cart");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Islemler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Depo", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Musteriler", "Musteri")
+                    b.HasOne("EntityLayer.Concrete.Class.Yerlesim", "Ilcee")
+                        .WithMany()
+                        .HasForeignKey("IlceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EntityLayer.Concrete.Class.Yerlesim", "Sehirr")
+                        .WithMany()
+                        .HasForeignKey("SehirId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Ilcee");
+
+                    b.Navigation("Sehirr");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Islemler", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.Class.Musteriler", "Musteri")
                         .WithMany("Islemler")
                         .HasForeignKey("MusteriID");
 
-                    b.HasOne("EntityLayer.Concrete.Kisiler", "Toptanci")
+                    b.HasOne("EntityLayer.Concrete.Class.Kisiler", "Toptanci")
                         .WithMany("Islemler")
                         .HasForeignKey("ToptanciID");
 
-                    b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
+                    b.HasOne("EntityLayer.Concrete.Class.Urunler", "Urun")
                         .WithMany("Islemler")
                         .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -585,9 +672,28 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Urun");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Kisiler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Stok", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Urunler", "Urun")
+                    b.HasOne("EntityLayer.Concrete.Class.Depo", "Depo")
+                        .WithMany("Stoklar")
+                        .HasForeignKey("DepoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EntityLayer.Concrete.Class.Urunler", "Urun")
+                        .WithMany("Stoklar")
+                        .HasForeignKey("UrunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Depo");
+
+                    b.Navigation("Urun");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Kisiler", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.Class.Urunler", "Urun")
                         .WithMany("Kisiler")
                         .HasForeignKey("UrunId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -596,18 +702,28 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Urun");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Urunler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Urunler", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Depo", "Depo")
-                        .WithMany("Urunler")
-                        .HasForeignKey("DepoId");
+                    b.HasOne("EntityLayer.Concrete.Class.UrunOzellikleri", "Birim")
+                        .WithMany()
+                        .HasForeignKey("BirimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Depo");
+                    b.HasOne("EntityLayer.Concrete.Class.UrunOzellikleri", "Marka")
+                        .WithMany()
+                        .HasForeignKey("MarkaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Birim");
+
+                    b.Navigation("Marka");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppRole", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -616,7 +732,7 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -625,7 +741,7 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -634,13 +750,13 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppRole", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -649,36 +765,38 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.AppUser", null)
+                    b.HasOne("EntityLayer.Concrete.Class.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Cart", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Cart", b =>
                 {
                     b.Navigation("cartitem");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Depo", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Depo", b =>
                 {
-                    b.Navigation("Urunler");
+                    b.Navigation("Stoklar");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Musteriler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Musteriler", b =>
                 {
                     b.Navigation("Islemler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Kisiler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Kisiler", b =>
                 {
                     b.Navigation("Islemler");
                 });
 
-            modelBuilder.Entity("EntityLayer.Concrete.Urunler", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Class.Urunler", b =>
                 {
                     b.Navigation("Islemler");
+
+                    b.Navigation("Stoklar");
 
                     b.Navigation("Kisiler");
 
