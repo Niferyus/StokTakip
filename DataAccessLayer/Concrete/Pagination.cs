@@ -11,13 +11,17 @@ namespace DataAccessLayer.Concrete
         public List<T> items { get; set; }
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
+        public int TotalRecords { get; set; }
 
+        public Pagination()
+        { }
 
         public Pagination(List<T> items, int count, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             this.items = items;
+            TotalRecords = items.Count;
         }
 
         public bool HasPreviousPage => PageIndex > 1;

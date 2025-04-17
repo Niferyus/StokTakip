@@ -37,10 +37,9 @@ namespace EntityLayer.Concrete.Class
 
         [MaxLength(250)]
         public string Adres { get; set; }
-
         [Required]
         public KisiTuru Tur { get; set; }
-
         public DateTime KayitTarihi { get; set; } = DateTime.Now;
+        public ICollection<Hareketler> Hareket { get; set; }
     }
 }

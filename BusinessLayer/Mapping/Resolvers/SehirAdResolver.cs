@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.Mapping
+namespace BusinessLayer.Mapping.Resolvers
 {
     public class SehirAdResolver : IValueResolver<Depo, DepoDto, string>
     {
@@ -21,7 +21,7 @@ namespace BusinessLayer.Mapping
 
         public string Resolve(Depo source, DepoDto destination, string destMember, ResolutionContext context)
         {
-           return _depoDal.GetSehirNameById(source.SehirId).Result;
+            return _depoDal.GetSehirNameById(source.SehirId).Result;
         }
     }
 }

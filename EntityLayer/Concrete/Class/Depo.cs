@@ -36,6 +36,7 @@ namespace EntityLayer.Concrete.Class
         public string Aciklama { get; set; }
         public bool IsDefault { get; set; }
         public ICollection<Stok> Stoklar { get; set; }
+        public ICollection<Hareketler> Hareketler { get; set;}
 
     }
 }

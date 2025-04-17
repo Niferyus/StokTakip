@@ -8,23 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.Mapping
+namespace BusinessLayer.Mapping.Resolvers
 {
-    public class SehirIdResolver : IValueResolver<DepoDto, Depo, int>
+    public class IlceIdResolver : IValueResolver<DepoDto, Depo, int>
     {
         private readonly IDepoDal _depoDal;
 
-        public SehirIdResolver(IDepoDal depoDal)
+        public IlceIdResolver(IDepoDal depoDal)
         {
             _depoDal = depoDal;
         }
 
         public int Resolve(DepoDto source, Depo destination, int destMember, ResolutionContext context)
         {
-            return _depoDal.GetSehirIdByName(source.Sehir).Result;
+            return _depoDal.GetIlceIdByName(source.Ilce).Result;
         }
     }
-    
-
-    
 }

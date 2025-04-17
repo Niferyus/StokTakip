@@ -1,7 +1,8 @@
 
 using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
-using BusinessLayer.Mapping;
+using BusinessLayer.Mapping.Config;
+using BusinessLayer.Mapping.Resolvers;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
@@ -79,8 +80,8 @@ builder.Services.AddScoped<IUrunService, UrunService>();
 builder.Services.AddScoped<IDepoDal, DepoDal>();
 builder.Services.AddScoped<IDepoService, DepoService>();
 
-builder.Services.AddScoped<IKisilerRepository, KisilerRepository>();
-builder.Services.AddScoped<IKisilerService, KisilerService>();
+builder.Services.AddScoped<IKisilerDal, KisilerDal>();
+builder.Services.AddScoped<IKisiService, KisiService>();
 
 builder.Services.AddScoped<IIslemlerRepository, IslemlerRepository>();
 builder.Services.AddScoped<IIslemlerService, IslemlerService>();

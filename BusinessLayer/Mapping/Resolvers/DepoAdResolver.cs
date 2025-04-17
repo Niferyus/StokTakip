@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.Mapping
+namespace BusinessLayer.Mapping.Resolvers
 {
     public class DepoAdResolver  /*IValueResolver<Urunler, UrunlerDto, string>*/
     {

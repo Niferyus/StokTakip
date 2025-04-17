@@ -64,7 +64,7 @@ namespace DataAccessLayer.Concrete
                             Adet = islem.Adet,
                             ToplamFiyat = islem.ToplamFiyat,
                             Tarih = islem.Tarih,
-                            SatisTipi = islem.Satis
+                            //SatisTipi = islem.Satis
                         };
             return query.ToList();
         }

@@ -32,7 +32,7 @@ namespace EntityLayer.Concrete.Class
         public UrunOzellikleri Marka { get; set; }
         public int BirimId { get; set; }
         public UrunOzellikleri Birim { get; set; }
-        public ICollection<Islemler> Islemler { get; set; }
+        public ICollection<Hareketler> Hareketler { get; set; }
         public ICollection<Toptancilar> Toptancilar { get; set; }
         public ICollection<CartItem> cartitem { get; set; }
         public ICollection<Stok> Stoklar { get; set; }

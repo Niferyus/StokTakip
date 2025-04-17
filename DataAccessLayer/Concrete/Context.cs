@@ -17,6 +17,7 @@ namespace DataAccessLayer.Concrete
         public DbSet<Stok> Stok { get; set; }
         public DbSet<UrunOzellikleri> UrunOzellikleri { get; set; }
         public DbSet<Kisiler> Kisiler { get; set; }
+        public DbSet<Hareketler> Hareketler { get; set; }
 
 
 

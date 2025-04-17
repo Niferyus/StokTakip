@@ -1,0 +1,159 @@
+﻿@{
+    ViewData["Title"] = "Ürün Listesi";
+    Layout = "~/Views/Layoutt/Index.cshtml"; ;
+}
+
+<div class="dropdown-container card shadow-sm p-3 mb-4 bg-white rounded">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="yeniUrunDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-plus-circle"></i> Yeni Ürün Ekle
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="yeniUrunDropdown">
+        <li>
+            <a class="dropdown-item" href="#" onclick="loadModal(0)">
+                <i class="fas fa-box-open"></i> Ürün
+                Ekle
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item">
+                <i class="fas fa-file-excel"></i> Excel ile Ekle
+            </a>
+        </li>
+    </ul>
+</div>
+<br />
+<div class="grid-container card shadow-sm p-3 mb-4 bg-white rounded">
+    <table id="grid" class="table table-striped"></table>
+    <div id="pager"></div>
+</div>
+
+@Html.Partial("DynamicModal")
+
+@section Scripts{
+    <script>
+        jQuery("#grid").jqGrid({
+            url: '@Url.Action("GetItems", "Kisiler")',
+            datatype: "json",
+            mtype: "GET",
+            colNames: ['Ad', 'Soyad', 'Firma Adı', 'Telefon', 'Eposta', 'Adres', 'Tür', 'Kayıt Tarihi','İşlemler'],
+            colModel: [
+                { name: 'ad', index: 'userName', width: 100, editable: false },
+                { name: 'soyad', index: 'markaAdi', width: 100, editable: true },
+                { name: 'firmaAdi', index: 'adi', width: 80, editable: true },
+                { name: 'telefon', index: 'barkodNo', width: 90, editable: true },
+                { name: 'eposta', index: 'aciklama', width: 120, editable: true },
+                { name: 'adres', index: 'birimAdi', width: 80, sortable: false, editable: true },
+                { name: 'tur', index: 'birimAdi', width: 80, sortable: false, editable: true },
+                { name: 'kayitTarihi', index: 'birimAdi', width: 80, sortable: false, editable: true, formatter: "date", formatoptions: { srcformat: "Y-m-d\\TH:i:s", newformat: "d/m/Y" }},
+                { name: 'islemler', width: 120, formatter: ButtonFormatter, sortable: false, editable: false },
+            ],
+            rowNum: 10,
+            rowList: [5, 10, 20, 50],
+            pager: '#pager',
+            sortname: 'tarih',
+            viewrecords: true,
+            sortorder: "desc",
+            caption: "Kişiler",
+            jsonReader: {
+                root: "rows.items",
+                page: "rows.pageIndex",
+                total: "rows.totalPages",
+                records: "total",
+                repeatitems: false,
+                //id: "ad"
+            },
+
+            gridComplete: function () {
+                $(".deletebutton").click(function () {
+                    var id = $(this).data("id");
+                    deleteitem(id);
+                });
+                $(".updatebutton").click(function () {
+                    var id = $(this).data("id");
+                    loadModal(id);
+                });
+                $(".detailbutton").click(function () {
+                    var id = $(this).data("id");
+                    loadDetailModal(id);
+                });
+            }
+        });
+
+        jQuery("#grid").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false });
+
+
+        function ButtonFormatter(cellvalue, options, rowObject) {
+            return `<div style="display: flex; gap: 5px;">
+            <button class="deletebutton btn btn-danger" data-id="${rowObject.id}">Sil</button>
+            <button class="updatebutton btn btn-primary" data-id="${rowObject.id}">Düzenle</button>
+            </div>`;
+        }
+
+        function ButtonDetailsFormatter(cellvalue, options, rowObject) {
+            return `<div style="display: flex; gap: 5px;">
+            <button class="detailbutton btn btn-success" data-id="${rowObject.id}">Detay</button>
+            </div>`;
+        }
+
+
+        function loadModal(id) {
+            $.ajax({
+                url: '/Kisiler/FormPartial',
+                type: 'GET',
+                data: { id: id },
+                success: function (response) {
+                    $("#modalContent").html(response);
+                    $("#dynamicModal").modal("show");
+                },
+                error: function () {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                        class_name: 'gritter-error'
+                    });
+                }
+            });
+        }
+
+
+        function deleteitem(id) {
+            bootbox.confirm({
+                message: "Bu ürünü silmek istediğinize emin misiniz?",
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Hayır',
+                        result: false
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Evet',
+                        result: true
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Kisiler/DeleteItem",
+                            data: { id: id },
+                            success: function (response) {
+                                if (response.success) {
+                                    $.gritter.add({
+                                        title: "Başarılı",
+                                        text: "Ürün başarıyla silindi.",
+                                        class_name: "gritter-success"
+                                    });
+                                    $("#grid").trigger("reloadGrid");
+                                }
+                            },
+                            error: function () {
+                                alert("Ürün silinirken bir hata oluştu.");
+                            }
+                        })
+                    }
+                }
+            });
+        }
+
+    </script>
+}

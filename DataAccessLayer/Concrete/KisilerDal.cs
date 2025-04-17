@@ -14,5 +14,6 @@ namespace DataAccessLayer.Concrete
         public KisilerDal(Context context) : base(context)
         {
         }
+
     }
 }

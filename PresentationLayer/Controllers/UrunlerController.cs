@@ -39,14 +39,14 @@ namespace PresentationLayer.Controllers
             }   
         }
 
-        public async Task<JsonResult> GetUrunler(int page = 1)
+        public async Task<JsonResult> GetUrunler(int page,int rows)
         {
-            int pageSize = 5;
-            var items = await urunService.GetAllUrunlerDto(page,pageSize);
+            var items = await urunService.GetAllUrunlerDto(page, rows);
             var jsonData = new
             {
                 total = items.TotalPages,
                 page = page,
+                totalRecords = items.TotalRecords,
                 rows = items
             };
             return Json(jsonData);

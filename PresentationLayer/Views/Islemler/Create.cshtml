@@ -7,19 +7,8 @@
 <h1>Yeni İşlem Ekle</h1>
 
 <form method="post">
-    @if (Model.Satis == true)
-    {
-        <input type="hidden" asp-for="MusteriID" />
-        <label>Ürün ID</label>
-        <input type="text" asp-for="UrunId" class="form-control" />
-    }
-    else
-    {
-        <input type="hidden" asp-for="ToptanciID" />
-        <input type="hidden" asp-for="UrunId" />
-    }
     <input type="hidden" asp-for="Tarih" />
-    <input type="hidden" asp-for="Satis" />
+    @*<input type="hidden" asp-for="Satis" />*@
     <input type="hidden" asp-for="ToplamFiyat" />
     <label>Ürün Adeti</label>
     <input type="text" asp-for="Adet" class="form-control" />

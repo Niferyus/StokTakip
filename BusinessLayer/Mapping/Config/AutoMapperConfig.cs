@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLayer.Mapping.Resolvers;
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete.Class;
 using EntityLayer.Concrete.Dtos;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.Mapping
+namespace BusinessLayer.Mapping.Config
 {
     public class AutoMapperConfig : Profile
     {
@@ -18,9 +19,9 @@ namespace BusinessLayer.Mapping
                 .ForMember(dest => dest.Fiyat, opt => opt.MapFrom(src => src.SatisFiyat))
                 .ReverseMap();
 
-            CreateMap<Urunler, UrunlerDto>()
-                .ForMember(dest => dest.Tarih, opt => opt.MapFrom(src => src.CreateDate))
-                .ReverseMap();
+            //CreateMap<Urunler, UrunlerDto>()
+            //    .ForMember(dest => dest.Tarih, opt => opt.MapFrom(src => src.CreateDate))
+            //    .ReverseMap();
 
             CreateMap<DepoDto, Depo>()
                 .ForMember(dest => dest.SehirId, opt => opt.MapFrom<SehirIdResolver>())
@@ -41,9 +42,10 @@ namespace BusinessLayer.Mapping
                 .ForMember(dest => dest.MarkaAdi, opt => opt.MapFrom<MarkaAdResolver>())
                 .ForMember(dest => dest.BirimAdi, opt => opt.MapFrom<BirimAdResolver>());
 
-
-            CreateMap<Pagination<Depo>, Pagination<DepoDto>>()
+            CreateMap<Kisiler, KisilerDto>()
                 .ReverseMap();
+
+            CreateMap(typeof(Pagination<>), typeof(Pagination<>));
 
         }
     }

@@ -8,20 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.Mapping
+namespace BusinessLayer.Mapping.Resolvers
 {
-    public class BirimIdResolver : IValueResolver<UrunlerDto, Urunler, int>
+    public class BirimAdResolver : IValueResolver<Urunler, UrunlerDto, string>
     {
         private readonly IUrunlerDal _urunlerDal;
 
-        public BirimIdResolver(IUrunlerDal urunlerDal)
+        public BirimAdResolver(IUrunlerDal urunlerDal)
         {
             _urunlerDal = urunlerDal;
         }
 
-        public int Resolve(UrunlerDto source, Urunler destination, int destMember, ResolutionContext context)
+        public string Resolve(Urunler source, UrunlerDto destination, string destMember, ResolutionContext context)
         {
-            return _urunlerDal.GetBirimId(source.BirimAdi).Result;
+            return _urunlerDal.GetBirimName(source.BirimId).Result;
         }
     }
 }

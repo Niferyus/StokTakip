@@ -12,13 +12,13 @@ namespace PresentationLayer.Controllers
     {
         private readonly IIslemlerService islemlerService;
         private readonly IUrunService urunlerService;
-        private readonly IKisilerService KisilerService;
+        private readonly IKisiService _kisilerService;
 
-        public IslemlerController(IIslemlerService islemlerService, IUrunService urunlerService, IKisilerService KisilerService)
+        public IslemlerController(IIslemlerService islemlerService, IUrunService urunlerService, IKisiService _kisilerService)
         {
             this.islemlerService = islemlerService;
             this.urunlerService = urunlerService;
-            this.KisilerService = KisilerService;
+            this._kisilerService = _kisilerService;
         }
 
         public IActionResult Index()
@@ -36,7 +36,7 @@ namespace PresentationLayer.Controllers
                 {
                     MusteriID = id,
                     Tarih = DateTime.Now,
-                    Satis = satismi,
+                    //Satis = satismi,
                     UrunId = 0,
                     Adet = 1,
                     ToplamFiyat = 0,
@@ -48,8 +48,8 @@ namespace PresentationLayer.Controllers
                 {
                     ToptanciID = id,
                     Tarih = DateTime.Now,
-                    Satis = satismi,
-                    //UrunId = KisilerService.GetById(id).UrunId,
+                    //Satis = satismi,
+                    //UrunId = _kisilerService.GetById(id).UrunId,
                     Adet = 1,
                     ToplamFiyat = 0,
                 };
@@ -79,7 +79,7 @@ namespace PresentationLayer.Controllers
         //    }
         //    else
         //    {
-        //        var toptanci = KisilerService.GetById(islem.ToptanciID!);
+        //        var toptanci = _kisilerService.GetById(islem.ToptanciID!);
         //        islem.ToplamFiyat = toptanci.SatisFiyati! * islem.Adet; 
         //        if (toptanci.Adet < islem.Adet)
         //        {

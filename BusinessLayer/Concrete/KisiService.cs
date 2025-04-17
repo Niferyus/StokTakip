@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Abstract;
+﻿using AutoMapper;
+using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete.Class;
@@ -14,10 +15,12 @@ namespace BusinessLayer.Concrete
     public class KisiService : IKisiService
     {
         private readonly IKisilerDal _kisiDal;
+        private readonly IMapper _mapper;
 
-        public KisiService(IKisilerDal kisiDal)
+        public KisiService(IKisilerDal kisiDal, IMapper mapper)
         {
             _kisiDal = kisiDal;
+            _mapper = mapper;
         }
 
         public async Task Delete(int id)
@@ -28,6 +31,12 @@ namespace BusinessLayer.Concrete
         public async Task<Pagination<Kisiler>> GetAll(int pageIndex, int pageSize)
         {
            return await _kisiDal.GetAll(pageIndex, pageSize);
+        }
+
+        public async Task<Pagination<KisilerDto>> GetAllDto(int pageIndex, int pageSize)
+        {
+            var items = await GetAll(pageIndex,pageSize);
+            return _mapper.Map<Pagination<KisilerDto>>(items);
         }
 
         public async Task<Kisiler> GetById(int id)
