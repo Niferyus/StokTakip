@@ -33,6 +33,15 @@ namespace BusinessLayer.Concrete
            return await _kisiDal.GetAll(pageIndex, pageSize);
         }
 
+        public async Task<int> GetkisiId(string name)
+        {
+            return await _kisiDal.GetkisiId(name);
+        }
+        public async Task<List<Kisiler>> GetAllDefault()
+        {
+            return await _kisiDal.GetAllDefault();
+        }
+
         public async Task<Pagination<KisilerDto>> GetAllDto(int pageIndex, int pageSize)
         {
             var items = await GetAll(pageIndex,pageSize);

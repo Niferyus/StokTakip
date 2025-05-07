@@ -24,6 +24,10 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
+        public async Task<List<Kisiler>> GetAll()
+        {
+            return await _kisilerService.GetAllDefault();
+        }
         public async Task<JsonResult> GetItems(int page, int rows)
         {
             var items = await _kisilerService.GetAllDto(page, rows);

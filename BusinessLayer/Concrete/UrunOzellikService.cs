@@ -29,6 +29,11 @@ namespace BusinessLayer.Concrete
             throw new NotImplementedException();
         }
 
+        public Task<List<UrunOzellikleri>> GetAllDefault()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<UrunOzellikleri>> GetAllOzellik(string type)
         {
            return await _urunOzellikDal.GetAllOzellik(type);

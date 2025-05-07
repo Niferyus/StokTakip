@@ -4,6 +4,7 @@ using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Migrations;
 using DocumentFormat.OpenXml.Drawing.ChartDrawing;
+using EntityLayer.Class;
 using EntityLayer.Concrete.Class;
 using EntityLayer.Concrete.Dtos;
 using Microsoft.AspNetCore.Http;
@@ -47,6 +48,11 @@ namespace BusinessLayer.Concrete
         public async Task<Urunler> GetById(int id)
         {
             return await urunlerDal.GetById(id);
+        }
+
+        public async Task<int> GeturunId(string name)
+        {
+            return await urunlerDal.GetUrunId(name);
         }
 
         public async Task Save(Urunler entity)
@@ -101,9 +107,9 @@ namespace BusinessLayer.Concrete
             return items;
         }
 
-        public async Task<Pagination<UrunlerDto>> GetByFilter(string marka, string adi, string barkod, string stok,string baslangicTarihi, string bitisTarihi , int pageIndex, int pageSize)
+        public async Task<Pagination<UrunlerDto>> GetByFilter(ProductFilter filter, int pageIndex, int pageSize)
         {
-            return await urunlerDal.GetByFilter(marka, adi, barkod, stok, baslangicTarihi, bitisTarihi, pageIndex, pageSize);
+            return await urunlerDal.GetByFilter(filter, pageIndex, pageSize);
         }
 
         public byte[] GenerateTemplate()
@@ -202,6 +208,16 @@ namespace BusinessLayer.Concrete
         public async Task<Urunler> ConvertToEntity(UrunlerDto item)
         {
             return await Task.Run(() => _mapper.Map<Urunler>(item));
+        }
+
+        public async Task<List<Urunler>> GetAllDefault()
+        {
+            return await urunlerDal.GetAllDefault();
+        }
+
+        public async Task<Urunler?> GetByBarcode(string barcode)
+        {
+            return await urunlerDal.GetByBarcode(barcode);
         }
     }
 }

@@ -10,6 +10,6 @@ namespace DataAccessLayer.Abstract
 {
     public interface IKisilerDal : IGenericRepository<Kisiler>
     {
-        
+        public Task<int> GetkisiId(string name);
     }
 }

@@ -4,17 +4,19 @@ using BusinessLayer.Concrete;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Vml.Office;
+using EntityLayer.Class;
 using EntityLayer.Concrete.Class;
 using EntityLayer.Concrete.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
+using PresentationLayer.Models;
 using System.Globalization;
 using System.Text.Json.Nodes;
 
 namespace PresentationLayer.Controllers
 {
-    [Authorize(Roles = "Satıcı")]
+    //[Authorize(Roles = "Satıcı")]
     public class UrunlerController : Controller
     {
         private readonly IUrunService urunService;
@@ -39,6 +41,11 @@ namespace PresentationLayer.Controllers
             }   
         }
 
+        public async Task<List<Urunler>> GetAll()
+        {
+            return await urunService.GetAllDefault();
+        }
+
         public async Task<JsonResult> GetUrunler(int page,int rows)
         {
             var items = await urunService.GetAllUrunlerDto(page, rows);
@@ -59,11 +66,11 @@ namespace PresentationLayer.Controllers
             return Json(new { success = true });
         }
         //UrunlerDtoFilter
-        public async Task<JsonResult> GetFilterItem(string marka,string adi,string barkod,string stok,string baslangicTarihi,string bitisTarihi,int page = 1)
+        public async Task<JsonResult> GetFilterItem(ProductFilter filter,int page = 1)
         {
             int pagesize = 5;
 
-            var items = await urunService.GetByFilter(marka, adi, barkod, stok,baslangicTarihi,bitisTarihi ,page, pagesize);
+            var items = await urunService.GetByFilter(filter ,page, pagesize);
             
             var response = new
             {
@@ -79,6 +86,8 @@ namespace PresentationLayer.Controllers
             var urun = await urunService.GetById(id);
             return Json(urun);
         }
+
+        
 
         public async Task<JsonResult> Save(UrunlerDto entity)
         {

@@ -5,8 +5,10 @@ using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using EFCore.BulkExtensions;
+using EntityLayer.Class;
 using EntityLayer.Concrete.Class;
 using EntityLayer.Concrete.Dtos;
+using EntityLayer.Concrete.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -50,22 +52,18 @@ namespace DataAccessLayer.Concrete
             return await Task.Run(() => Pagination<UrunlerDto>.Create(query.AsQueryable(), pageIndex, pageSize));
         }
 
-        public async Task<Pagination<UrunlerDto>> GetByFilter(string marka, string adi, string barkod, string stok, string baslangicTarihi, string bitisTarihi, int pageIndex, int pageSize)
+        public async Task<Pagination<UrunlerDto>> GetByFilter(ProductFilter filter, int pageIndex, int pageSize)
         {
             var query = from urun in _context.Urunler
                         join user in _context.Users on urun.InsUserId equals user.Id
-                        //join markaa in _context.Marka on urun.MarkaId equals markaa.Id
-                        //join birim in _context.Birim on urun.BirimId equals birim.Id
                         where urun.Active == true
                         select new UrunlerDto
                         {
                             Id = urun.Id,
                             UserName = user.Name,
-                            //  MarkaAdi = markaa.Ad,
                             Adi = urun.Adi,
                             BarkodNo = urun.BarkodNo,
-                            Aciklama = urun.Aciklama,
-                            //Birim = birim.Ad,
+                            Aciklama = urun.Aciklama,                            
                             AlisFiyat = urun.AlisFiyat,
                             SatisFiyat = urun.SatisFiyat,
                             Stok = urun.Stok,
@@ -73,34 +71,34 @@ namespace DataAccessLayer.Concrete
                         };
 
 
-            if (!string.IsNullOrEmpty(marka))
-                query = query.Where(x => x.MarkaAdi.Contains(marka));
+            if (!string.IsNullOrEmpty(filter.Marka))
+                query = query.Where(x => x.MarkaAdi.Contains(filter.Marka));
 
-            if (!string.IsNullOrEmpty(adi))
-                query = query.Where(x => x.Adi.Contains(adi));
+            if (!string.IsNullOrEmpty(filter.Adi))
+                query = query.Where(x => x.Adi.Contains(filter.Adi));
 
-            if (!string.IsNullOrEmpty(barkod))
-                query = query.Where(x => x.BarkodNo.Contains(barkod));
+            if (!string.IsNullOrEmpty(filter.Barkod))
+                query = query.Where(x => x.BarkodNo.Contains(filter.Barkod));
 
-            if (!string.IsNullOrEmpty(stok))
+            if (filter.StokMiktar.HasValue)
             {
-                if (stok == "StokVar")
+                if (filter.StokMiktar.Value == StokMiktar.StokVar)
                     query = query.Where(x => x.Stok > 0);
-                else if (stok == "StokYok")
+                else if (filter.StokMiktar.Value == StokMiktar.StokYok)
                     query = query.Where(x => x.Stok <= 0);
             }
 
-            if (!string.IsNullOrEmpty(baslangicTarihi))
+            if (!string.IsNullOrEmpty(filter.BaslangicTarihi))
             {
-                if (DateTime.TryParseExact(baslangicTarihi, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime baslangic))
+                if (DateTime.TryParseExact(filter.BaslangicTarihi, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime baslangic))
                 {
                     query = query.Where(x => x.Tarih.Date >= baslangic.Date);
                 }
             }
 
-            if (!string.IsNullOrEmpty(bitisTarihi))
+            if (!string.IsNullOrEmpty(filter.BitisTarihi))
             {
-                if (DateTime.TryParseExact(bitisTarihi, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime bitis))
+                if (DateTime.TryParseExact(filter.BitisTarihi, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime bitis))
                 {
                     query = query.Where(x => x.Tarih.Date <= bitis.Date);
                 }
@@ -108,6 +106,11 @@ namespace DataAccessLayer.Concrete
 
             var items = await Task.Run(() => Pagination<UrunlerDto>.Create(query.AsQueryable(), pageIndex, pageSize));
             return items;
+        }
+
+        public async Task<Urunler?> GetByBarcode(string barcode)
+        {
+            return await _context.Urunler.FirstOrDefaultAsync(x => x.BarkodNo == barcode);
         }
 
         public async Task BulkInsert(List<Urunler> items)
@@ -141,7 +144,7 @@ namespace DataAccessLayer.Concrete
         public async Task<int> GetIdByName<TEntity>(string name) where TEntity : class
         {
             var entity = await _context.Set<TEntity>()
-                .Where(x => EF.Property<string>(x, "Ad") == name) // Burada EF.Property kullanıyoruz.
+                .Where(x => EF.Property<string>(x, "Adi") == name) // Burada EF.Property kullanıyoruz.
                 .Select(x => EF.Property<int>(x, "Id")) // Burada da EF.Property kullanıyoruz.
                 .FirstOrDefaultAsync();
 
@@ -192,6 +195,11 @@ namespace DataAccessLayer.Concrete
         public async Task<string> GetDepoName(int id)
         {
             return await GetNameById<Depo>(id);
+        }
+
+        public async Task<int> GetUrunId(string name)
+        {
+            return await GetIdByName<Urunler>(name);
         }
     }
 }

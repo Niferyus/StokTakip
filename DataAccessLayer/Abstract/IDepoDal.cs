@@ -18,6 +18,7 @@ namespace DataAccessLayer.Abstract
         public Task<int> GetSehirIdByName(string sehirAdi);
         public Task<int> GetIlceIdByName(string ilceAdi);
         public Task<string> GetIlceNameById(int ilceId);
-        public Task<string> GetSehirNameById(int sehirId);        
+        public Task<string> GetSehirNameById(int sehirId);
+        public Task<int> GetdepoId(string name);
     }
 }

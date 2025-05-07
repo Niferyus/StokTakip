@@ -113,5 +113,23 @@ namespace DataAccessLayer.Concrete
 
             return sehirAdi;
         }
+
+        public async Task<int> GetIdByName<TEntity>(string name) where TEntity : class
+        {
+            var entity = await _context.Set<TEntity>()
+                .Where(x => EF.Property<string>(x, "Ad") == name) // Burada EF.Property kullanıyoruz.
+                .Select(x => EF.Property<int>(x, "Id")) // Burada da EF.Property kullanıyoruz.
+                .FirstOrDefaultAsync();
+
+            if (entity == 0) // FirstOrDefaultAsync() int döndürdüğü için null yerine 0 kontrolü yapıyoruz.
+                throw new InvalidOperationException($"(ID: {entity}) BULUNAMADI");
+
+            return entity;
+        }
+
+        public async Task<int> GetdepoId(string name)
+        {
+            return await GetIdByName<Depo>(name);
+        }
     }
 }

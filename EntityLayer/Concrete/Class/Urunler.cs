@@ -22,15 +22,15 @@ namespace EntityLayer.Concrete.Class
         public string BarkodNo { get; set; }
 
         [Column(TypeName = "varchar(100)")]
-        public string Aciklama { get; set; }        
-        public decimal AlisFiyat { get; set; }
-        public decimal SatisFiyat { get; set; }
-        public int KritikStokMiktarı { get; set; }
-        public int EksikStokMiktarı { get; set; }
-        public int Stok { get; set; }
-        public int MarkaId { get; set; }
+        public string Aciklama { get; set; } = "aciklama";     
+        public decimal AlisFiyat { get; set; } = decimal.Zero;
+        public decimal SatisFiyat { get; set; } = decimal.Zero;
+        public int KritikStokMiktarı { get; set; } = 0;
+        public int EksikStokMiktarı { get; set; } = 0;
+        public int Stok { get; set; } = 0;
+        public int MarkaId { get; set; } = 4;
         public UrunOzellikleri Marka { get; set; }
-        public int BirimId { get; set; }
+        public int BirimId { get; set; } = 6;
         public UrunOzellikleri Birim { get; set; }
         public ICollection<Hareketler> Hareketler { get; set; }
         public ICollection<Toptancilar> Toptancilar { get; set; }

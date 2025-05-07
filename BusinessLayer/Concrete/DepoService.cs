@@ -36,6 +36,11 @@ namespace BusinessLayer.Concrete
             }
         }
 
+        public async Task<int> GetdepoId(string name)
+        {
+            return await _depoDal.GetdepoId(name);
+        }
+
         public async Task<Pagination<Depo>> GetAll(int pageIndex, int pageSize)
         {
             var items = await _depoDal.GetAll(pageIndex, pageSize);
@@ -90,6 +95,11 @@ namespace BusinessLayer.Concrete
         {
             var items = await _depoDal.GetDefaultntDepo();
             return _mapper.Map<List<DepoDto>>(items);
+        }
+
+        public async Task<List<Depo>> GetAllDefault()
+        {
+            return await _depoDal.GetAllDefault();
         }
     }
 }

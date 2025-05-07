@@ -1,0 +1,171 @@
+﻿@model EntityLayer.Concrete.Dtos.HareketlerDto
+
+
+<form id="addnewitemfrom" method="post">
+
+    <div class="form-group">
+        <label class="form-label">Müşteri</label>
+        <span asp-validation-for="KisiAdi" class="text-danger"></span>
+        <select id="kisiselect" asp-for="KisiAdi" class="form-control">
+            <option value="">Marka seçiniz</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Depo</label>
+        <span asp-validation-for="DepoAdi" class="text-danger"></span>
+        <select id="deposelect" asp-for="DepoAdi" class="form-control">
+            <option value="">Marka seçiniz</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Depo</label>
+        <span asp-validation-for="UrunAdi" class="text-danger"></span>
+        <select id="urunselect" asp-for="UrunAdi" class="form-control">
+            <option value="">Marka seçiniz</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Miktar</label>
+        <span asp-validation-for="Miktar" class="text-danger"></span>
+        <input type="text" asp-for="Miktar" class="form-control" id="yetkili" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Birim Fiyat</label>
+        <span asp-validation-for="BirimFiyat" class="text-danger"></span>
+        <input type="text" asp-for="BirimFiyat" class="form-control" id="aciklama" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">İşlem Türü</label>
+        <span asp-validation-for="IslemTuru" class="text-danger"></span>
+        <div>
+            <input type="radio" asp-for="IslemTuru" value="@EntityLayer.Concrete.Class.IslemTuru.Satis" /> Satış
+            <input type="radio" asp-for="IslemTuru" value="@EntityLayer.Concrete.Class.IslemTuru.Alis" /> Alış
+        </div>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+</form>
+<script src="~/jquery-validate/jquery.validate.min.js"></script>
+<script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Depo/GetAll',
+            type: 'GET',
+            success: function (response) {
+                // Dropdown'u temizle ve placeholder ekle
+                $('#deposelect').empty().append('<option value="">Marka seçiniz</option>');
+
+                // Gelen depo listesi üzerinden dropdown'u doldur
+                response.forEach(function (depo) {
+                    $('#deposelect').append(`<option value="${depo.ad}">${depo.ad}</option>`);
+                });
+            },
+            error: function () {
+                $.gritter.add({
+                    title: 'Hata',
+                    text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                    class_name: 'gritter-error'
+                });
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Kisiler/GetAll',
+            type: 'GET',
+            success: function (response) {
+
+                $('#kisiselect').empty().append('<option value="">Müşteri seçiniz</option>');
+
+                // Gelen "rows" dizisindeki verilerle dropdown'u doldur
+                response.forEach(function (kisi) {
+                    $('#kisiselect').append(`<option value="${kisi.ad}">${kisi.ad}</option>`);
+                });
+            },
+            error: function () {
+                $.gritter.add({
+                    title: 'Hata',
+                    text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                    class_name: 'gritter-error'
+                });
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Urunler/GetAll',
+            type: 'GET',
+            success: function (response) {
+                // Dropdown'u temizle ve placeholder ekle
+                $('#urunselect').empty().append('<option value="">Ürün seçiniz</option>');
+
+                // Gelen "rows" dizisindeki verilerle dropdown'u doldur
+                response.forEach(function (urun) {
+                    $('#urunselect').append(`<option value="${urun.adi}">${urun.adi}</option>`);
+                });
+            },
+            error: function () {
+                $.gritter.add({
+                    title: 'Hata',
+                    text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                    class_name: 'gritter-error'
+                });
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $("#addnewitemfrom").submit(function (event) {
+            event.preventDefault();
+            var formdata = $("#addnewitemfrom").serialize();
+            console.log(formdata);
+            if ($("#addnewitemfrom").valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Hareketler/Save",
+                    data: formdata,
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.create) {
+                                $.gritter.add({
+                                    title: "Başarılı",
+                                    text: "Depo başarıyla eklendi.",
+                                    class_name: "gritter-success"
+                                });
+                            }
+                            else {
+                                $.gritter.add({
+                                    title: "Başarılı",
+                                    text: "Depo başarıyla güncellendi.",
+                                    class_name: "gritter-success"
+                                });
+                            }
+                            $("#dynamicModal").modal("hide");
+                            $("#grid").trigger("reloadGrid");
+                        } else {
+                            alert(response.errors.join("\n"));
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Hata Detayı:", xhr.responseText);
+                        alert("Sunucu hatası oluştu");
+                    }
+                });
+            }
+            return false;
+        });
+    });
+
+
+</script>

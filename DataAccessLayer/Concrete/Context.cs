@@ -19,8 +19,6 @@ namespace DataAccessLayer.Concrete
         public DbSet<Kisiler> Kisiler { get; set; }
         public DbSet<Hareketler> Hareketler { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Base metodunu çağırın (Identity için)

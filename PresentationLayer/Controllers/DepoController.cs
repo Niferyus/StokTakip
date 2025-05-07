@@ -27,6 +27,11 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
+        public async Task<List<Depo>> GetAll()
+        {
+            return await _depoService.GetAllDefault();
+        }
+
         public async Task<JsonResult> GetDepos(int page = 1)
         {
             int pageSize = 5;

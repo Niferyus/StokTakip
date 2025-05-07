@@ -16,5 +16,6 @@ namespace BusinessLayer.Abstract
         public Task<Pagination<DepoDto>> GetAllDepo(int pageIndex, int pageSize);
         public Task<List<DepoDto>> GetDefaultntDepo();
         public Task<Depo> ConvertToEntity(DepoDto dto);
+        public Task<int> GetdepoId(string name);
     }
 }

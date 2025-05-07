@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Abstract
 {
-    public interface IKisiService : IGenericService<Kisiler>
+    public interface IHareketlerService : IGenericService<Hareketler>
     {
-        public Task<Pagination<KisilerDto>> GetAllDto(int pageIndex, int pageSize);
-        public Task<int> GetkisiId(string name);
+        public Task<Pagination<HareketlerDto>> GetAllDto(int pageIndex, int pageSize);
     }
 }

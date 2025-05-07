@@ -83,8 +83,8 @@ builder.Services.AddScoped<IDepoService, DepoService>();
 builder.Services.AddScoped<IKisilerDal, KisilerDal>();
 builder.Services.AddScoped<IKisiService, KisiService>();
 
-builder.Services.AddScoped<IIslemlerRepository, IslemlerRepository>();
-builder.Services.AddScoped<IIslemlerService, IslemlerService>();
+builder.Services.AddScoped<IHareketlerDal, HareketlerDal>();
+builder.Services.AddScoped<IHareketlerService, HareketlerService>();
 
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartService, CartService>();

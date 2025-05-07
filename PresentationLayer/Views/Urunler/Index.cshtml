@@ -27,10 +27,12 @@
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label">Stok Durumu</label>
-                        <select id="stokdrop" name="stok" class="form-select">
+                        <select id="stokdrop" class="form-control">
                             <option value="">Tümü</option>
-                            <option value="StokVar">Stok Var</option>
-                            <option value="StokYok">Stok Yok</option>
+                            @foreach (var value in Enum.GetValues(typeof(EntityLayer.Concrete.Enums.StokMiktar)))
+                            {
+                                <option value="@value">@value</option>
+                            }
                         </select>
                     </div>
                     <div class="col-md-3 mb-3">
@@ -175,7 +177,7 @@
             rownumbers: true,
             pagerpos: "center",
             loadonce: false,
-            //pgbuttons: true,
+            pgbuttons: true,
             pginput: true,
             recordpos: "left",
             pgtext: "Sayfa {0} / {1}",
@@ -300,22 +302,11 @@
 
         $("#filterbutton").click(function (e) {
             e.preventDefault();
-            var marka = $("#markainput").val();
-            var adi = $("#adiinput").val();
-            var barkod = $("#barkodinput").val();
-            var stok = $("#stokdrop").val();
-            var baslangicTarihi = formatDate($("#baslangicTarihi").val());
-            var bitisTarihi = formatDate($("#bitisTarihi").val());
-
+            var formdata = $("#filterform").serialize();
             $("#grid").jqGrid('setGridParam', {
                 url: '@Url.Action("GetFilterItem", "Urunler")',
                 postData: {
-                    marka: marka,
-                    adi: adi,
-                    barkod: barkod,
-                    stok: stok,
-                    baslangicTarihi: baslangicTarihi,
-                    bitisTarihi: bitisTarihi,
+                    formdata,
                     rows: $("#grid").getGridParam("rowNum"),
                     page: 1
                 },

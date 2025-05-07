@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Concrete;
+using EntityLayer.Class;
 using EntityLayer.Concrete.Class;
 using EntityLayer.Concrete.Dtos;
 using System;
@@ -13,11 +14,13 @@ namespace BusinessLayer.Abstract
     {
         public Task<List<MusteriUrunDto>> GetAllMusteriUrunDto();
         public Task<Pagination<UrunlerDto>> GetAllUrunlerDto(int pageIndex, int pageSize);
-        public Task<Pagination<UrunlerDto>> GetByFilter(string marka, string adi, string barkod, string stok, string baslangicTarihi, string bitisTarihi, int pageIndex, int pageSize);
+        public Task<Pagination<UrunlerDto>> GetByFilter(ProductFilter filter,int pageIndex, int pageSize);
         public byte[] GenerateTemplate();
         public byte[] ExportToExcel(List<Urunler> items);
         public Task ImportFromExcelAsync(byte[] fileBytes,int userid);
         public Task<Urunler> ConvertToEntity(UrunlerDto item);
+        public Task<int> GeturunId(string name);
+        public Task<Urunler?> GetByBarcode(string barcode);
 
         //public Task SaveUrun(UrunlerDto entity, int? insuserid);
     }

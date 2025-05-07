@@ -1,0 +1,88 @@
+﻿@{
+    Layout = "~/Views/Layoutt/Index.cshtml";
+}
+
+<div>
+    <button class="btn btn-success" onclick="loadModal(0)">Depo Ekle</button>
+</div>
+<div class="grid-container card shadow-sm p-3 mb-4 bg-white rounded">
+    <table id="grid" class="table table-striped"></table>
+    <div id="pager"></div>
+</div>
+@Html.Partial("DynamicModal")
+
+
+
+@section Scripts{
+    <script>
+        jQuery('#grid').jqGrid({
+            url: '/Hareketler/GetItems',
+            datatype: 'json',
+            mtype: 'GET',
+            colNames: ['MüsteriAdı', 'Depo', 'Urun', 'Miktar', 'BirimFiyat', 'ToplamFiyat', 'Tarih', 'İşlem', 'İşlemler'],
+            colModel: [
+                { name: 'kisiAdi', index: 'kisiAdi', editable: true },
+                { name: 'depoAdi', index: 'depoAdi', editable: true },
+                { name: 'urunAdi', index: 'urunAdi', editable: true },
+                { name: 'miktar', index: 'miktar', editable: true },
+                { name: 'birimFiyat', index: 'birimFiyat', editable: true },
+                { name: 'toplamFiyat', index: 'toplamFiyat', editable: true },
+                { name: 'tarih', index: 'tarih', editable: true },
+                { name: 'islemTuru', index: 'islemTuru', editable: false },
+                { name: 'islemler', formatter: ButtonFormatter, editable: true },
+            ],
+            pager: jQuery('#pager'),
+            rowNum: 10,
+            rowList: [10, 20, 30, 40],
+            height: '100%',
+            viewrecords: true,
+            caption: 'Depo List',
+            emptyrecords: 'No records to display',
+            jsonReader: {
+                root: "rows.items",
+                page: "rows.pageIndex",
+                total: "rows.totalPages",
+                records: "total",
+                repeatitems: false,
+                //id: "barkodNo"
+            },
+            autowidth: true,
+            multiselect: false,
+            gridComplete: function () {
+                $(".deletebutton").on("click", function () {
+                    var id = $(this).data("id");
+                    deleteitem(id);
+                });
+                $(".updatebutton").on("click", function () {
+                    var id = $(this).data("id");
+                    loadModal(id);
+                })
+            }
+        });
+
+        function ButtonFormatter(cellvalue, options, rowObject) {
+            return `<div style="display: flex; gap: 5px;">
+                <button id="deletebutton" class="deletebutton btn btn-danger" data-id="${rowObject.id}">Sil</button>
+                <button class="updatebutton btn btn-primary" data-id="${rowObject.id}">Düzenle</button>
+                </div>`;
+        }
+
+        function loadModal(id) {
+            $.ajax({
+                url: '/Hareketler/FormPartial',
+                type: 'GET',
+                success: function (response) {
+                    $("#modalContent").html(response);
+                    $("#dynamicModal").modal("show");
+                },
+                error: function () {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: 'Sunucu ile iletişim kurulurken bir hata oluştu',
+                        class_name: 'gritter-error'
+                    });
+                }
+            });
+        }
+    </script>
+}

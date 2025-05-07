@@ -19,6 +19,11 @@ namespace DataAccessLayer.Concrete
             _context = context;
         }
 
+        public async Task<List<T>> GetAllDefault()
+        {
+           return await _context.Set<T>().ToListAsync();
+        }
+
         public async Task<Pagination<T>> GetAll(int pageIndex, int pageSize)
         {
             //return await _context.Set<T>().ToListAsync();
